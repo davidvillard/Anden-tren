@@ -2,23 +2,29 @@
 
 Web con trenes de Cercanías en directo, avisos de Renfe y un registro de accidentes ferroviarios graves en España. Solo usa datos públicos y oficiales: no admite avisos de usuarios ni publica datos personales.
 
-## Cómo funciona
+## Estructura
 
-- `site/`: la web estática (HTML, CSS y JS, sin dependencias de compilación).
+- `site/`: la web estática (HTML, CSS y JS, sin paso de compilación).
 - `site/data/accidentes.json`: registro de accidentes con sus fuentes. Se edita a mano.
-- `scripts/fetch-renfe.mjs`: descarga los feeds GTFS-Realtime de Renfe y genera `site/data/live.json`.
-- `.github/workflows/publicar.yml`: publica la web en GitHub Pages al subir cambios y cada 5 minutos, con los datos de Renfe recién descargados.
+- `api/live.js`: función de Vercel. `GET /api/live` consulta los feeds GTFS-Realtime de Renfe y devuelve un resumen. Vercel guarda la respuesta 30 segundos en caché.
+- `lib/renfe.js`: descarga y lectura de los feeds de Renfe.
 
-GitHub puede retrasar las ejecuciones programadas unos minutos, así que los datos en directo tienen un retraso de entre 5 y 15 minutos.
+## Publicar en Vercel
+
+1. En Vercel, **Add New → Project** e importa este repositorio.
+2. Deja **Framework Preset** en "Other". `vercel.json` ya indica que la web está en `site/`.
+3. Pulsa **Deploy**.
+
+No necesita variables de entorno ni claves.
 
 ## Probar en local
 
 ```bash
-node scripts/fetch-renfe.mjs site/data/live.json
+npm run live
 ```
 
 ```bash
-python3 -m http.server 8000 --directory site
+npx vercel dev
 ```
 
 ## Fuentes

@@ -45,7 +45,7 @@ function renderLive() {
   live.layer.clearLayers();
 
   if (!d || !d.generatedAt) {
-    status.replaceChildren(h("span", { class: "live-dot off" }), "Aún no hay datos. Se cargan en la primera actualización automática, en unos minutos.");
+    status.replaceChildren(h("span", { class: "live-dot off" }), "No se han podido cargar los datos de Renfe. Se reintenta cada 30 segundos.");
     document.getElementById("alerts").replaceChildren(h("div", { class: "empty" }, "Los avisos de Renfe aparecerán aquí."));
     return;
   }
@@ -53,11 +53,11 @@ function renderLive() {
   const ageMin = (Date.now() / 1000 - d.generatedAt) / 60;
   const NAMES = { vehicles: "posiciones de Cercanías", trips: "retrasos de Cercanías", alerts: "avisos", tripsLD: "retrasos de larga distancia" };
   const failed = Object.entries(d.sources || {}).filter(([, s]) => !s.ok).map(([k]) => NAMES[k] || k);
-  const dotClass = ageMin > 20 ? "live-dot stale" : "live-dot";
+  const dotClass = ageMin > 5 ? "live-dot stale" : "live-dot";
   status.replaceChildren(
     h("span", { class: dotClass }),
     `Datos de Renfe de las ${fmtTime(d.generatedAt)}`,
-    ageMin > 20 ? ` (hace ${Math.round(ageMin)} min, la actualización se ha retrasado)` : "",
+    ageMin > 5 ? ` (hace ${Math.round(ageMin)} min, la conexión con Renfe falla)` : "",
     failed.length ? `. Sin respuesta de: ${failed.join(", ")}.` : "."
   );
 
@@ -104,7 +104,7 @@ function renderAlerts() {
 
 async function loadLive() {
   try {
-    const r = await fetch(`data/live.json?t=${Date.now()}`, { cache: "no-store" });
+    const r = await fetch("/api/live", { cache: "no-store" });
     if (!r.ok) throw new Error(r.status);
     live.data = await r.json();
   } catch {
@@ -234,4 +234,4 @@ document.getElementById("alert-q").addEventListener("input", (e) => { live.q = e
 buildChips();
 loadAcc();
 loadLive();
-setInterval(loadLive, 60_000);
+setInterval(loadLive, 30_000);

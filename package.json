@@ -1,0 +1,9 @@
+{
+  "name": "atlas-ferroviario",
+  "private": true,
+  "type": "module",
+  "engines": { "node": ">=20" },
+  "scripts": {
+    "live": "node scripts/live.js"
+  }
+}
