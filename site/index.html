@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Atlas Ferroviario de España</title>
+<meta name="description" content="Trenes de Cercanías en directo, avisos de Renfe y registro de accidentes ferroviarios en España, solo con datos públicos y oficiales.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Public+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <div class="head-main">
+      <div class="rule-pk" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span></div>
+      <h1>Atlas Ferroviario de España</h1>
+      <p class="sub">Trenes en directo, avisos y accidentes, solo con datos públicos y oficiales. Sin nombres, sin imágenes, sin avisos de usuarios.</p>
+    </div>
+    <nav class="tabs" aria-label="Secciones">
+      <a href="#directo">En directo</a>
+      <a href="#accidentes">Accidentes</a>
+      <a href="#fuentes">Fuentes</a>
+    </nav>
+  </header>
+
+  <!-- Suceso en curso -->
+  <section class="alert" aria-labelledby="alert-title">
+    <div class="alert-head">
+      <span class="pill crit"><span class="dot"></span>Suceso en curso</span>
+      <span class="pill neutral">Cifras provisionales</span>
+      <span class="label">Miércoles 28 oct 2026 · ≈ 08:54</span>
+    </div>
+    <h2 id="alert-title">Colisión entre dos trenes de alta velocidad entre Los Yébenes y Urda (Toledo)</h2>
+    <p>Un AVE de Renfe y un tren de Iryo chocaron en la línea de alta velocidad Madrid–Andalucía. La CIAF ha enviado técnicos al lugar. Las causas están en investigación.</p>
+    <div class="figs">
+      <div class="fig"><b class="crit">≥ 64</b><small>fallecidos</small></div>
+      <div class="fig"><b>≈ 80</b><small>heridos, unos 50 graves</small></div>
+      <div class="fig"><b>543</b><small>personas a bordo, según medios</small></div>
+    </div>
+    <ul>
+      <li><strong>Circulación:</strong> alta velocidad Madrid–Andalucía interrumpida. Renfe ha puesto un servicio lanzadera de Madrid a Ciudad Real y Puertollano.</li>
+      <li><strong>Origen de las cifras:</strong> Gobierno de Castilla-La Mancha, recogidas por la prensa. Aún no hay un balance del Ministerio de Transportes ni de la CIAF.</li>
+    </ul>
+    <p class="note">Las cifras pueden cambiar. Fuentes:
+      <a href="https://theobjective.com/economia/transporte/2026-10-28/accidente-ferroviario-urda-toledo/directo/" target="_blank" rel="noopener">The Objective</a> ·
+      <a href="https://www.eleconomista.es/transportes-turismo/noticias/14024147/10/26/el-accidente-de-tren-en-urda-toledo-se-convierte-en-el-mas-grave-desde-el-de-angrois-al-menos-64-muertos.html" target="_blank" rel="noopener">El Economista</a> ·
+      <a href="https://www.elespanol.com/invertia/observatorios/movilidad/20261028/accidente-tren-hoy-directo-ultima-hora-choque-resultado-varios-heridos-interrumpido-circulacion-madrid-andalucia/1003744437595_10.html" target="_blank" rel="noopener">El Español</a>
+    </p>
+  </section>
+
+  <!-- En directo -->
+  <section class="block" id="directo" aria-labelledby="live-title">
+    <div class="sec-head">
+      <h2 id="live-title">Cercanías en directo</h2>
+      <p class="note" id="live-status">Cargando datos de Renfe…</p>
+    </div>
+    <div class="kpis" id="live-kpis"></div>
+    <div class="main">
+      <div class="mapbox">
+        <div id="live-map" class="map" role="region" aria-label="Mapa con la posición de los trenes de Cercanías"></div>
+        <div class="legend">
+          <span><i style="background:var(--ok)"></i>En hora o menos de 3 min</span>
+          <span><i style="background:var(--accent)"></i>3 a 10 min de retraso</span>
+          <span><i style="background:var(--crit)"></i>Más de 10 min</span>
+          <span><i style="background:var(--muted)"></i>Sin dato de retraso</span>
+        </div>
+      </div>
+      <div class="side">
+        <div class="side-head">
+          <h3>Avisos de Renfe</h3>
+          <label class="search"><span class="label">Buscar</span><input id="alert-q" type="search" placeholder="Línea, estación…" autocomplete="off"></label>
+        </div>
+        <div class="list" id="alerts"></div>
+      </div>
+    </div>
+    <p class="note">Fuente: feeds GTFS-Realtime de Renfe (posiciones, retrasos y avisos de Cercanías). La web los descarga cada pocos minutos; no son datos al segundo.</p>
+  </section>
+
+  <!-- Registro histórico -->
+  <section class="block" id="accidentes" aria-labelledby="reg-title">
+    <div class="sec-head">
+      <h2 id="reg-title">Registro de accidentes graves, 2003–2026</h2>
+      <p class="note">Selección de los accidentes ferroviarios con víctimas mortales más relevantes en España desde 2003. No es la lista completa: más adelante se cargarán todos los sucesos de las memorias anuales de la CIAF.</p>
+    </div>
+    <div class="controls" role="group" aria-label="Filtros">
+      <div class="group" id="f-service"><span class="label">Servicio</span></div>
+      <div class="group" id="f-status"><span class="label">Investigación</span></div>
+      <div class="group">
+        <span class="label">Ordenar</span>
+        <button class="chip" id="sort-date" aria-pressed="true">Más reciente</button>
+        <button class="chip" id="sort-fat" aria-pressed="false">Más víctimas</button>
+      </div>
+    </div>
+    <div class="main">
+      <div class="mapbox">
+        <div id="acc-map" class="map" role="region" aria-label="Mapa con la ubicación de cada accidente"></div>
+        <div class="legend">
+          <span><i style="background:var(--crit)"></i>Investigación abierta</span>
+          <span><i style="background:var(--ok)"></i>Informe final publicado</span>
+          <span><i style="background:var(--muted)"></i>Anterior a la CIAF (2007)</span>
+          <span>Tamaño del círculo = fallecidos</span>
+        </div>
+      </div>
+      <div class="side">
+        <div class="summary" id="summary"></div>
+        <div class="list" id="list"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Fuentes y legalidad -->
+  <section class="block" id="fuentes" aria-labelledby="src-title">
+    <div class="sec-head">
+      <h2 id="src-title">Fuentes de datos y uso legal</h2>
+      <p class="note">La web solo usa fuentes oficiales o publicadas, y siempre cita su origen.</p>
+    </div>
+    <div class="tablewrap">
+      <table>
+        <thead><tr><th>Fuente</th><th>Qué ofrece</th><th>Actualización</th><th>Uso en la web</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Renfe · GTFS-Realtime Cercanías</strong><br><span class="note">gtfsrt.renfe.com</span></td><td>Posición de trenes, retrasos y avisos</td><td>~30 s (la web, cada ~5 min)</td><td><span class="pill ok">En uso</span></td></tr>
+          <tr><td><strong>Renfe · retrasos de larga distancia</strong><br><span class="note">gtfsrt.renfe.com/trip_updates_LD.json</span></td><td>Retrasos de AVE, Alvia y similares</td><td>~30 s</td><td><span class="pill open">Pendiente de confirmar</span><br><span class="note">Solo documentado por terceros.</span></td></tr>
+          <tr><td><strong>Renfe · horarios GTFS</strong><br><span class="note">data.renfe.com</span></td><td>Horarios de Cercanías, AV, LD y MD</td><td>Al cambiar horarios</td><td><span class="pill neutral">Próximamente</span></td></tr>
+          <tr><td><strong>Renfe · informes de puntualidad</strong></td><td>Puntualidad por servicio, Cercanías incluido</td><td>Mensual</td><td><span class="pill neutral">Próximamente</span></td></tr>
+          <tr><td><strong>Eurostat · accidentes ferroviarios</strong><br><span class="note">tran_sf_railac, tran_sf_railvi</span></td><td>Accidentes y víctimas por país, comparables en la UE</td><td>Anual</td><td><span class="pill neutral">Próximamente</span></td></tr>
+          <tr><td><strong>CIAF y ERA · informes</strong></td><td>Investigación, causas y recomendaciones de cada accidente</td><td>Al publicarse</td><td><span class="pill ok">En uso</span></td></tr>
+          <tr><td><strong>Adif · red ferroviaria</strong><br><span class="note">Servicio WFS en la IDEE</span></td><td>Trazado de las vías</td><td>Al cambiar la red</td><td><span class="pill neutral">Próximamente</span></td></tr>
+          <tr><td><strong>Adif · incidencias y obras</strong></td><td>Averías, cortes y obras</td><td>—</td><td><span class="pill open">No abierto</span><br><span class="note">Adif no las publica como datos abiertos.</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="cols">
+      <div class="panel"><h3>Privacidad</h3><p>No se publican nombres, edades, fotos ni datos que permitan identificar a víctimas, tripulación o testigos. Solo cifras agregadas, conforme al RGPD y la LOPDGDD.</p></div>
+      <div class="panel"><h3>Sin avisos de usuarios</h3><p>Toda la información viene de organismos públicos (CIAF, Renfe, Adif, Gobiernos autonómicos, 112) o de prensa que cita a esos organismos.</p></div>
+      <div class="panel"><h3>Cifras que cambian</h3><p>En sucesos recientes se indica la fuente de cada cifra y se marca como provisional hasta que haya un balance oficial.</p></div>
+    </div>
+  </section>
+
+  <footer>
+    <p>Datos: Renfe (datos abiertos), CIAF, Agencia Ferroviaria de la Unión Europea, servicios 112 y Gobiernos autonómicos. Mapa base © colaboradores de OpenStreetMap.</p>
+    <p>Proyecto independiente, sin relación con Renfe ni Adif.</p>
+  </footer>
+</div>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
