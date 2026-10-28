@@ -3,7 +3,8 @@
   const { h, norm, css, ago, fmtTime, tiles } = window.Anden;
   const LIVE_URL = "/api/live";
   const REFRESH_MS = 30000;
-  const state = { live: null, acc: [], line: "", view: "map", alertsAll: false, alertQ: "", focus: null, lastOk: null };
+  const state = { live: null, acc: [], redes: [], line: "", view: "map", alertsAll: false, alertQ: "", focus: null, lastOk: null };
+  const SCOPE = window.ANDEN_RED || null; // página de una red concreta
 
   /* ---------- Utilidades de trenes ---------- */
   const LINE_RE = /\b(RT\d|RG\d|RL\d|R\d{1,2}[NS]?|C-?\d{1,2}[a-z]?|S\d{1,2}|T\d)\b/i;
@@ -25,12 +26,29 @@
     if (min <= 10) return { cls: "warn", text: `${min} min de retraso`, short: `+${min} min`, color: css("--warn") };
     return { cls: "crit", text: `${min} min de retraso`, short: `+${min} min`, color: css("--crit") };
   }
-  const trains = () => (state.live?.cercanias?.trains || []).map((t) => ({ ...t, line: lineOf(t), num: trainNumber(t) }));
-  const alerts = () => state.live?.cercanias?.alerts || [];
+  const redOf = (t) => state.redes.find((r) => t.lat >= r.bbox[0] && t.lat <= r.bbox[2] && t.lon >= r.bbox[1] && t.lon <= r.bbox[3]) || null;
+  const scopeRed = () => state.redes.find((r) => r.slug === SCOPE) || null;
+  // Una línea se identifica por su código y su red (la C1 de Madrid no es la C1 de Valencia)
+  const lineName = (key) => { if (!key) return null; const [code, slug] = key.split("|"); const r = state.redes.find((x) => x.slug === slug); return SCOPE || !r ? code : `${code} · ${r.corto}`; };
+  const lineCode = (key) => (key ? key.split("|")[0] : null);
+  const trains = () => (state.live?.cercanias?.trains || []).map((t) => {
+    const red = redOf(t), code = lineOf(t);
+    return { ...t, red, code, line: code ? `${code}|${red ? red.slug : "otras"}` : null, num: trainNumber(t) };
+  }).filter((t) => !SCOPE || t.red?.slug === SCOPE);
+  const alertText = (a) => norm(`${a.header} ${a.desc} ${a.routes.join(" ")}`);
+  const alerts = () => {
+    const all = state.live?.cercanias?.alerts || [];
+    const r = scopeRed();
+    if (!r) return all;
+    const codes = new Set(trains().map((t) => norm(t.code)).filter(Boolean));
+    return all.filter((a) => r.claves.some((k) => alertText(a).includes(norm(k))) || a.routes.some((x) => [...codes].some((c) => norm(x).endsWith(c))));
+  };
+  const alertMatchesLine = (a, key) => { const code = norm(lineCode(key)); const r = state.redes.find((x) => x.slug === key.split("|")[1]); const byCode = a.routes.some((x) => norm(x).endsWith(code)) || new RegExp(`\\b${code}\\b`).test(alertText(a)); return byCode && (!r || SCOPE || r.claves.some((k) => alertText(a).includes(norm(k))) || a.routes.length > 0); };
   const visibleTrains = () => trains().filter((t) => !state.line || t.line === state.line);
 
   /* ---------- Mapa ---------- */
   const map = L.map("map", { scrollWheelZoom: false, minZoom: 5 }).fitBounds([[35.9, -9.4], [43.8, 3.4]]);
+  function fitScope() { const r = scopeRed(); if (r) map.fitBounds([[r.bbox[0], r.bbox[1]], [r.bbox[2], r.bbox[3]]]); }
   tiles(map);
   const layer = L.layerGroup().addTo(map);
   const markers = new Map();
@@ -38,7 +56,7 @@
   function popupFor(t) {
     const d = delayInfo(t.delayMin);
     return h("div", {},
-      h("strong", {}, t.line ? `${t.line} · tren ${t.num}` : `Tren ${t.num}`), h("br"),
+      h("strong", {}, t.line ? `${lineName(t.line)} · tren ${t.num}` : `Tren ${t.num}`), h("br"),
       h("span", { class: `tag ${d.cls}` }, d.text),
       t.ts ? h("div", { class: "small muted", style: "margin-top:4px" }, `Posición de las ${fmtTime(t.ts)}`) : "");
   }
@@ -64,8 +82,8 @@
     const items = rows.slice(0, listLimit).map((t) => {
       const d = delayInfo(t.delayMin);
       return h("button", { class: "row", type: "button", onclick: () => showTrain(t, true) },
-        h("span", { class: "line-badge" }, t.line || "—"),
-        h("span", { class: "grow" }, h("strong", {}, `Tren ${t.num}`), h("span", {}, t.ts ? `Posición de las ${fmtTime(t.ts)}` : "Posición sin hora")),
+        h("span", { class: "line-badge" }, t.code || "—"),
+        h("span", { class: "grow" }, h("strong", {}, `Tren ${t.num}`), h("span", {}, [t.red && !SCOPE ? t.red.corto : "", t.ts ? `posición de las ${fmtTime(t.ts)}` : "posición sin hora"].filter(Boolean).join(" · "))),
         h("span", { class: `tag ${d.cls}` }, d.short));
     });
     if (rows.length > listLimit) items.push(h("button", { class: "btn ghost", type: "button", onclick: () => { listLimit += 40; drawList(); } }, `Mostrar más (${rows.length - listLimit} restantes)`));
@@ -90,13 +108,13 @@
     const sel = document.getElementById("line-filter");
     const counts = {};
     for (const t of trains()) if (t.line) counts[t.line] = (counts[t.line] || 0) + 1;
-    const lines = Object.keys(counts).sort((a, b) => a.localeCompare(b, "es", { numeric: true }));
+    const lines = Object.keys(counts).sort((a, b) => lineName(a).localeCompare(lineName(b), "es", { numeric: true }));
     const cur = state.line;
-    sel.replaceChildren(h("option", { value: "" }, "Todas las líneas"), ...lines.map((l) => h("option", { value: l }, `${l} · ${counts[l]} trenes`)));
+    sel.replaceChildren(h("option", { value: "" }, "Todas las líneas"), ...lines.map((l) => h("option", { value: l }, `${lineName(l)} · ${counts[l]} ${counts[l] === 1 ? "tren" : "trenes"}`)));
     sel.value = lines.includes(cur) ? cur : "";
     const hints = document.getElementById("hints");
     const top = Object.entries(counts).sort((a, b) => b[1] - a[1]).slice(0, 4).map(([l]) => l);
-    hints.replaceChildren(h("span", {}, top.length ? "Prueba:" : ""), ...top.map((l) => h("button", { class: "hint", type: "button", onclick: () => pick({ type: "line", line: l }) }, l)));
+    hints.replaceChildren(h("span", {}, top.length ? "Prueba:" : ""), ...top.map((l) => h("button", { class: "hint", type: "button", onclick: () => pick({ type: "line", line: l }) }, lineName(l))));
   }
 
   /* ---------- Avisos ---------- */
@@ -105,7 +123,7 @@
     const more = document.getElementById("alerts-more");
     const q = norm(state.alertQ);
     let rows = alerts();
-    if (state.line) rows = rows.filter((a) => a.routes.some((r) => norm(r).includes(norm(state.line))) || norm(a.header + " " + a.desc).includes(norm(state.line)));
+    if (state.line) rows = rows.filter((a) => alertMatchesLine(a, state.line));
     if (q) rows = rows.filter((a) => norm(`${a.header} ${a.desc} ${a.routes.join(" ")}`).includes(q));
     if (!state.live) { box.replaceChildren(h("div", { class: "empty" }, "Cargando avisos…")); more.hidden = true; return; }
     if (!rows.length) { box.replaceChildren(h("div", { class: "empty" }, q || state.line ? "No hay avisos que coincidan." : "Renfe no tiene avisos activos ahora mismo.")); more.hidden = true; return; }
@@ -135,15 +153,15 @@
   function showTrain(t, zoom) {
     state.focus = { type: "train", id: t.id };
     const d = delayInfo(t.delayMin);
-    const lineAlerts = t.line ? alerts().filter((a) => a.routes.some((r) => norm(r).includes(norm(t.line)))) : [];
+    const lineAlerts = t.line ? alerts().filter((a) => alertMatchesLine(a, t.line)) : [];
     openFocus(
-      h("div", { class: "focus-head" }, h("span", { class: "line-badge" }, t.line || "—"), h("h3", {}, `Tren ${t.num}`), closeBtn()),
+      h("div", { class: "focus-head" }, h("span", { class: "line-badge" }, t.code || "—"), h("h3", {}, `Tren ${t.num}`), t.red && !SCOPE ? h("span", { class: "muted" }, t.red.nombre) : "", closeBtn()),
       h("p", { style: "font-size:1.3rem" }, h("span", { class: `tag ${d.cls}`, style: "font-size:1.05rem;padding:6px 14px" }, d.text)),
       h("p", { class: "muted" }, t.ts ? `Última posición recibida a las ${fmtTime(t.ts)}.` : "Renfe no indica la hora de la posición."),
-      lineAlerts.length ? h("p", {}, h("strong", {}, `${lineAlerts.length} aviso${lineAlerts.length > 1 ? "s" : ""} en la línea ${t.line}. `), h("a", { href: "#avisos", onclick: () => setLine(t.line) }, "Ver avisos")) : "",
+      lineAlerts.length ? h("p", {}, h("strong", {}, `${lineAlerts.length} aviso${lineAlerts.length > 1 ? "s" : ""} en la línea ${lineName(t.line)}. `), h("a", { href: "#avisos", onclick: () => setLine(t.line) }, "Ver avisos")) : "",
       h("div", { class: "focus-actions" },
         h("button", { class: "btn", type: "button", onclick: () => locate(t) }, "Ver en el mapa"),
-        t.line ? h("button", { class: "btn ghost", type: "button", onclick: () => pick({ type: "line", line: t.line }) }, `Toda la línea ${t.line}`) : ""));
+        t.line ? h("button", { class: "btn ghost", type: "button", onclick: () => pick({ type: "line", line: t.line }) }, `Toda la línea ${lineName(t.line)}`) : ""));
     if (zoom) locate(t, false);
   }
   function locate(t, scroll = true) {
@@ -159,13 +177,13 @@
     const known = ts.filter((t) => t.delayMin !== null && t.delayMin !== undefined);
     const late = known.filter((t) => t.delayMin >= 3);
     const avg = known.length ? known.reduce((s, t) => s + Math.max(0, t.delayMin), 0) / known.length : null;
-    const la = alerts().filter((a) => a.routes.some((r) => norm(r).includes(norm(line))) || norm(a.header + " " + a.desc).includes(norm(line)));
+    const la = alerts().filter((a) => alertMatchesLine(a, line));
     const status = !known.length ? { cls: "none", text: "Sin datos de retraso" } : late.length / known.length > 0.3 ? { cls: "crit", text: "Muchos retrasos" } : late.length ? { cls: "warn", text: "Algunos retrasos" } : { cls: "ok", text: "Funciona con normalidad" };
     openFocus(
-      h("div", { class: "focus-head" }, h("span", { class: "line-badge" }, line), h("h3", {}, `Línea ${line}`), closeBtn()),
+      h("div", { class: "focus-head" }, h("span", { class: "line-badge" }, lineCode(line)), h("h3", {}, `Línea ${lineName(line)}`), closeBtn()),
       h("p", {}, h("span", { class: `tag ${status.cls}`, style: "font-size:1.05rem;padding:6px 14px" }, status.text)),
       h("div", { class: "kpis" },
-        h("div", { class: "kpi card" }, h("b", {}, ts.length), h("span", {}, "trenes circulando")),
+        h("div", { class: "kpi card" }, h("b", {}, ts.length), h("span", {}, ts.length === 1 ? "tren circulando" : "trenes circulando")),
         h("div", { class: "kpi card" }, h("b", {}, late.length), h("span", {}, "con 3 min o más de retraso")),
         h("div", { class: "kpi card" }, h("b", {}, avg !== null ? `${avg.toFixed(1).replace(".", ",")} min` : "—"), h("span", {}, "de retraso medio")),
         h("div", { class: "kpi card" }, h("b", {}, la.length), h("span", {}, "avisos"))),
@@ -203,11 +221,11 @@
     const out = [];
     const counts = {};
     for (const t of trains()) if (t.line) counts[t.line] = (counts[t.line] || 0) + 1;
-    for (const l of Object.keys(counts)) if (norm(l).startsWith(q.replace(/\s|-/g, "")) || norm("linea " + l).includes(q))
-      out.push({ type: "line", line: l, title: `Línea ${l}`, sub: `${counts[l]} trenes circulando`, group: "Líneas" });
+    for (const l of Object.keys(counts)) if (norm(lineCode(l)).startsWith(q.replace(/\s|-/g, "")) || norm("linea " + lineName(l)).includes(q))
+      out.push({ type: "line", line: l, title: `Línea ${lineName(l)}`, sub: `${counts[l]} ${counts[l] === 1 ? "tren circulando" : "trenes circulando"}`, group: "Líneas" });
     for (const t of trains()) {
       if ([t.num, t.label, t.tripId, t.id].some((v) => v && norm(v).includes(q))) {
-        out.push({ type: "train", t, title: `Tren ${t.num}${t.line ? " · " + t.line : ""}`, sub: delayInfo(t.delayMin).text, group: "Trenes de Cercanías" });
+        out.push({ type: "train", t, title: `Tren ${t.num}${t.line ? " · " + lineName(t.line) : ""}`, sub: delayInfo(t.delayMin).text, group: "Trenes de Cercanías" });
       }
     }
     for (const trip of state.live?.largaDistancia?.trips || []) {
@@ -232,7 +250,7 @@
     let group = null;
     results.forEach((r, i) => {
       if (r.group !== group) { group = r.group; list.append(h("li", { class: "grp", role: "presentation" }, group)); }
-      const badge = r.type === "line" ? r.line : r.type === "train" ? (r.t.line || "—") : r.type === "ld" ? "LD" : r.type === "alert" ? "!" : "⚑";
+      const badge = r.type === "line" ? lineCode(r.line) : r.type === "train" ? (r.t.code || "—") : r.type === "ld" ? "LD" : r.type === "alert" ? "!" : "⚑";
       list.append(h("li", { role: "option", id: `opt-${i}`, "aria-selected": i === active ? "true" : "false", onmousedown: (e) => { e.preventDefault(); pick(r); } },
         h("span", { class: "line-badge", "aria-hidden": "true" }, badge),
         h("span", { class: "opt-main" }, h("strong", {}, r.title), h("span", {}, r.sub))));
@@ -245,13 +263,13 @@
 
   function pick(r) {
     closeSuggest();
-    if (r.type === "line") { input.value = r.line; showLine(r.line); }
+    if (r.type === "line") { input.value = lineName(r.line); showLine(r.line); }
     else if (r.type === "train") showTrain(r.t, true);
     else if (r.type === "ld") showLD(r.trip);
     else if (r.type === "alert") showAlert(r.a);
     else if (r.type === "acc") location.href = `/accidentes#${r.d.id}`;
     const url = new URL(location.href);
-    url.searchParams.set("q", input.value.trim() || r.line || "");
+    url.searchParams.set("q", input.value.trim());
     history.replaceState(null, "", url);
   }
 
@@ -321,7 +339,13 @@
     try { state.acc = (await (await fetch("/data/accidentes.json")).json()).accidentes; } catch (e) {}
   }
 
+  async function loadRedes() {
+    try { state.redes = (await (await fetch("/data/redes.json")).json()).redes; } catch (e) {}
+    fitScope();
+  }
+
   async function start() {
+    await loadRedes();
     await Promise.all([loadLive(), loadAcc()]);
     const q = new URLSearchParams(location.search).get("q");
     if (q) { input.value = q; const r = search(q); if (r.length) pick(r[0]); }

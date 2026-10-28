@@ -38,9 +38,10 @@ ${body}
 `,
 });
 
-const ph = (t) => `<span class="placeholder">${t}</span>`;
+const mail = (cfg) => `<a href="mailto:${cfg.contact}">${cfg.contact}</a>`;
+const titular = (cfg) => cfg.ownerName ? `${cfg.ownerName}, responsable del proyecto Andén` : "la persona física responsable del proyecto Andén";
 
-export const PAGES = [
+export const pages = (cfg) => [
   page({
     path: "/fuentes",
     title: "Fuentes de datos y uso legal",
@@ -53,7 +54,7 @@ export const PAGES = [
 <tbody>
 <tr><td><strong>Renfe · GTFS-Realtime Cercanías</strong><br><span class="small muted">gtfsrt.renfe.com</span></td><td>Posición de los trenes, retrasos y avisos de servicio de Cercanías y Rodalies</td><td>Unos 30 segundos</td><td><span class="tag ok">Datos abiertos</span><br><span class="small muted">Portal de datos abiertos de Renfe, citando la fuente</span></td></tr>
 <tr><td><strong>Renfe · retrasos de larga distancia</strong><br><span class="small muted">gtfsrt.renfe.com</span></td><td>Retrasos de AVE, Alvia y otros trenes de larga distancia</td><td>Unos 30 segundos</td><td><span class="tag warn">En revisión</span><br><span class="small muted">Pendiente de confirmar como fuente oficial</span></td></tr>
-<tr><td><strong>Sucesos en curso</strong></td><td>Cifras de fallecidos y heridos, estado de la circulación</td><td>Cada vez que un organismo oficial publica un balance</td><td><span class="tag ok">Información pública</span><br><span class="small muted">Servicios 112, gobiernos, Ministerio de Transportes, CIAF</span></td></tr>
+<tr><td><strong>Sucesos en curso</strong></td><td>Cifras de fallecidos y heridos, estado de la circulación</td><td>Revisión automática cada 5 minutos</td><td><span class="tag ok">Información pública</span><br><span class="small muted">Servicios 112, gobiernos, Ministerio de Transportes, CIAF</span></td></tr>
 </tbody></table></div>
 
 <h2>Registro de accidentes</h2>
@@ -78,6 +79,9 @@ export const PAGES = [
 
 <h2>Cómo tratamos las cifras de un suceso</h2>
 <ul>
+<li>Un sistema automático revisa cada 5 minutos las noticias sobre trenes. Una inteligencia artificial (Claude, de Anthropic) extrae de ellas las cifras y el organismo que las da.</li>
+<li>Solo se publica una cifra si la noticia la atribuye a un organismo oficial (servicios de emergencias, gobiernos, ministerios, Guardia Civil, CIAF u operadores).</li>
+<li>Un suceso nuevo solo aparece si lo cuentan al menos dos medios distintos.</li>
 <li>Cada cifra indica qué organismo la ha dado y cuándo.</li>
 <li>Mientras no haya un balance oficial definitivo, las cifras se marcan como provisionales.</li>
 <li>Guardamos cómo han ido cambiando las cifras para que se vea su evolución.</li>
@@ -85,7 +89,7 @@ export const PAGES = [
 </ul>
 
 <h2>Ver un error</h2>
-<p>Si ves un dato incorrecto, escríbenos a ${ph("[correo de contacto]")} indicando la página y la fuente correcta.</p>
+<p>Si ves un dato incorrecto, escríbenos a ${mail(cfg)} indicando la página y la fuente correcta.</p>
 `,
   }),
 
@@ -95,12 +99,12 @@ export const PAGES = [
     description: "Información legal sobre Andén: titular del sitio, condiciones de uso y responsabilidad sobre los datos mostrados.",
     body: `
 <h2>Titular del sitio</h2>
-<p>En cumplimiento de la Ley 34/2002, de servicios de la sociedad de la información y de comercio electrónico (LSSI-CE):</p>
 <ul>
-<li><strong>Titular:</strong> ${ph("[Nombre y apellidos o razón social]")}</li>
-<li><strong>NIF:</strong> ${ph("[NIF]")}</li>
-<li><strong>Domicilio:</strong> ${ph("[Dirección]")}</li>
-<li><strong>Correo electrónico:</strong> ${ph("[correo de contacto]")}</li>
+<li><strong>Nombre del sitio:</strong> Andén</li>
+<li><strong>Titular:</strong> ${cfg.ownerName || "persona física, a título particular"}</li>
+${cfg.ownerNif ? `<li><strong>NIF:</strong> ${cfg.ownerNif}</li>` : ""}
+<li><strong>Naturaleza:</strong> proyecto personal, gratuito y sin ánimo de lucro. No vende productos ni servicios y no incluye publicidad.</li>
+<li><strong>Correo electrónico:</strong> ${mail(cfg)}</li>
 </ul>
 
 <h2>Objeto</h2>
@@ -128,12 +132,12 @@ export const PAGES = [
 <h2>Resumen</h2>
 <ul>
 <li>No hace falta registrarse.</li>
-<li>No usamos cookies de publicidad ni de analítica.</li>
+<li>No usamos cookies de publicidad.${cfg.ga ? " Las de analítica solo se activan si las aceptas." : " Tampoco de analítica."}</li>
 <li>No vendemos ni cedemos datos.</li>
 </ul>
 
 <h2>Responsable del tratamiento</h2>
-<p>${ph("[Nombre y apellidos o razón social]")}, NIF ${ph("[NIF]")}, correo ${ph("[correo de contacto]")}.</p>
+<p>${titular(cfg)}. Contacto: ${mail(cfg)}.</p>
 
 <h2>Qué datos se tratan</h2>
 <ul>
@@ -141,16 +145,18 @@ export const PAGES = [
 <li><strong>Mapa:</strong> las imágenes del mapa se cargan desde los servidores de OpenStreetMap, que reciben tu dirección IP para enviarlas.</li>
 <li><strong>Preferencias:</strong> el tamaño de texto y el tema (claro u oscuro) se guardan solo en tu navegador. No nos llegan.</li>
 <li><strong>Búsquedas:</strong> lo que escribes en el buscador se procesa en tu navegador y no se guarda.</li>
+${cfg.ga ? `<li><strong>Estadísticas de visitas (solo si las aceptas):</strong> Google Analytics recoge de forma agregada qué páginas se visitan, desde qué tipo de dispositivo y de qué país, para mejorar la web. Base legal: tu consentimiento (art. 6.1.a RGPD), que puedes retirar en cualquier momento con el enlace «Configurar cookies» del pie de página.</li>` : ""}
 </ul>
 
 <h2>Proveedores</h2>
 <ul>
 <li>Vercel Inc. (alojamiento), con garantías para transferencias internacionales según el RGPD.</li>
 <li>Fundación OpenStreetMap (imágenes del mapa).</li>
+${cfg.ga ? "<li>Google Ireland Ltd. (Google Analytics), solo con tu consentimiento.</li>" : ""}
 </ul>
 
 <h2>Tus derechos</h2>
-<p>Puedes ejercer tus derechos de acceso, rectificación, supresión, oposición, limitación y portabilidad escribiendo a ${ph("[correo de contacto]")}. También puedes reclamar ante la Agencia Española de Protección de Datos (aepd.es).</p>
+<p>Puedes ejercer tus derechos de acceso, rectificación, supresión, oposición, limitación y portabilidad escribiendo a ${mail(cfg)}. También puedes reclamar ante la Agencia Española de Protección de Datos (aepd.es).</p>
 
 <h2>Personas mencionadas en sucesos</h2>
 <p>Andén solo publica cifras agregadas de víctimas. No publica nombres, imágenes ni ningún dato que permita identificar a personas afectadas.</p>
@@ -163,7 +169,12 @@ export const PAGES = [
     description: "Andén no usa cookies de seguimiento ni de publicidad.",
     body: `
 <h2>¿Usa cookies Andén?</h2>
-<p>No. Andén no instala cookies de publicidad, analítica ni seguimiento, por eso no te mostramos ningún aviso de cookies.</p>
+${cfg.ga ? `<p>Andén no usa cookies de publicidad. Solo usa cookies de <strong>Google Analytics</strong> para contar visitas de forma agregada, y únicamente si las aceptas en el aviso que aparece al entrar.</p>
+<div class="table-wrap"><table><thead><tr><th>Cookie</th><th>De quién</th><th>Para qué</th><th>Duración</th></tr></thead><tbody>
+<tr><td>_ga</td><td>Google Analytics</td><td>Distinguir visitantes de forma anónima</td><td>2 años</td></tr>
+<tr><td>_ga_*</td><td>Google Analytics</td><td>Mantener el estado de la visita</td><td>2 años</td></tr>
+</tbody></table></div>
+<p>Puedes cambiar tu decisión cuando quieras con el enlace «Configurar cookies» del pie de página.</p>` : `<p>No. Andén no instala cookies de publicidad, analítica ni seguimiento, por eso no te mostramos ningún aviso de cookies.</p>`}
 
 <h2>Almacenamiento local</h2>
 <p>Si cambias el tamaño del texto o el tema, tu navegador guarda esa preferencia en su almacenamiento local para recordarla la próxima vez. Es un dato técnico necesario para la función que has pedido, no sale de tu dispositivo y puedes borrarlo desde los ajustes del navegador.</p>
@@ -172,7 +183,7 @@ export const PAGES = [
 <p>Las imágenes del mapa vienen de OpenStreetMap, que no instala cookies al servirlas.</p>
 
 <h2>Cambios</h2>
-<p>Si en el futuro añadimos cookies que necesiten tu permiso, lo indicaremos aquí y te lo pediremos antes de usarlas.</p>
+<p>Si añadimos otras cookies que necesiten tu permiso, lo indicaremos aquí y te lo pediremos antes de usarlas.</p>
 `,
   }),
 
@@ -202,7 +213,7 @@ export const PAGES = [
 </ul>
 
 <h2>Avísanos</h2>
-<p>Si algo no te funciona o te cuesta leerlo, escríbenos a ${ph("[correo de contacto]")}. Intentaremos arreglarlo.</p>
+<p>Si algo no te funciona o te cuesta leerlo, escríbenos a ${mail(cfg)}. Intentaremos arreglarlo.</p>
 `,
   }),
 

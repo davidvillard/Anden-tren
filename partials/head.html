@@ -17,10 +17,12 @@
 <link rel="preload" href="/assets/fonts/atkinson-hyperlegible-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/assets/fonts/lexend-latin-700-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="/assets/css/app.css">
+<!--#verification-->
 <script>
   // Aplica las preferencias guardadas antes de pintar la página, para evitar parpadeos.
   try {
     var t = localStorage.getItem("anden-theme"); if (t) document.documentElement.dataset.theme = t;
     var s = localStorage.getItem("anden-text"); if (s) document.documentElement.dataset.text = s;
   } catch (e) {}
+  window.ANDEN_GA = "__GA_ID__";
 </script>

@@ -1,0 +1,222 @@
+// Páginas pensadas para buscadores, generadas en cada build:
+//  - /accidente-tren-hoy           todos los sucesos en curso y recientes
+//  - /accidente-tren/<id> (o la ruta de "pagina")  una por suceso, con FAQ
+//  - /cercanias/<red>              retrasos e incidencias de cada red de Cercanías
+// El contenido principal va escrito en el HTML para que Google lo lea sin JS;
+// después los scripts lo actualizan en directo.
+
+const esc = (s) => String(s ?? "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+const TZ = { timeZone: "Europe/Madrid" };
+const fecha = (iso) => new Date(iso).toLocaleDateString("es-ES", { ...TZ, day: "numeric", month: "long", year: "numeric" });
+const hora = (iso) => new Date(iso).toLocaleTimeString("es-ES", { ...TZ, hour: "2-digit", minute: "2-digit" });
+const cifra = (c) => c && c.valor !== null && c.valor !== undefined ? `${c.prefijo === "≥" ? "al menos " : ""}${c.valor}` : null;
+export const sucesoPath = (s) => s.pagina || `/accidente-tren/${s.id}`;
+
+function shell({ path, title, description, ogType = "website", jsonld = [], body, scripts = [], leaflet = false, inline = "" }) {
+  return `<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>${esc(title)}</title>
+<meta name="description" content="${esc(description)}">
+<link rel="canonical" href="__SITE_URL__${path}">
+<meta property="og:type" content="${ogType}">
+<meta property="og:title" content="${esc(title)}">
+<meta property="og:description" content="${esc(description)}">
+<meta property="og:url" content="__SITE_URL__${path}">
+<!--#head-->
+${jsonld.map((j) => `<script type="application/ld+json">${JSON.stringify(j)}</script>`).join("\n")}
+${leaflet ? '<link rel="stylesheet" href="/vendor/leaflet/leaflet.css">' : ""}
+</head>
+<body>
+<!--#header-->
+<main id="contenido">
+${body}
+</main>
+<!--#footer-->
+${inline ? `<script>${inline}</script>\n` : ""}${scripts.map((s) => `<script src="${s}"></script>`).join("\n")}
+</body>
+</html>
+`;
+}
+
+const crumbs = (items) => ({
+  "@context": "https://schema.org", "@type": "BreadcrumbList",
+  itemListElement: items.map(([name, path], i) => ({ "@type": "ListItem", position: i + 1, name, item: `__SITE_URL__${path}` })),
+});
+const faqLd = (qs) => ({
+  "@context": "https://schema.org", "@type": "FAQPage",
+  mainEntity: qs.map((q) => ({ "@type": "Question", name: q.p, acceptedAnswer: { "@type": "Answer", text: q.r } })),
+});
+const faqHtml = (qs) => `<section class="section" aria-labelledby="faq"><div class="container">
+  <h2 id="faq">Preguntas frecuentes</h2>
+  <div class="prose">${qs.map((q) => `<details class="card pad"><summary><strong>${esc(q.p)}</strong></summary><p style="margin-top:8px">${esc(q.r)}</p></details>`).join("\n")}</div>
+</div></section>`;
+
+/* ---------- Sucesos ---------- */
+
+function preguntasSuceso(s) {
+  const f = cifra(s.cifras?.fallecidos), hh = cifra(s.cifras?.heridos);
+  const balance = (f || hh) ? {
+    p: "¿Cuántos fallecidos y heridos hay?",
+    r: `Según el último balance${s.fuente ? ` (${s.fuente})` : ""}, hay ${[f && `${f} fallecidos`, hh && `${hh} heridos${s.cifras.heridos.nota ? ` (${s.cifras.heridos.nota})` : ""}`].filter(Boolean).join(" y ")}. Las cifras son provisionales.`,
+  } : null;
+  if (s.preguntas?.length) {
+    const rest = s.preguntas.filter((q) => !/cu[aá]nt[oa]s (fallecidos|muertos|heridos)/i.test(q.p));
+    return [rest[0], balance, ...rest.slice(1)].filter(Boolean);
+  }
+  return [
+    { p: "¿Qué ha pasado?", r: `${s.resumen} Ocurrió el ${fecha(s.inicio)} hacia las ${hora(s.inicio)}.` },
+    balance,
+    s.circulacion && { p: "¿Cómo está la circulación de trenes?", r: s.circulacion },
+    s.causas && { p: "¿Cuál ha sido la causa?", r: s.causas },
+  ].filter(Boolean);
+}
+
+function sucesoPage(s, actualizado) {
+  const path = sucesoPath(s);
+  const f = cifra(s.cifras?.fallecidos), hh = cifra(s.cifras?.heridos);
+  const title = s.seo?.title || `Accidente de tren en ${s.lugar}: última hora, fallecidos y heridos`;
+  const description = s.seo?.description || `${s.resumen}${f ? ` Balance: ${f} fallecidos` : ""}${hh ? ` y ${hh} heridos` : ""}.`;
+  const qs = preguntasSuceso(s);
+  const article = {
+    "@context": "https://schema.org", "@type": "NewsArticle",
+    headline: title.slice(0, 110), description, inLanguage: "es-ES",
+    datePublished: s.inicio, dateModified: actualizado || s.inicio,
+    image: ["__SITE_URL__/assets/img/og.png"],
+    author: { "@type": "Organization", name: "Andén", url: "__SITE_URL__/" },
+    publisher: { "@type": "Organization", name: "Andén", logo: { "@type": "ImageObject", url: "__SITE_URL__/assets/img/icon-512.png" } },
+    mainEntityOfPage: `__SITE_URL__${path}`,
+  };
+  const fig = (c, label, crit) => c && c.valor !== null && c.valor !== undefined
+    ? `<div class="figure${crit ? " crit" : ""}"><b>${esc(c.prefijo ? c.prefijo + " " : "")}${c.valor}</b><span>${esc(label)}${c.nota ? ", " + esc(c.nota) : ""}</span>${c.fuente ? `<span class="small" style="display:block;margin-top:4px">Fuente: ${esc(c.fuente)}</span>` : ""}</div>` : "";
+  const body = `
+  <section class="page-head band"><div class="container">
+    <p class="crumbs"><a href="/">Inicio</a> › <a href="/accidente-tren-hoy">Accidente de tren hoy</a> › ${esc(s.lugar)}</p>
+    <h1>${esc(s.titulo)}</h1>
+    <p>${esc(s.lugar)} · ${fecha(s.inicio)}, ${hora(s.inicio)} · ${esc(s.tipo || "")}</p>
+  </div></section>
+  <section class="section"><div class="container" id="suceso" data-modo="completo" data-id="${esc(s.id)}">
+    <article class="incident"><div class="incident-body">
+      <p style="font-size:1.1rem">${esc(s.resumen)}</p>
+      <div class="figures">${fig(s.cifras?.fallecidos, "fallecidos", true)}${fig(s.cifras?.heridos, "heridos")}${fig(s.cifras?.aBordo, "personas a bordo")}</div>
+      ${s.telefonos?.length ? `<h2>Teléfonos para familiares</h2><ul>${s.telefonos.map((t) => `<li><strong>${esc(t.numero)}</strong>: ${esc(t.nombre)}</li>`).join("")}</ul>` : ""}
+      ${s.circulacion ? `<h2>Trenes afectados</h2><p>${esc(s.circulacion)}</p>` : ""}
+      ${s.causas ? `<h2>Causas</h2><p>${esc(s.causas)}</p>` : ""}
+    </div></article>
+  </div></section>
+  ${faqHtml(qs)}
+  <section class="section"><div class="container"><div class="card pad promo">
+    <div style="display:grid;gap:6px"><h2>¿Viajas en tren hoy?</h2><p class="muted">Consulta retrasos y avisos de tu línea en directo.</p></div>
+    <a class="btn" href="/">Buscar mi tren</a>
+  </div></div></section>`;
+  return {
+    path, priority: s.activo ? "0.9" : "0.6", freq: s.activo ? "always" : "weekly",
+    html: shell({ path, title: `${title} · Andén`, description, ogType: "article", body,
+      jsonld: [article, faqLd(qs), crumbs([["Inicio", "/"], ["Accidente de tren hoy", "/accidente-tren-hoy"], [s.lugar, path]])],
+      scripts: ["/assets/js/sucesos.js"] }),
+  };
+}
+
+function hoyPage(data) {
+  const path = "/accidente-tren-hoy";
+  const activos = (data.sucesos || []).filter((s) => s.activo);
+  const title = "Accidente de tren hoy en España: última hora, heridos y trenes afectados";
+  const description = activos.length
+    ? `Última hora: ${activos.map((s) => s.titulo).join(". ")}. Cifras oficiales, teléfonos para familiares y estado de los trenes.`
+    : "Accidentes de tren en España en las últimas horas: cifras oficiales de fallecidos y heridos, teléfonos de atención y trenes afectados.";
+  const qs = [
+    { p: "¿Ha habido hoy algún accidente de tren en España?", r: activos.length ? `Sí. ${activos.map((s) => `${s.titulo}.`).join(" ")}` : "Ahora mismo no hay ningún accidente ferroviario grave en curso registrado en Andén." },
+    { p: "¿De dónde salen las cifras de víctimas?", r: "De los balances que publican los servicios de emergencias, los gobiernos, el Ministerio de Transportes, la Guardia Civil y la CIAF. Cada cifra indica qué organismo la da." },
+    { p: "¿Cada cuánto se actualiza esta página?", r: "Andén revisa las noticias cada pocos minutos y actualiza las cifras cuando un organismo oficial publica un balance nuevo." },
+  ];
+  const body = `
+  <section class="page-head band"><div class="container">
+    <p class="crumbs"><a href="/">Inicio</a> › Accidente de tren hoy</p>
+    <h1>Accidente de tren hoy</h1>
+    <p>Última hora de los accidentes ferroviarios en España: cifras oficiales, teléfonos para familiares y trenes afectados. Se actualiza automáticamente.</p>
+  </div></section>
+  <section class="section"><div class="container" id="suceso" data-modo="lista">
+    ${activos.length ? activos.map((s) => `<article class="incident"><div class="incident-body"><h2><a href="${sucesoPath(s)}">${esc(s.titulo)}</a></h2><p>${esc(s.resumen)}</p></div></article>`).join("") : '<div class="empty">Ahora mismo no hay ningún accidente ferroviario grave en curso en España.</div>'}
+  </div></section>
+  ${faqHtml(qs)}
+  <section class="section"><div class="container"><div class="card pad promo">
+    <div style="display:grid;gap:6px"><h2>Registro histórico</h2><p class="muted">Todos los accidentes graves desde 2003, en un mapa.</p></div>
+    <a class="btn" href="/accidentes">Ver accidentes anteriores</a>
+  </div></div></section>`;
+  return { path, priority: "0.9", freq: "always",
+    html: shell({ path, title: `${title} · Andén`, description, body, jsonld: [faqLd(qs), crumbs([["Inicio", "/"], ["Accidente de tren hoy", path]])], scripts: ["/assets/js/sucesos.js"] }) };
+}
+
+/* ---------- Redes de Cercanías ---------- */
+
+function redPage(red, redes) {
+  const path = `/cercanias/${red.slug}`;
+  const title = `${red.nombre} hoy: retrasos, incidencias y trenes en directo`;
+  const description = `Retrasos de ${red.nombre} ahora mismo: trenes en el mapa, minutos de retraso por línea y avisos de Renfe, actualizados cada 30 segundos.`;
+  const qs = [
+    { p: `¿Hay retrasos en ${red.nombre} ahora?`, r: `En esta página ves en directo cuántos trenes de ${red.nombre} circulan, cuántos van con retraso y el retraso medio, con datos de Renfe actualizados cada 30 segundos.` },
+    { p: `¿Cómo sé si mi tren de ${red.corto} va con retraso?`, r: "Escribe el número del tren o la línea en el buscador. Verás su retraso, su última posición y los avisos de su línea." },
+    { p: `¿Hay incidencias u obras en ${red.nombre}?`, r: "La sección de avisos muestra las obras, cortes y cambios de servicio que Renfe comunica para esta red." },
+  ];
+  const others = redes.filter((r) => r.slug !== red.slug).map((r) => `<a class="chip" style="display:inline-flex;align-items:center;text-decoration:none" href="/cercanias/${r.slug}">${esc(r.corto)}</a>`).join("");
+  const body = `
+  <section class="hero band" aria-labelledby="titulo"><div class="container">
+    <p class="crumbs"><a href="/">Inicio</a> › Cercanías › ${esc(red.corto)}</p>
+    <span class="live-pill" id="live-pill"><span class="pulse off" aria-hidden="true"></span><span id="live-pill-text">Conectando con Renfe…</span></span>
+    <h1 id="titulo">${esc(red.nombre)}: retrasos e incidencias hoy</h1>
+    <p class="lead">Trenes en directo, minutos de retraso por línea y avisos de Renfe en ${esc(red.nombre)}.</p>
+    ${searchForm(`Nº de tren o línea de ${red.corto}`)}
+  </div></section>
+  ${liveSections(`Ahora mismo en ${red.nombre}`)}
+  ${faqHtml(qs)}
+  <section class="section"><div class="container"><h2>Otras redes de Cercanías</h2><div class="chips">${others}</div></div></section>`;
+  return { path, priority: "0.8", freq: "always",
+    html: shell({ path, title: `${title} · Andén`, description, body, leaflet: true,
+      jsonld: [faqLd(qs), crumbs([["Inicio", "/"], [red.nombre, path]])],
+      inline: `window.ANDEN_RED=${JSON.stringify(red.slug)};`,
+      scripts: ["/vendor/leaflet/leaflet.js", "/assets/js/home.js"] }) };
+}
+
+export function searchForm(placeholder) {
+  return `<form class="search" role="search" id="search-form" autocomplete="off">
+        <label for="q" class="sr-only">Buscar tren, línea o lugar</label>
+        <div class="search-box">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+          <input id="q" name="q" type="search" placeholder="${esc(placeholder)}" role="combobox" aria-expanded="false" aria-controls="suggest" aria-autocomplete="list" enterkeyhint="search">
+          <button type="submit">Buscar</button>
+        </div>
+        <ul class="suggest" id="suggest" role="listbox" aria-label="Resultados" hidden></ul>
+      </form>
+      <div class="hints" id="hints"></div>`;
+}
+
+export function liveSections(kpiTitle) {
+  return `
+  <div id="focus-wrap" class="section" hidden><div class="container"><div id="focus" class="card pad focus-card" tabindex="-1" aria-live="polite"></div></div></div>
+  <section class="section" aria-labelledby="ahora-titulo"><div class="container">
+    <div class="section-head"><h2 id="ahora-titulo">${esc(kpiTitle)}</h2><p class="small">Datos de Renfe, se actualizan cada 30 segundos.</p></div>
+    <div class="kpis" id="kpis"></div>
+  </div></section>
+  <section class="section" id="directo" aria-labelledby="directo-titulo"><div class="container">
+    <div class="section-head"><h2 id="directo-titulo">Trenes en directo</h2>
+      <div class="segmented" role="group" aria-label="Forma de ver los trenes"><button type="button" id="view-map" aria-pressed="true">Mapa</button><button type="button" id="view-list" aria-pressed="false">Lista</button></div></div>
+    <div class="filter"><label for="line-filter" class="sr-only">Filtrar por línea</label><select id="line-filter"><option value="">Todas las líneas</option></select></div>
+    <div id="map-view" class="card pad"><div id="map" class="map" role="region" aria-label="Mapa con la posición de los trenes"></div>
+      <div class="legend"><span><i style="background:var(--ok)"></i>En hora</span><span><i style="background:var(--warn)"></i>De 3 a 10 min tarde</span><span><i style="background:var(--crit)"></i>Más de 10 min tarde</span><span><i style="background:var(--muted)"></i>Sin dato</span></div></div>
+    <div id="list-view" hidden><div class="list-scroll" id="train-list"></div></div>
+  </div></section>
+  <section class="section" id="avisos" aria-labelledby="avisos-titulo"><div class="container">
+    <div class="section-head"><h2 id="avisos-titulo">Avisos de Renfe</h2><p class="small">Obras, cortes y cambios de servicio comunicados por Renfe.</p></div>
+    <div class="filter"><label for="alert-q" class="sr-only">Buscar en los avisos</label><input id="alert-q" type="search" placeholder="Buscar en los avisos: línea, estación…"></div>
+    <div class="alerts" id="alerts"><div class="empty">Cargando avisos…</div></div>
+    <button class="btn ghost" type="button" id="alerts-more" hidden>Ver todos los avisos</button>
+  </div></section>`;
+}
+
+export function generate({ sucesos, redes }) {
+  const pages = [hoyPage(sucesos)];
+  for (const s of sucesos.sucesos || []) pages.push(sucesoPage(s, sucesos.actualizado));
+  for (const r of redes.redes) pages.push(redPage(r, redes.redes));
+  return pages;
+}

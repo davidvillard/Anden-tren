@@ -15,6 +15,41 @@ Retrasos, avisos e incidencias de trenes en España, en directo y con datos ofic
 | `api/live.js` | Función de Vercel: `GET /api/live` resume los feeds en directo de Renfe (caché de 30 s) |
 | `lib/renfe.js` | Lectura de los feeds GTFS-Realtime de Renfe |
 
+## Actualización automática de sucesos
+
+`api/cron/sucesos.js` revisa cada 5 minutos titulares sobre sucesos ferroviarios (`lib/news.js`), pide a Claude las cifras y quién las da (`lib/extract.js`) y aplica las reglas de `lib/merge.js`:
+
+- Una cifra solo se publica si la noticia la atribuye a un organismo oficial.
+- Un suceso nuevo necesita al menos dos medios distintos y una cifra oficial.
+- Los enlaces solo pueden ser de las noticias recibidas.
+- Un suceso sin novedades en 72 horas deja de mostrarse como "en curso".
+- Se excluyen los atropellos de personas aisladas.
+
+El resultado se guarda en Upstash Redis y se sirve en `GET /api/sucesos`. Si Redis no está configurado, la web usa `site/data/sucesos.json`.
+
+### Variables de entorno en Vercel
+
+| Variable | Para qué | Obligatoria |
+|---|---|---|
+| `ANTHROPIC_API_KEY` | Extracción de cifras con Claude | Para la actualización automática |
+| `KV_REST_API_URL`, `KV_REST_API_TOKEN` | Upstash Redis (las crea Vercel al conectarlo) | Para la actualización automática |
+| `CRON_SECRET` | Contraseña que protege `/api/cron/sucesos` | Para la actualización automática |
+| `DEPLOY_HOOK_URL` | Republica la web cuando cambian las cifras, para que Google las vea | Recomendada |
+| `SITE_URL` | Dominio público | Recomendada |
+| `GA_MEASUREMENT_ID` | Google Analytics 4 (`G-...`) | No |
+| `GSC_VERIFICATION` | Código de verificación de Search Console | No |
+| `CONTACT_EMAIL`, `OWNER_NAME`, `OWNER_NIF` | Datos de las páginas legales | No |
+| `CLAUDE_MODEL`, `CLAUDE_MIN_INTERVAL_MIN` | Modelo y minutos mínimos entre consultas a Claude (por defecto 10) | No |
+| `NEWS_FEEDS` | RSS oficiales adicionales, separados por comas | No |
+
+### Programar la revisión cada 5 minutos
+
+El plan gratuito de Vercel solo permite un cron al día (ya configurado en `vercel.json`). Para revisar cada 5 minutos, crea una tarea en [cron-job.org](https://cron-job.org) (gratis):
+
+- URL: `https://TU-DOMINIO/api/cron/sucesos`
+- Frecuencia: cada 5 minutos
+- Cabecera: `Authorization: Bearer TU_CRON_SECRET`
+
 ## Publicar en Vercel
 
 Vercel lo detecta solo gracias a `vercel.json`: ejecuta `node scripts/build.js` y publica `dist/`.
@@ -31,9 +66,10 @@ npm run preview
 npm run live
 ```
 
-## Datos legales pendientes
+## Páginas para buscadores
 
-En `scripts/pages.js` hay marcadores `[...]` (titular, NIF, domicilio y correo) que hay que rellenar antes de lanzar la web, porque la LSSI obliga a mostrarlos.
+- `/accidente-tren-hoy` y una página por suceso (`/accidente-tren-toledo`, o `/accidente-tren/<id>` para los detectados automáticamente), con FAQ y datos estructurados `NewsArticle` y `FAQPage`.
+- `/cercanias/<red>` para las 12 redes de Cercanías de `site/data/redes.json`.
 
 ## Accesibilidad
 

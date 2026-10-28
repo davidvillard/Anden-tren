@@ -49,6 +49,41 @@
   });
 })();
 
+// Google Analytics: solo si está configurado y la persona lo acepta.
+(function () {
+  const id = window.ANDEN_GA;
+  if (!id || !/^G-[A-Z0-9]+$/.test(id)) return;
+  document.querySelectorAll("[data-ga-only]").forEach((el) => { el.hidden = false; });
+  const KEY = "anden-consent";
+  const get = () => { try { return localStorage.getItem(KEY); } catch (e) { return null; } };
+  const set = (v) => { try { localStorage.setItem(KEY, v); } catch (e) {} };
+  let loaded = false;
+  function loadGA() {
+    if (loaded) return; loaded = true;
+    window.dataLayer = window.dataLayer || [];
+    window.gtag = function () { window.dataLayer.push(arguments); };
+    window.gtag("js", new Date());
+    window.gtag("config", id);
+    const s = document.createElement("script");
+    s.async = true; s.src = `https://www.googletagmanager.com/gtag/js?id=${id}`;
+    document.head.appendChild(s);
+  }
+  function banner() {
+    if (document.getElementById("consent")) return;
+    const el = document.createElement("div");
+    el.className = "consent"; el.id = "consent"; el.setAttribute("role", "dialog"); el.setAttribute("aria-label", "Cookies");
+    el.innerHTML = '<div class="consent-in"><p>Usamos cookies de Google Analytics para saber cuánta gente visita Andén y mejorarlo. Solo se activan si las aceptas. <a href="/cookies">Más información</a></p><div class="row-btns"><button type="button" class="btn ghost" data-v="no">Rechazar</button><button type="button" class="btn" data-v="si">Aceptar</button></div></div>';
+    el.addEventListener("click", (e) => {
+      const v = e.target.closest("button")?.dataset.v; if (!v) return;
+      set(v); el.remove();
+      if (v === "si") loadGA(); else if (loaded) location.reload();
+    });
+    document.body.appendChild(el);
+  }
+  if (get() === "si") loadGA(); else if (!get()) banner();
+  document.getElementById("cookie-settings")?.addEventListener("click", banner);
+})();
+
 // Utilidades compartidas
 window.Anden = {
   h(tag, attrs = {}, ...children) {

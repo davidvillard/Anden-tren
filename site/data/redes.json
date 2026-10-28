@@ -1,0 +1,17 @@
+{
+  "nota": "Zonas aproximadas de cada red de Cercanías (lat/lon mín. y máx.). Sirven para asignar cada tren a su red.",
+  "redes": [
+    { "slug": "madrid", "nombre": "Cercanías Madrid", "corto": "Madrid", "bbox": [39.85, -4.35, 40.95, -3.0], "claves": ["madrid", "atocha", "chamartín", "chamartin", "sol", "nuevos ministerios", "alcalá de henares", "aranjuez", "guadalajara", "parla", "fuenlabrada", "móstoles", "getafe", "alcobendas", "villalba", "el escorial", "cercedilla"] },
+    { "slug": "rodalies-catalunya", "nombre": "Rodalies de Catalunya", "corto": "Rodalies", "bbox": [40.5, 0.15, 42.5, 3.35], "claves": ["rodalies", "barcelona", "sants", "passeig de gràcia", "girona", "tarragona", "lleida", "manresa", "terrassa", "sabadell", "mataró", "granollers", "vic", "vilanova", "sant vicenç", "maçanet", "figueres", "reus"] },
+    { "slug": "valencia", "nombre": "Cercanías Valencia", "corto": "Valencia", "bbox": [38.85, -1.0, 40.05, 0.1], "claves": ["valència", "valencia", "castelló", "castellón", "gandia", "xàtiva", "sagunt", "sagunto", "utiel", "caudete de las fuentes", "moixent"] },
+    { "slug": "sevilla", "nombre": "Cercanías Sevilla", "corto": "Sevilla", "bbox": [36.9, -6.5, 37.75, -5.3], "claves": ["sevilla", "santa justa", "utrera", "dos hermanas", "lora del río", "cazalla", "benacazón", "aeropuerto de sevilla"] },
+    { "slug": "malaga", "nombre": "Cercanías Málaga", "corto": "Málaga", "bbox": [36.45, -4.95, 36.85, -4.2], "claves": ["málaga", "malaga", "fuengirola", "torremolinos", "benalmádena", "álora", "aeropuerto de málaga"] },
+    { "slug": "cadiz", "nombre": "Cercanías Cádiz", "corto": "Cádiz", "bbox": [36.35, -6.45, 36.85, -5.95], "claves": ["cádiz", "cadiz", "jerez", "san fernando", "puerto real", "el puerto de santa maría", "universidad"] },
+    { "slug": "bilbao", "nombre": "Cercanías Bilbao", "corto": "Bilbao", "bbox": [43.1, -3.3, 43.45, -2.6], "claves": ["bilbao", "abando", "santurtzi", "muskiz", "orduña", "urduña", "balmaseda", "barakaldo"] },
+    { "slug": "san-sebastian", "nombre": "Cercanías San Sebastián", "corto": "San Sebastián", "bbox": [42.95, -2.35, 43.4, -1.7], "claves": ["donostia", "san sebastián", "irun", "brinkola", "tolosa", "beasain", "zumárraga"] },
+    { "slug": "asturias", "nombre": "Cercanías Asturias", "corto": "Asturias", "bbox": [43.1, -6.3, 43.65, -5.2], "claves": ["asturias", "oviedo", "gijón", "gijon", "avilés", "mieres", "langreo", "pola de lena", "laviana"] },
+    { "slug": "cantabria", "nombre": "Cercanías Cantabria", "corto": "Cantabria", "bbox": [43.1, -4.3, 43.5, -3.7], "claves": ["santander", "cantabria", "torrelavega", "reinosa", "cabezón de la sal", "liérganes"] },
+    { "slug": "murcia-alicante", "nombre": "Cercanías Murcia/Alicante", "corto": "Murcia/Alicante", "bbox": [37.5, -1.75, 38.45, -0.4], "claves": ["murcia", "alicante", "alacant", "elche", "elx", "lorca", "águilas", "orihuela", "san vicente"] },
+    { "slug": "zaragoza", "nombre": "Cercanías Zaragoza", "corto": "Zaragoza", "bbox": [41.5, -1.2, 41.8, -0.7], "claves": ["zaragoza", "delicias", "casetas", "miraflores", "utebo"] }
+  ]
+}
