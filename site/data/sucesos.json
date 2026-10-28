@@ -1,0 +1,30 @@
+{
+  "actualizado": "2026-10-28T20:00:00+01:00",
+  "sucesos": [
+    {
+      "id": "urda-2026-10-28",
+      "activo": true,
+      "accidenteId": "urda",
+      "titulo": "Choque de dos trenes de alta velocidad entre Los Yébenes y Urda (Toledo)",
+      "resumen": "Un AVE de Renfe y un tren de Iryo chocaron en la línea de alta velocidad Madrid–Andalucía. La CIAF investiga las causas.",
+      "inicio": "2026-10-28T08:54:00+01:00",
+      "estado": "provisional",
+      "cifras": {
+        "fallecidos": { "valor": 64, "prefijo": "≥" },
+        "heridos": { "valor": 80, "prefijo": "≈", "nota": "unos 50 graves" },
+        "aBordo": { "valor": 543, "nota": "según medios" }
+      },
+      "circulacion": "Alta velocidad Madrid–Andalucía interrumpida. Renfe ofrece lanzaderas de Madrid a Ciudad Real y Puertollano.",
+      "fuente": "Gobierno de Castilla-La Mancha, recogido por la prensa. Aún sin balance del Ministerio de Transportes ni de la CIAF.",
+      "historial": [
+        { "cuando": "Mañana del 28 oct", "texto": "Primer balance: 30 fallecidos", "fuente": "Junta de Castilla-La Mancha" },
+        { "cuando": "Tarde del 28 oct", "texto": "Se eleva a 64 fallecidos y unos 80 heridos", "fuente": "Gobierno de Castilla-La Mancha" }
+      ],
+      "enlaces": [
+        ["The Objective (directo)", "https://theobjective.com/economia/transporte/2026-10-28/accidente-ferroviario-urda-toledo/directo/"],
+        ["El Economista", "https://www.eleconomista.es/transportes-turismo/noticias/14024147/10/26/el-accidente-de-tren-en-urda-toledo-se-convierte-en-el-mas-grave-desde-el-de-angrois-al-menos-64-muertos.html"],
+        ["El Español (directo)", "https://www.elespanol.com/invertia/observatorios/movilidad/20261028/accidente-tren-hoy-directo-ultima-hora-choque-resultado-varios-heridos-interrumpido-circulacion-madrid-andalucia/1003744437595_10.html"]
+      ]
+    }
+  ]
+}

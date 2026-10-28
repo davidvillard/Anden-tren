@@ -1,9 +1,11 @@
 {
-  "name": "atlas-ferroviario",
+  "name": "anden",
   "private": true,
   "type": "module",
   "engines": { "node": ">=20" },
   "scripts": {
-    "live": "node scripts/live.js"
+    "build": "node scripts/build.js",
+    "live": "node scripts/live.js",
+    "preview": "node scripts/build.js && python3 -m http.server 3000 --directory dist"
   }
 }

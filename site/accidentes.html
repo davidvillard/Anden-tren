@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Accidentes ferroviarios en España: mapa y registro · Andén</title>
+<meta name="description" content="Mapa de los accidentes de tren más graves en España desde 2003: fallecidos, heridos, causas y estado de la investigación de la CIAF.">
+<link rel="canonical" href="__SITE_URL__/accidentes">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Accidentes ferroviarios en España · Andén">
+<meta property="og:description" content="Dónde ocurrieron, qué los causó y en qué punto está cada investigación.">
+<meta property="og:url" content="__SITE_URL__/accidentes">
+<!--#head-->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Dataset",
+  "name": "Accidentes ferroviarios graves en España (2003–2026)",
+  "description": "Selección de accidentes ferroviarios con víctimas mortales en España, con fecha, lugar, tipo, cifras de víctimas, causa y estado de la investigación.",
+  "url": "__SITE_URL__/accidentes",
+  "inLanguage": "es-ES",
+  "spatialCoverage": "España",
+  "temporalCoverage": "2003/2026",
+  "creator": { "@type": "Organization", "name": "Andén", "url": "__SITE_URL__/" },
+  "isBasedOn": "Comisión de Investigación de Accidentes Ferroviarios (CIAF) y servicios de emergencia",
+  "distribution": { "@type": "DataDownload", "encodingFormat": "application/json", "contentUrl": "__SITE_URL__/data/accidentes.json" }
+}
+</script>
+<link rel="stylesheet" href="/vendor/leaflet/leaflet.css">
+</head>
+<body>
+<!--#header-->
+
+<main id="contenido">
+  <section class="page-head band">
+    <div class="container">
+      <p class="crumbs"><a href="/">Inicio</a> › Accidentes</p>
+      <h1>Accidentes ferroviarios en España</h1>
+      <p>Los accidentes de tren más graves desde 2003: dónde ocurrieron, cuántas víctimas hubo, qué los causó y en qué punto está la investigación.</p>
+    </div>
+  </section>
+
+  <section class="section" id="suceso-wrap" hidden aria-label="Suceso en curso">
+    <div class="container" id="suceso"></div>
+  </section>
+
+  <section class="section" aria-labelledby="reg-titulo">
+    <div class="container">
+      <div class="section-head">
+        <h2 id="reg-titulo">Registro de accidentes</h2>
+        <p class="small" id="summary"></p>
+      </div>
+      <div class="filter">
+        <label for="acc-q" class="sr-only">Buscar por lugar</label>
+        <input id="acc-q" type="search" placeholder="Buscar por lugar o provincia">
+      </div>
+      <div class="chips" role="group" aria-label="Tipo de servicio" id="f-service"><span class="chip-label">Servicio:</span></div>
+      <div class="chips" role="group" aria-label="Estado de la investigación" id="f-status"><span class="chip-label">Investigación:</span></div>
+      <div class="chips" role="group" aria-label="Orden">
+        <span class="chip-label">Ordenar:</span>
+        <button class="chip" type="button" id="sort-date" aria-pressed="true">Más recientes</button>
+        <button class="chip" type="button" id="sort-fat" aria-pressed="false">Más víctimas</button>
+      </div>
+      <div class="live-grid">
+        <div class="card pad sticky-map">
+          <div id="acc-map" class="map" role="region" aria-label="Mapa con la ubicación de cada accidente"></div>
+          <div class="legend">
+            <span><i style="background:var(--crit)"></i>Investigación abierta</span>
+            <span><i style="background:var(--ok)"></i>Informe final publicado</span>
+            <span><i style="background:var(--muted)"></i>Antes de existir la CIAF (2007)</span>
+            <span>Círculo más grande = más víctimas</span>
+          </div>
+        </div>
+        <div class="acc-list" id="list"></div>
+      </div>
+      <p class="small muted">Es una selección de los accidentes con víctimas mortales más relevantes. Iremos añadiendo todos los sucesos de las memorias anuales de la CIAF.</p>
+    </div>
+  </section>
+</main>
+
+<!--#footer-->
+<script src="/vendor/leaflet/leaflet.js"></script>
+<script src="/assets/js/sucesos.js"></script>
+<script src="/assets/js/accidentes.js"></script>
+</body>
+</html>

@@ -1,41 +1,43 @@
-# Atlas Ferroviario de España
+# Andén
 
-Web con trenes de Cercanías en directo, avisos de Renfe y un registro de accidentes ferroviarios graves en España. Solo usa datos públicos y oficiales: no admite avisos de usuarios ni publica datos personales.
+Retrasos, avisos e incidencias de trenes en España, en directo y con datos oficiales.
 
 ## Estructura
 
-- `site/`: la web estática (HTML, CSS y JS, sin paso de compilación).
-- `site/data/accidentes.json`: registro de accidentes con sus fuentes. Se edita a mano.
-- `api/live.js`: función de Vercel. `GET /api/live` consulta los feeds GTFS-Realtime de Renfe y devuelve un resumen. Vercel guarda la respuesta 30 segundos en caché.
-- `lib/renfe.js`: descarga y lectura de los feeds de Renfe.
+| Carpeta o archivo | Qué es |
+|---|---|
+| `site/` | La web: páginas, estilos, scripts, fuentes, iconos y datos |
+| `site/data/accidentes.json` | Registro de accidentes con sus fuentes |
+| `site/data/sucesos.json` | Suceso en curso: cifras, historial y fuente de cada cifra |
+| `partials/` | Cabecera, pie y etiquetas comunes que se insertan en todas las páginas |
+| `scripts/build.js` | Genera `dist/`: inserta los parciales, crea las páginas legales, `sitemap.xml` y `robots.txt` |
+| `scripts/pages.js` | Contenido de las páginas de texto (fuentes, aviso legal, privacidad, cookies, accesibilidad) |
+| `api/live.js` | Función de Vercel: `GET /api/live` resume los feeds en directo de Renfe (caché de 30 s) |
+| `lib/renfe.js` | Lectura de los feeds GTFS-Realtime de Renfe |
 
 ## Publicar en Vercel
 
-1. En Vercel, **Add New → Project** e importa este repositorio.
-2. Deja **Framework Preset** en "Other". `vercel.json` ya indica que la web está en `site/`.
-3. Pulsa **Deploy**.
+Vercel lo detecta solo gracias a `vercel.json`: ejecuta `node scripts/build.js` y publica `dist/`.
 
-No necesita variables de entorno ni claves.
+- **Dominio propio:** añade la variable de entorno `SITE_URL` (por ejemplo `https://anden.es`) para que las etiquetas SEO, el sitemap y las imágenes para compartir usen ese dominio. Sin ella, se usa el dominio de producción de Vercel.
 
 ## Probar en local
+
+```bash
+npm run preview
+```
 
 ```bash
 npm run live
 ```
 
-```bash
-npx vercel dev
-```
+## Datos legales pendientes
 
-## Fuentes
+En `scripts/pages.js` hay marcadores `[...]` (titular, NIF, domicilio y correo) que hay que rellenar antes de lanzar la web, porque la LSSI obliga a mostrarlos.
 
-| Fuente | Uso |
-|---|---|
-| Renfe GTFS-Realtime (`gtfsrt.renfe.com`): posiciones, retrasos y avisos de Cercanías | En directo |
-| Renfe `trip_updates_LD.json`: retrasos de larga distancia | En prueba; falta confirmar que es oficial |
-| CIAF y ERA: informes de accidentes | Registro |
-| OpenStreetMap: mapa base | Mapa (para mucho tráfico, cambiar a un proveedor de teselas propio) |
+## Accesibilidad
 
-## Privacidad
-
-Solo cifras agregadas (fallecidos y heridos). Nada de nombres, edades, fotos ni datos que permitan identificar a nadie.
+- Tipografía Atkinson Hyperlegible a 18 px, con botón para agrandar el texto.
+- Modo claro y oscuro (por defecto, el del dispositivo).
+- Contraste mínimo AA, botones de al menos 44 px y estados indicados siempre con texto, no solo con color.
+- Vista de lista además del mapa y buscador compatible con lectores de pantalla.

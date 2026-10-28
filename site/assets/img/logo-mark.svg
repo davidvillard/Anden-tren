@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Andén">
+  <rect width="64" height="64" rx="16" fill="#1446D8"/>
+  <path d="M15 53 L29.5 15 M49 53 L34.5 15" stroke="#fff" stroke-width="6.5" stroke-linecap="round" fill="none"/>
+  <path d="M21.5 39 H42.5" stroke="#fff" stroke-width="5.5" stroke-linecap="round"/>
+  <circle cx="47.5" cy="16.5" r="7.5" fill="#2EE59D" stroke="#1446D8" stroke-width="3"/>
+</svg>
