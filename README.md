@@ -17,7 +17,7 @@ Retrasos, avisos e incidencias de trenes en España, en directo y con datos ofic
 
 ## Actualización automática de sucesos
 
-`api/cron/sucesos.js` revisa cada 5 minutos titulares sobre sucesos ferroviarios (`lib/news.js`), pide a Claude las cifras y quién las da (`lib/extract.js`) y aplica las reglas de `lib/merge.js`:
+`api/cron/sucesos.js` revisa cada 5 minutos titulares sobre sucesos ferroviarios (`lib/news.js`), pide a Gemini (plan gratuito de Google AI Studio) las cifras y quién las da (`lib/extract.js`) y aplica las reglas de `lib/merge.js`:
 
 - Una cifra solo se publica si la noticia la atribuye a un organismo oficial.
 - Un suceso nuevo necesita al menos dos medios distintos y una cifra oficial.
@@ -31,7 +31,7 @@ El resultado se guarda en Upstash Redis y se sirve en `GET /api/sucesos`. Si Red
 
 | Variable | Para qué | Obligatoria |
 |---|---|---|
-| `ANTHROPIC_API_KEY` | Extracción de cifras con Claude | Para la actualización automática |
+| `GEMINI_API_KEY` | Extracción de cifras con Gemini (gratis, sin facturación vinculada) | Para la actualización automática |
 | `KV_REST_API_URL`, `KV_REST_API_TOKEN` | Upstash Redis (las crea Vercel al conectarlo) | Para la actualización automática |
 | `CRON_SECRET` | Contraseña que protege `/api/cron/sucesos` | Para la actualización automática |
 | `DEPLOY_HOOK_URL` | Republica la web cuando cambian las cifras, para que Google las vea | Recomendada |
@@ -39,16 +39,18 @@ El resultado se guarda en Upstash Redis y se sirve en `GET /api/sucesos`. Si Red
 | `GA_MEASUREMENT_ID` | Google Analytics 4 (`G-...`) | No |
 | `GSC_VERIFICATION` | Código de verificación de Search Console | No |
 | `CONTACT_EMAIL`, `OWNER_NAME`, `OWNER_NIF` | Datos de las páginas legales | No |
-| `CLAUDE_MODEL`, `CLAUDE_MIN_INTERVAL_MIN` | Modelo y minutos mínimos entre consultas a Claude (por defecto 10) | No |
+| `GEMINI_MODELS`, `GEMINI_MIN_INTERVAL_MIN` | Modelos gratuitos a probar en orden y minutos mínimos entre consultas (por defecto 10) | No |
 | `NEWS_FEEDS` | RSS oficiales adicionales, separados por comas | No |
 
 ### Programar la revisión cada 5 minutos
 
-El plan gratuito de Vercel solo permite un cron al día (ya configurado en `vercel.json`). Para revisar cada 5 minutos, crea una tarea en [cron-job.org](https://cron-job.org) (gratis):
+El plan gratuito de Vercel solo permite un cron al día (ya configurado en `vercel.json` como respaldo). Para revisar cada 5 minutos, crea una tarea gratuita en [cron-job.org](https://cron-job.org):
 
 - URL: `https://TU-DOMINIO/api/cron/sucesos`
 - Frecuencia: cada 5 minutos
 - Cabecera: `Authorization: Bearer TU_CRON_SECRET`
+
+Coste: 0 €. Gemini solo se consulta cuando hay titulares nuevos, como mucho cada 10 minutos, y si se agota el cupo gratuito se pausa una hora. Sin cuenta de facturación vinculada al proyecto de Google, nunca se cobra.
 
 ## Publicar en Vercel
 

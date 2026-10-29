@@ -79,7 +79,7 @@ export const pages = (cfg) => [
 
 <h2>Cómo tratamos las cifras de un suceso</h2>
 <ul>
-<li>Un sistema automático revisa cada 5 minutos las noticias sobre trenes. Una inteligencia artificial (Claude, de Anthropic) extrae de ellas las cifras y el organismo que las da.</li>
+<li>Un sistema automático revisa cada 5 minutos las noticias sobre trenes. Una inteligencia artificial (Gemini, de Google) extrae de ellas las cifras y el organismo que las da.</li>
 <li>Solo se publica una cifra si la noticia la atribuye a un organismo oficial (servicios de emergencias, gobiernos, ministerios, Guardia Civil, CIAF u operadores).</li>
 <li>Un suceso nuevo solo aparece si lo cuentan al menos dos medios distintos.</li>
 <li>Cada cifra indica qué organismo la ha dado y cuándo.</li>
