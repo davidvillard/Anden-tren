@@ -36,14 +36,16 @@
     return { ...t, red, code, line: code ? `${code}|${red ? red.slug : "otras"}` : null, num: trainNumber(t) };
   }).filter((t) => !SCOPE || t.red?.slug === SCOPE);
   const alertText = (a) => norm(`${a.header} ${a.desc} ${a.routes.join(" ")}`);
+  // routeId de Renfe: <red><T><nº><línea>, p. ej. 10T0011C4 → red 10, línea C4
+  const routeRed = (r) => { const m = /^(\d{2})T/.exec(r || ""); return m ? state.redes.find((x) => (x.codigos || []).includes(m[1])) || null : null; };
+  const routeLine = (r) => { const m = /T\d+([A-Za-z]+\d+[a-zA-Z]?)$/.exec(r || ""); return m ? m[1].toUpperCase().replace(/([A-Z]+\d+)[A-Z]$/, "$1") : null; };
   const alerts = () => {
     const all = state.live?.cercanias?.alerts || [];
     const r = scopeRed();
     if (!r) return all;
-    const codes = new Set(trains().map((t) => norm(t.code)).filter(Boolean));
-    return all.filter((a) => r.claves.some((k) => alertText(a).includes(norm(k))) || a.routes.some((x) => [...codes].some((c) => norm(x).endsWith(c))));
+    return all.filter((a) => a.routes.some((x) => routeRed(x)?.slug === r.slug) || (!a.routes.length && r.claves.some((k) => alertText(a).includes(norm(k)))));
   };
-  const alertMatchesLine = (a, key) => { const code = norm(lineCode(key)); const r = state.redes.find((x) => x.slug === key.split("|")[1]); const byCode = a.routes.some((x) => norm(x).endsWith(code)) || new RegExp(`\\b${code}\\b`).test(alertText(a)); return byCode && (!r || SCOPE || r.claves.some((k) => alertText(a).includes(norm(k))) || a.routes.length > 0); };
+  const alertMatchesLine = (a, key) => { const [code, slug] = key.split("|"); return a.routes.some((x) => routeLine(x) === code && (!routeRed(x) || routeRed(x).slug === slug)) || (!a.routes.length && new RegExp(`\\b${norm(code)}\\b`).test(alertText(a))); };
   const visibleTrains = () => trains().filter((t) => !state.line || t.line === state.line);
 
   /* ---------- Mapa ---------- */
@@ -102,6 +104,9 @@
       k(known.length ? `${Math.round((late.length / known.length) * 100)} %` : "—", "van con 3 min o más de retraso"),
       k(avg !== null ? `${avg.toFixed(1).replace(".", ",")} min` : "—", "de retraso medio"),
       k(alerts().length.toLocaleString("es-ES"), "avisos activos"));
+    const ld = state.live?.largaDistancia?.trips || [];
+    const cancel = ld.filter((t) => t.cancelled).length;
+    if (!SCOPE && cancel) document.getElementById("kpis").append(k(cancel.toLocaleString("es-ES"), "trenes de alta velocidad y larga distancia cancelados hoy"));
   }
 
   function drawLineFilter() {
