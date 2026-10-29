@@ -50,7 +50,7 @@
     const href = a.getAttribute("href");
     const match = href === "/" ? path === "/" : path === href || path.startsWith(href + "/") ||
       (href === "/accidente-tren-hoy" && /^\/(accidentes|accidente-tren)/.test(path)) ||
-      (href === "/trenes" && /^\/(tren|cercanias)/.test(path)) || (href === "/retrasos" && path === "/linea");
+      (href === "/trenes" && /^\/(tren|cercanias)/.test(path)) || (href === "/retrasos" && path === "/linea") || (href === "/incidencias" && path.startsWith("/incidencia/"));
     if (match) a.setAttribute("aria-current", "page");
   });
 })();

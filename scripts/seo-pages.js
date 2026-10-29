@@ -1,6 +1,8 @@
 // Páginas pensadas para buscadores, generadas en cada build:
 //  - /accidente-tren-hoy           todos los sucesos en curso y recientes
-//  - /accidente-tren/<id> (o la ruta de "pagina")  una por suceso, con FAQ
+//  - /accidente-tren/<id> (o la ruta de "pagina")  una por accidente, con FAQ
+//  - /incidencias                  averías, trenes parados y cortes de vía en curso
+//  - /incidencia/<id>              una por incidencia
 //  - /cercanias/<red>              retrasos e incidencias de cada red de Cercanías
 // El contenido principal va escrito en el HTML para que Google lo lea sin JS;
 // después los scripts lo actualizan en directo.
@@ -10,7 +12,8 @@ const TZ = { timeZone: "Europe/Madrid" };
 const fecha = (iso) => new Date(iso).toLocaleDateString("es-ES", { ...TZ, day: "numeric", month: "long", year: "numeric" });
 const hora = (iso) => new Date(iso).toLocaleTimeString("es-ES", { ...TZ, hour: "2-digit", minute: "2-digit" });
 const cifra = (c) => c && c.valor !== null && c.valor !== undefined ? `${c.prefijo === "≥" ? "al menos " : ""}${c.valor}` : null;
-export const sucesoPath = (s) => s.pagina || `/accidente-tren/${s.id}`;
+const isInc = (s) => s.clase === "incidencia";
+export const sucesoPath = (s) => s.pagina || (isInc(s) ? `/incidencia/${s.id}` : `/accidente-tren/${s.id}`);
 
 function shell({ path, title, description, ogType = "website", jsonld = [], body, scripts = [], leaflet = false, inline = "", dataPage = "" }) {
   return `<!doctype html>
@@ -76,9 +79,14 @@ function preguntasSuceso(s) {
 function sucesoPage(s, actualizado) {
   const path = sucesoPath(s);
   const f = cifra(s.cifras?.fallecidos), hh = cifra(s.cifras?.heridos);
-  const title = s.seo?.title || `Accidente de tren en ${s.lugar}: última hora, fallecidos y heridos`;
+  const inc = isInc(s);
+  const title = s.seo?.title || (inc
+    ? `${s.titulo}: última hora y trenes afectados`
+    : `Accidente de tren en ${s.lugar}: última hora, fallecidos y heridos`);
   const description = s.seo?.description || `${s.resumen}${f ? ` Balance: ${f} fallecidos` : ""}${hh ? ` y ${hh} heridos` : ""}.`;
   const qs = preguntasSuceso(s);
+  const parent = inc ? ["Incidencias", "/incidencias"] : ["Accidente de tren hoy", "/accidente-tren-hoy"];
+  const fuentes = (s.enlaces || []).map((e) => Array.isArray(e) ? { nombre: e[0], url: e[1] } : e);
   const article = {
     "@context": "https://schema.org", "@type": "NewsArticle",
     headline: title.slice(0, 110), description, inLanguage: "es-ES",
@@ -92,7 +100,7 @@ function sucesoPage(s, actualizado) {
     ? `<div class="figure${crit ? " crit" : ""}"><b>${esc(c.prefijo ? c.prefijo + " " : "")}${c.valor}</b><span>${esc(label)}${c.nota ? ", " + esc(c.nota) : ""}</span>${c.fuente ? `<span class="small" style="display:block;margin-top:4px">Fuente: ${esc(c.fuente)}</span>` : ""}</div>` : "";
   const body = `
   <section class="page-head band"><div class="container">
-    <p class="crumbs"><a href="/">Inicio</a> › <a href="/accidente-tren-hoy">Accidente de tren hoy</a> › ${esc(s.lugar)}</p>
+    <p class="crumbs"><a href="/">Inicio</a> › <a href="${parent[1]}">${parent[0]}</a> › ${esc(s.lugar)}</p>
     <h1>${esc(s.titulo)}</h1>
     <p>${esc(s.lugar)} · ${fecha(s.inicio)}, ${hora(s.inicio)} · ${esc(s.tipo || "")}</p>
   </div></section>
@@ -103,6 +111,7 @@ function sucesoPage(s, actualizado) {
       ${s.telefonos?.length ? `<h2>Teléfonos para familiares</h2><ul>${s.telefonos.map((t) => `<li><strong>${esc(t.numero)}</strong>: ${esc(t.nombre)}</li>`).join("")}</ul>` : ""}
       ${s.circulacion ? `<h2>Trenes afectados</h2><p>${esc(s.circulacion)}</p>` : ""}
       ${s.causas ? `<h2>Causas</h2><p>${esc(s.causas)}</p>` : ""}
+      ${fuentes.length ? `<h2>Fuentes</h2><ul>${fuentes.map((e) => `<li><a href="${esc(e.url)}" rel="noopener" target="_blank">${esc(e.nombre)}</a></li>`).join("")}</ul>` : ""}
     </div></article>
   </div></section>
   ${faqHtml(qs)}
@@ -113,14 +122,14 @@ function sucesoPage(s, actualizado) {
   return {
     path, priority: s.activo ? "0.9" : "0.6", freq: s.activo ? "always" : "weekly",
     html: shell({ path, title: `${title} · Andén`, description, ogType: "article", body,
-      jsonld: [article, faqLd(qs), crumbs([["Inicio", "/"], ["Accidente de tren hoy", "/accidente-tren-hoy"], [s.lugar, path]])],
+      jsonld: [article, faqLd(qs), crumbs([["Inicio", "/"], parent, [s.lugar, path]])],
       scripts: ["/assets/js/sucesos.js"] }),
   };
 }
 
 function hoyPage(data) {
   const path = "/accidente-tren-hoy";
-  const activos = (data.sucesos || []).filter((s) => s.activo);
+  const activos = (data.sucesos || []).filter((s) => s.activo && !isInc(s));
   const title = "Accidente de tren hoy en España: última hora, heridos y trenes afectados";
   const description = activos.length
     ? `Última hora: ${activos.map((s) => s.titulo).join(". ")}. Cifras oficiales, teléfonos para familiares y estado de los trenes.`
@@ -146,6 +155,38 @@ function hoyPage(data) {
   </div></div></section>`;
   return { path, priority: "0.9", freq: "always",
     html: shell({ path, title: `${title} · Andén`, description, body, jsonld: [faqLd(qs), crumbs([["Inicio", "/"], ["Accidente de tren hoy", path]])], scripts: ["/assets/js/sucesos.js"] }) };
+}
+
+function incidenciasPage(data) {
+  const path = "/incidencias";
+  const incs = (data.sucesos || []).filter(isInc);
+  const activas = incs.filter((s) => s.activo);
+  const title = "Incidencias de trenes hoy: averías, trenes parados y cortes de vía";
+  const description = activas.length
+    ? `Ahora: ${activas.map((s) => s.titulo).join(". ")}. Incidencias de Renfe, Iryo, Ouigo y Adif en directo.`
+    : "Incidencias ferroviarias en España en directo: averías, trenes detenidos, problemas de catenaria y cortes de vía en Renfe, Iryo, Ouigo y Cercanías.";
+  const qs = [
+    { p: "¿Hay hoy alguna incidencia en los trenes?", r: activas.length ? `Sí. ${activas.map((s) => `${s.titulo}.`).join(" ")}` : "Ahora mismo Andén no tiene registrada ninguna incidencia importante en la red ferroviaria." },
+    { p: "¿De dónde sale esta información?", r: "De las noticias de al menos dos medios distintos que informan de la incidencia, enlazados en cada caso. Para los avisos oficiales de Cercanías, consulta la página de avisos de Renfe." },
+    { p: "¿Cada cuánto se actualiza?", r: "Andén revisa las noticias cada pocos minutos. Una incidencia deja de mostrarse como en curso cuando se restablece la circulación o tras unas horas sin novedades." },
+  ];
+  const card = (s) => `<article class="incident inc${s.activo ? "" : " done"}"><div class="incident-body"><h3><a href="${sucesoPath(s)}">${esc(s.titulo)}</a></h3><p>${esc(s.resumen)}</p></div></article>`;
+  const body = `
+  <section class="page-head band"><div class="container">
+    <p class="crumbs"><a href="/">Inicio</a> › Incidencias</p>
+    <h1>Incidencias en los trenes</h1>
+    <p>Averías, trenes parados, problemas de catenaria y cortes de vía en toda España y en cualquier compañía. Se actualiza automáticamente.</p>
+  </div></section>
+  <section class="section"><div class="container" id="suceso" data-modo="incidencias">
+    ${activas.length ? `<div class="alerts">${activas.map(card).join("")}</div>` : '<div class="empty">Ahora mismo no hay ninguna incidencia importante en la red ferroviaria.</div>'}
+  </div></section>
+  <section class="section"><div class="container"><div class="card pad promo">
+    <div style="display:grid;gap:6px"><h2>Avisos oficiales de Renfe</h2><p class="muted">Obras, cortes y cambios de servicio en Cercanías, tal como los publica Renfe.</p></div>
+    <a class="btn" href="/avisos">Ver avisos de Renfe</a>
+  </div></div></section>
+  ${faqHtml(qs)}`;
+  return { path, priority: "0.9", freq: "always",
+    html: shell({ path, title: `${title} · Andén`, description, body, jsonld: [faqLd(qs), crumbs([["Inicio", "/"], ["Incidencias", path]])], scripts: ["/assets/js/sucesos.js"] }) };
 }
 
 /* ---------- Redes de Cercanías ---------- */
@@ -193,7 +234,7 @@ function redPage(red, redes) {
 }
 
 export function generate({ sucesos, redes }) {
-  const pages = [hoyPage(sucesos)];
+  const pages = [hoyPage(sucesos), incidenciasPage(sucesos)];
   for (const s of sucesos.sucesos || []) pages.push(sucesoPage(s, sucesos.actualizado));
   for (const r of redes.redes) pages.push(redPage(r, redes.redes));
   return pages;

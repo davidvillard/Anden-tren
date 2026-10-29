@@ -48,8 +48,8 @@ export default async function handler(req, res) {
     } else {
       await setJSON(KEY_LAST_CALL, now.getTime());
       try {
-        const { data, model } = await extract({ state, items: items.slice(0, 60), now });
-        ({ state: next, changes } = merge({ state, proposal: data, items: items.slice(0, 60), now }));
+        const { data, model } = await extract({ state, items: items.slice(0, 90), now });
+        ({ state: next, changes } = merge({ state, proposal: data, items: items.slice(0, 90), now }));
         for (const it of items) seen[it.link] = now.toISOString();
         summary.gemini = { modelo: model };
       } catch (e) {
