@@ -252,7 +252,8 @@ tbody tr{transition:background .12s}
 tbody tr:hover{background:var(--softer)}
 
 /* ---------- Avisos ---------- */
-.alerts{display:grid;gap:10px}
+.alerts{display:grid;grid-template-columns:minmax(0,1fr);gap:10px}
+.alert-item,.incident{overflow-wrap:anywhere}
 .alert-item{padding:18px 20px;display:grid;gap:8px}
 .alert-item h3{font-size:1rem;font-weight:650;letter-spacing:-.005em;line-height:1.35}
 .alert-item p{color:var(--ink-2)}
