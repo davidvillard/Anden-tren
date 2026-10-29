@@ -119,15 +119,15 @@ window.Anden = {
     return `a las ${window.Anden.fmtTime(unix)}`;
   },
   mapsOff: () => document.documentElement.dataset.maps === "off",
-  // Mapa base suave (CARTO Positron) con zoom por rueda, doble clic y pellizco
+  // Mapa base de OpenStreetMap (gratis, sin clave), en gris suave por CSS, con zoom por rueda, doble clic y pellizco
   makeMap(id, bounds) {
     const map = L.map(id, {
       scrollWheelZoom: true, wheelPxPerZoomLevel: 90, zoomSnap: 0.25, zoomDelta: 0.5,
       doubleClickZoom: true, touchZoom: true, minZoom: 5, maxZoom: 17,
     });
-    L.tileLayer("https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png", {
-      subdomains: "abcd", maxZoom: 19,
-      attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> · © <a href="https://carto.com/attributions">CARTO</a>',
+    L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
+      maxZoom: 19,
+      attribution: '© <a href="https://www.openstreetmap.org/copyright">colaboradores de OpenStreetMap</a>',
     }).addTo(map);
     map.fitBounds(bounds || [[35.9, -9.4], [43.8, 3.4]]);
     return map;

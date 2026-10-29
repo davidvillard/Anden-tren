@@ -305,6 +305,9 @@ details.card[open] summary{margin-bottom:6px}
 
 /* ---------- Leaflet ---------- */
 .leaflet-container{font-family:var(--font);font-size:.95rem;background:var(--soft)}
+/* Mapa base en gris claro para que destaquen los trenes */
+.leaflet-tile-pane{filter:grayscale(.9) brightness(1.04) contrast(.92)}
+html[data-contrast="high"] .leaflet-tile-pane{filter:grayscale(1)}
 .leaflet-popup-content-wrapper{border-radius:var(--r-lg)!important;box-shadow:var(--shadow-lg)!important}
 .leaflet-bar{border:1px solid var(--line)!important;border-radius:var(--r)!important;box-shadow:var(--shadow)!important;overflow:hidden}
 .leaflet-bar a{border-radius:0!important;color:var(--ink)!important;border-bottom-color:var(--line)!important}

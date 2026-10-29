@@ -155,7 +155,7 @@ ${cfg.ownerNif ? `<li><strong>NIF:</strong> ${cfg.ownerNif}</li>` : ""}
 <h2>Qué datos se tratan</h2>
 <ul>
 <li><strong>Datos técnicos de la conexión:</strong> al visitar la web, el servidor (Vercel Inc.) registra la dirección IP y datos del navegador para servir la página y protegerla frente a abusos. Base legal: interés legítimo (art. 6.1.f RGPD).</li>
-<li><strong>Mapa:</strong> las imágenes del mapa se cargan desde los servidores de CARTO (con datos de OpenStreetMap), que reciben tu dirección IP para enviarlas.</li>
+<li><strong>Mapa:</strong> las imágenes del mapa se cargan desde los servidores de la Fundación OpenStreetMap, que reciben tu dirección IP para enviarlas.</li>
 <li><strong>Preferencias:</strong> el modo fácil de leer, el tamaño de texto, el contraste y tu decisión sobre las cookies se guardan solo en tu navegador. No nos llegan.</li>
 <li><strong>Búsquedas:</strong> lo que escribes en el buscador se procesa en tu navegador y no se guarda.</li>
 <li><strong>Noticias para las cifras de sucesos:</strong> el servidor lee titulares públicos de prensa y los envía a Google Gemini para extraer cifras oficiales. No se envía ningún dato de las personas que visitan la web.</li>
@@ -165,7 +165,7 @@ ${cfg.ga ? `<li><strong>Estadísticas de visitas (solo si las aceptas):</strong>
 <h2>Proveedores</h2>
 <ul>
 <li>Vercel Inc. (alojamiento), con garantías para transferencias internacionales según el RGPD.</li>
-<li>CARTO (imágenes del mapa, con datos de la Fundación OpenStreetMap).</li>
+<li>Fundación OpenStreetMap (imágenes del mapa).</li>
 <li>Upstash (base de datos de las cifras de sucesos; no contiene datos de visitantes).</li>
 <li>Google (Gemini, para procesar titulares públicos; no recibe datos de visitantes).</li>
 <li>cron-job.org (programa la revisión automática de noticias; no recibe datos de visitantes).</li>
@@ -200,7 +200,7 @@ ${cfg.ga ? `<p>Andén no usa cookies de publicidad. Solo usa cookies de <strong>
 <p>Si activas el modo fácil de leer, cambias el tamaño del texto o el contraste, o decides sobre las cookies, tu navegador guarda esa preferencia en su almacenamiento local para recordarla la próxima vez. Es un dato técnico necesario para la función que has pedido, no sale de tu dispositivo y puedes borrarlo desde los ajustes del navegador.</p>
 
 <h2>Servicios de terceros</h2>
-<p>Las imágenes del mapa vienen de CARTO, que no instala cookies al servirlas.</p>
+<p>Las imágenes del mapa vienen de la Fundación OpenStreetMap, que no instala cookies al servirlas.</p>
 
 <h2>Cambios</h2>
 <p>Si añadimos otras cookies que necesiten tu permiso, lo indicaremos aquí y te lo pediremos antes de usarlas.</p>
