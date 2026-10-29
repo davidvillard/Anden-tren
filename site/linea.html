@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Línea de Cercanías: retrasos y avisos en directo · Andén</title>
+<meta name="description" content="Estado en directo de la línea: trenes circulando, retrasos y avisos de Renfe.">
+<link rel="canonical" href="__SITE_URL__/linea">
+<meta name="robots" content="noindex,follow">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Línea de Cercanías: retrasos y avisos en directo · Andén">
+<meta property="og:description" content="Estado en directo de la línea: trenes circulando, retrasos y avisos de Renfe.">
+<meta property="og:url" content="__SITE_URL__/linea">
+<!--#head-->
+<link rel="stylesheet" href="/vendor/leaflet/leaflet.css">
+
+</head>
+<body data-page="linea">
+<!--#header-->
+<main id="contenido">
+<section class="page-head"><div class="container">
+    <p class="crumbs"><a href="/">Inicio</a> › <a href="/retrasos">Retrasos</a> › <span id="crumb-red">Cercanías</span></p>
+    <h1 id="title">Línea</h1>
+    <div id="status"></div>
+    <span class="live-pill" id="live-pill"><span class="pulse off" aria-hidden="true"></span><span data-text>Conectando con Renfe…</span></span>
+  </div></section>
+  <section class="section"><div class="container"><div class="kpis" id="kpis"></div></div></section>
+  <section class="section" aria-labelledby="directo-titulo"><div class="container"><div class="section-head"><h2 id="directo-titulo">Trenes en directo</h2>
+      <div class="segmented" role="group" aria-label="Forma de ver los trenes"><button type="button" id="view-map" aria-pressed="true">Mapa</button><button type="button" id="view-list" aria-pressed="false">Lista</button></div></div>
+    <div class="card mapbox"><div id="map" class="map" role="region" aria-label="Mapa con la posición de los trenes"></div><div class="legend"><span><i style="background:var(--ok)"></i>En hora</span><span><i style="background:var(--warn)"></i>De 3 a 10 min tarde</span><span><i style="background:var(--crit)"></i>Más de 10 min tarde</span><span><i style="background:var(--faint)"></i>Sin dato</span></div><p class="map-hint">Usa la rueda del ratón o pellizca para acercar. Toca un tren para ver su ficha.</p></div>
+    <div data-list hidden><div class="list-scroll" id="train-list"></div></div></div></section>
+  <section class="section" id="avisos" aria-labelledby="a-t"><div class="container">
+    <h2 id="a-t">Avisos de la línea</h2><div class="alerts" id="alerts"></div>
+  </div></section>
+</main>
+<!--#footer-->
+<script src="/vendor/leaflet/leaflet.js"></script>
+<script src="/assets/js/live-core.js"></script>
+<script src="/assets/js/live-pages.js"></script>
+</body>
+</html>

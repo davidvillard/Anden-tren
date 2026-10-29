@@ -12,7 +12,7 @@ const hora = (iso) => new Date(iso).toLocaleTimeString("es-ES", { ...TZ, hour: "
 const cifra = (c) => c && c.valor !== null && c.valor !== undefined ? `${c.prefijo === "≥" ? "al menos " : ""}${c.valor}` : null;
 export const sucesoPath = (s) => s.pagina || `/accidente-tren/${s.id}`;
 
-function shell({ path, title, description, ogType = "website", jsonld = [], body, scripts = [], leaflet = false, inline = "" }) {
+function shell({ path, title, description, ogType = "website", jsonld = [], body, scripts = [], leaflet = false, inline = "", dataPage = "" }) {
   return `<!doctype html>
 <html lang="es">
 <head>
@@ -28,7 +28,7 @@ function shell({ path, title, description, ogType = "website", jsonld = [], body
 ${jsonld.map((j) => `<script type="application/ld+json">${JSON.stringify(j)}</script>`).join("\n")}
 ${leaflet ? '<link rel="stylesheet" href="/vendor/leaflet/leaflet.css">' : ""}
 </head>
-<body>
+<body${dataPage ? ` data-page="${dataPage}"` : ""}>
 <!--#header-->
 <main id="contenido">
 ${body}
@@ -153,65 +153,43 @@ function hoyPage(data) {
 function redPage(red, redes) {
   const path = `/cercanias/${red.slug}`;
   const title = `${red.nombre} hoy: retrasos, incidencias y trenes en directo`;
-  const description = `Retrasos de ${red.nombre} ahora mismo: trenes en el mapa, minutos de retraso por línea y avisos de Renfe, actualizados cada 30 segundos.`;
+  const description = `Retrasos de ${red.nombre} ahora mismo: estado de cada línea, trenes en el mapa y avisos de Renfe, actualizados cada 30 segundos.`;
   const qs = [
-    { p: `¿Hay retrasos en ${red.nombre} ahora?`, r: `En esta página ves en directo cuántos trenes de ${red.nombre} circulan, cuántos van con retraso y el retraso medio, con datos de Renfe actualizados cada 30 segundos.` },
-    { p: `¿Cómo sé si mi tren de ${red.corto} va con retraso?`, r: "Escribe el número del tren o la línea en el buscador. Verás su retraso, su última posición y los avisos de su línea." },
-    { p: `¿Hay incidencias u obras en ${red.nombre}?`, r: "La sección de avisos muestra las obras, cortes y cambios de servicio que Renfe comunica para esta red." },
+    { p: `¿Hay retrasos en ${red.nombre} ahora?`, r: `En esta página ves en directo cuántos trenes de ${red.nombre} circulan, cuántos van con retraso y el estado de cada línea, con datos de Renfe actualizados cada 30 segundos.` },
+    { p: `¿Cómo sé si mi tren de ${red.corto} va con retraso?`, r: "Toca tu línea en la tabla o busca el número del tren. Verás su retraso, su posición y los avisos de su línea." },
+    { p: `¿Hay obras o incidencias en ${red.nombre}?`, r: "La sección de avisos muestra las obras, cortes y cambios de servicio que Renfe comunica para esta red." },
   ];
-  const others = redes.filter((r) => r.slug !== red.slug).map((r) => `<a class="chip" style="display:inline-flex;align-items:center;text-decoration:none" href="/cercanias/${r.slug}">${esc(r.corto)}</a>`).join("");
+  const others = redes.filter((r) => r.slug !== red.slug).map((r) => `<a class="chip" href="/cercanias/${r.slug}">${esc(r.corto)}</a>`).join("");
   const body = `
-  <section class="hero band" aria-labelledby="titulo"><div class="container">
-    <p class="crumbs"><a href="/">Inicio</a> › Cercanías › ${esc(red.corto)}</p>
-    <span class="live-pill" id="live-pill"><span class="pulse off" aria-hidden="true"></span><span id="live-pill-text">Conectando con Renfe…</span></span>
-    <h1 id="titulo">${esc(red.nombre)}: retrasos e incidencias hoy</h1>
-    <p class="lead">Trenes en directo, minutos de retraso por línea y avisos de Renfe en ${esc(red.nombre)}.</p>
-    ${searchForm(`Nº de tren o línea de ${red.corto}`)}
+  <section class="page-head"><div class="container">
+    <p class="crumbs"><a href="/">Inicio</a> › <a href="/cercanias">Cercanías</a> › ${esc(red.corto)}</p>
+    <h1>${esc(red.nombre)}: retrasos hoy</h1>
+    <span class="live-pill" id="live-pill"><span class="pulse off" aria-hidden="true"></span><span data-text>Conectando con Renfe…</span></span>
   </div></section>
-  ${liveSections(`Ahora mismo en ${red.nombre}`)}
+  <section class="section"><div class="container"><div class="kpis" id="kpis"></div></div></section>
+  <section class="section" aria-labelledby="l-t"><div class="container">
+    <div class="section-head"><h2 id="l-t">Estado de las líneas</h2><p class="small">Toca una línea para ver sus trenes y avisos.</p></div>
+    <div id="lines"></div>
+  </div></section>
+  <section class="section" aria-labelledby="directo-titulo"><div class="container">
+    <div class="section-head"><h2 id="directo-titulo">Trenes en directo</h2>
+      <div class="segmented" role="group" aria-label="Forma de ver los trenes"><button type="button" id="view-map" aria-pressed="true">Mapa</button><button type="button" id="view-list" aria-pressed="false">Lista</button></div></div>
+    <div class="card mapbox"><div id="map" class="map" role="region" aria-label="Mapa con la posición de los trenes"></div>
+      <div class="legend"><span><i style="background:var(--ok)"></i>En hora</span><span><i style="background:var(--warn)"></i>De 3 a 10 min tarde</span><span><i style="background:var(--crit)"></i>Más de 10 min tarde</span><span><i style="background:var(--faint)"></i>Sin dato</span></div>
+      <p class="map-hint">Usa la rueda del ratón o pellizca para acercar. Toca un tren para ver su ficha.</p></div>
+    <div data-list hidden><div class="list-scroll" id="train-list"></div></div>
+  </div></section>
+  <section class="section" aria-labelledby="a-t"><div class="container">
+    <div class="section-head"><h2 id="a-t">Avisos de Renfe</h2><a class="more" href="/avisos?red=${red.slug}">Todos los avisos de ${esc(red.corto)}</a></div>
+    <div class="alerts" id="alerts"></div>
+  </div></section>
   ${faqHtml(qs)}
   <section class="section"><div class="container"><h2>Otras redes de Cercanías</h2><div class="chips">${others}</div></div></section>`;
   return { path, priority: "0.8", freq: "always",
-    html: shell({ path, title: `${title} · Andén`, description, body, leaflet: true,
-      jsonld: [faqLd(qs), crumbs([["Inicio", "/"], [red.nombre, path]])],
+    html: shell({ path, title: `${title} · Andén`, description, body, leaflet: true, dataPage: "red",
+      jsonld: [faqLd(qs), crumbs([["Inicio", "/"], ["Cercanías", "/cercanias"], [red.nombre, path]])],
       inline: `window.ANDEN_RED=${JSON.stringify(red.slug)};`,
-      scripts: ["/vendor/leaflet/leaflet.js", "/assets/js/home.js"] }) };
-}
-
-export function searchForm(placeholder) {
-  return `<form class="search" role="search" id="search-form" autocomplete="off">
-        <label for="q" class="sr-only">Buscar tren, línea o lugar</label>
-        <div class="search-box">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
-          <input id="q" name="q" type="search" placeholder="${esc(placeholder)}" role="combobox" aria-expanded="false" aria-controls="suggest" aria-autocomplete="list" enterkeyhint="search">
-          <button type="submit">Buscar</button>
-        </div>
-        <ul class="suggest" id="suggest" role="listbox" aria-label="Resultados" hidden></ul>
-      </form>
-      <div class="hints" id="hints"></div>`;
-}
-
-export function liveSections(kpiTitle) {
-  return `
-  <div id="focus-wrap" class="section" hidden><div class="container"><div id="focus" class="card pad focus-card" tabindex="-1" aria-live="polite"></div></div></div>
-  <section class="section" aria-labelledby="ahora-titulo"><div class="container">
-    <div class="section-head"><h2 id="ahora-titulo">${esc(kpiTitle)}</h2><p class="small">Datos de Renfe, se actualizan cada 30 segundos.</p></div>
-    <div class="kpis" id="kpis"></div>
-  </div></section>
-  <section class="section" id="directo" aria-labelledby="directo-titulo"><div class="container">
-    <div class="section-head"><h2 id="directo-titulo">Trenes en directo</h2>
-      <div class="segmented" role="group" aria-label="Forma de ver los trenes"><button type="button" id="view-map" aria-pressed="true">Mapa</button><button type="button" id="view-list" aria-pressed="false">Lista</button></div></div>
-    <div class="filter"><label for="line-filter" class="sr-only">Filtrar por línea</label><select id="line-filter"><option value="">Todas las líneas</option></select></div>
-    <div id="map-view" class="card pad"><div id="map" class="map" role="region" aria-label="Mapa con la posición de los trenes"></div>
-      <div class="legend"><span><i style="background:var(--ok)"></i>En hora</span><span><i style="background:var(--warn)"></i>De 3 a 10 min tarde</span><span><i style="background:var(--crit)"></i>Más de 10 min tarde</span><span><i style="background:var(--muted)"></i>Sin dato</span></div></div>
-    <div id="list-view" hidden><div class="list-scroll" id="train-list"></div></div>
-  </div></section>
-  <section class="section" id="avisos" aria-labelledby="avisos-titulo"><div class="container">
-    <div class="section-head"><h2 id="avisos-titulo">Avisos de Renfe</h2><p class="small">Obras, cortes y cambios de servicio comunicados por Renfe.</p></div>
-    <div class="filter"><label for="alert-q" class="sr-only">Buscar en los avisos</label><input id="alert-q" type="search" placeholder="Buscar en los avisos: línea, estación…"></div>
-    <div class="alerts" id="alerts"><div class="empty">Cargando avisos…</div></div>
-    <button class="btn ghost" type="button" id="alerts-more" hidden>Ver todos los avisos</button>
-  </div></section>`;
+      scripts: ["/vendor/leaflet/leaflet.js", "/assets/js/live-core.js", "/assets/js/live-pages.js"] }) };
 }
 
 export function generate({ sucesos, redes }) {

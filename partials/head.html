@@ -1,6 +1,5 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#0A2A7A" media="(prefers-color-scheme: light)">
-<meta name="theme-color" content="#050D24" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#FFFFFF">
 <meta name="application-name" content="Andén">
 <meta name="apple-mobile-web-app-title" content="Andén">
 <meta property="og:site_name" content="Andén">
@@ -9,6 +8,7 @@
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta property="og:image:alt" content="Andén: tu tren, en directo">
+<meta name="google-site-verification" content="__GSC__">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <link rel="icon" href="/assets/img/icon-192.png" sizes="192x192" type="image/png">
@@ -17,12 +17,11 @@
 <link rel="preload" href="/assets/fonts/atkinson-hyperlegible-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/assets/fonts/lexend-latin-700-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="/assets/css/app.css">
-<!--#verification-->
 <script>
   // Aplica las preferencias guardadas antes de pintar la página, para evitar parpadeos.
   try {
-    var t = localStorage.getItem("anden-theme"); if (t) document.documentElement.dataset.theme = t;
-    var s = localStorage.getItem("anden-text"); if (s) document.documentElement.dataset.text = s;
+    var d = document.documentElement;
+    ["a11y", "text", "contrast", "maps"].forEach(function (k) { var v = localStorage.getItem("anden-" + k); if (v) d.dataset[k] = v; });
   } catch (e) {}
-  window.ANDEN_GA = "__GA_ID__";
+  window.ANDEN_GTM = "__GTM_ID__";
 </script>

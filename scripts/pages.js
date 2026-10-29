@@ -113,8 +113,21 @@ ${cfg.ownerNif ? `<li><strong>NIF:</strong> ${cfg.ownerNif}</li>` : ""}
 <h2>Relación con Renfe, Adif y otros organismos</h2>
 <p>Andén es un proyecto independiente. No tiene relación con Renfe, Adif, Iryo, Ouigo ni con ningún organismo público. Los nombres de estas entidades se usan solo para identificar el origen de los datos.</p>
 
+<h2>Condiciones de uso</h2>
+<ul>
+<li>El uso de Andén es gratuito y no requiere registro.</li>
+<li>Puedes enlazar y compartir cualquier página. Si reutilizas los datos, cita la fuente original indicada en <a href="/fuentes">Fuentes de datos</a>.</li>
+<li>No está permitido usar la web para fines ilegales ni intentar alterar su funcionamiento o sobrecargar sus servidores.</li>
+</ul>
+
+<h2>Emergencias</h2>
+<p>Andén es un servicio informativo. No sustituye a los servicios de emergencia ni a los canales oficiales de Renfe, Adif o las autoridades. En una emergencia, llama al <strong>112</strong>.</p>
+
 <h2>Exactitud de la información</h2>
 <p>Los datos proceden de fuentes oficiales y se muestran tal como las publican. Pueden tener retrasos, errores o cambios posteriores. Para decisiones importantes (por ejemplo, si sale o no un tren), consulta siempre los canales oficiales del operador. El titular no se hace responsable de los daños derivados del uso de la información.</p>
+
+<h2>Enlaces a otras webs</h2>
+<p>Andén enlaza a noticias y webs oficiales para que puedas comprobar cada dato. No controla su contenido ni se responsabiliza de él.</p>
 
 <h2>Propiedad intelectual</h2>
 <p>El diseño, el logotipo y el código de Andén pertenecen a su titular. Los datos de terceros mantienen su licencia original, indicada en <a href="/fuentes">Fuentes de datos</a>.</p>
@@ -142,18 +155,25 @@ ${cfg.ownerNif ? `<li><strong>NIF:</strong> ${cfg.ownerNif}</li>` : ""}
 <h2>Qué datos se tratan</h2>
 <ul>
 <li><strong>Datos técnicos de la conexión:</strong> al visitar la web, el servidor (Vercel Inc.) registra la dirección IP y datos del navegador para servir la página y protegerla frente a abusos. Base legal: interés legítimo (art. 6.1.f RGPD).</li>
-<li><strong>Mapa:</strong> las imágenes del mapa se cargan desde los servidores de OpenStreetMap, que reciben tu dirección IP para enviarlas.</li>
-<li><strong>Preferencias:</strong> el tamaño de texto y el tema (claro u oscuro) se guardan solo en tu navegador. No nos llegan.</li>
+<li><strong>Mapa:</strong> las imágenes del mapa se cargan desde los servidores de CARTO (con datos de OpenStreetMap), que reciben tu dirección IP para enviarlas.</li>
+<li><strong>Preferencias:</strong> el modo accesible, el tamaño de texto, el contraste y tu decisión sobre las cookies se guardan solo en tu navegador. No nos llegan.</li>
 <li><strong>Búsquedas:</strong> lo que escribes en el buscador se procesa en tu navegador y no se guarda.</li>
-${cfg.ga ? `<li><strong>Estadísticas de visitas (solo si las aceptas):</strong> Google Analytics recoge de forma agregada qué páginas se visitan, desde qué tipo de dispositivo y de qué país, para mejorar la web. Base legal: tu consentimiento (art. 6.1.a RGPD), que puedes retirar en cualquier momento con el enlace «Configurar cookies» del pie de página.</li>` : ""}
+<li><strong>Noticias para las cifras de sucesos:</strong> el servidor lee titulares públicos de prensa y los envía a Google Gemini para extraer cifras oficiales. No se envía ningún dato de las personas que visitan la web.</li>
+${cfg.ga ? `<li><strong>Estadísticas de visitas (solo si las aceptas):</strong> mediante Google Tag Manager, Google Analytics recoge de forma agregada qué páginas se visitan, desde qué tipo de dispositivo y de qué país, para mejorar la web. Base legal: tu consentimiento (art. 6.1.a RGPD), que puedes retirar en cualquier momento con el enlace «Configurar cookies» del pie de página.</li>` : ""}
 </ul>
 
 <h2>Proveedores</h2>
 <ul>
 <li>Vercel Inc. (alojamiento), con garantías para transferencias internacionales según el RGPD.</li>
-<li>Fundación OpenStreetMap (imágenes del mapa).</li>
-${cfg.ga ? "<li>Google Ireland Ltd. (Google Analytics), solo con tu consentimiento.</li>" : ""}
+<li>CARTO (imágenes del mapa, con datos de la Fundación OpenStreetMap).</li>
+<li>Upstash (base de datos de las cifras de sucesos; no contiene datos de visitantes).</li>
+<li>Google (Gemini, para procesar titulares públicos; no recibe datos de visitantes).</li>
+<li>cron-job.org (programa la revisión automática de noticias; no recibe datos de visitantes).</li>
+${cfg.ga ? "<li>Google Ireland Ltd. (Google Tag Manager y Google Analytics), solo con tu consentimiento.</li>" : ""}
 </ul>
+
+<h2>Conservación</h2>
+<p>Los registros técnicos del alojamiento se conservan el tiempo que fija el proveedor para seguridad (normalmente días). Las estadísticas de Google Analytics se conservan 14 meses.</p>
 
 <h2>Tus derechos</h2>
 <p>Puedes ejercer tus derechos de acceso, rectificación, supresión, oposición, limitación y portabilidad escribiendo a ${mail(cfg)}. También puedes reclamar ante la Agencia Española de Protección de Datos (aepd.es).</p>
@@ -169,7 +189,7 @@ ${cfg.ga ? "<li>Google Ireland Ltd. (Google Analytics), solo con tu consentimien
     description: "Andén no usa cookies de seguimiento ni de publicidad.",
     body: `
 <h2>¿Usa cookies Andén?</h2>
-${cfg.ga ? `<p>Andén no usa cookies de publicidad. Solo usa cookies de <strong>Google Analytics</strong> para contar visitas de forma agregada, y únicamente si las aceptas en el aviso que aparece al entrar.</p>
+${cfg.ga ? `<p>Andén no usa cookies de publicidad. Solo usa cookies de <strong>Google Analytics</strong>, cargado a través de <strong>Google Tag Manager</strong>, para contar visitas de forma agregada, y únicamente si las aceptas en el aviso que aparece al entrar. Si las rechazas, Tag Manager no se carga.</p>
 <div class="table-wrap"><table><thead><tr><th>Cookie</th><th>De quién</th><th>Para qué</th><th>Duración</th></tr></thead><tbody>
 <tr><td>_ga</td><td>Google Analytics</td><td>Distinguir visitantes de forma anónima</td><td>2 años</td></tr>
 <tr><td>_ga_*</td><td>Google Analytics</td><td>Mantener el estado de la visita</td><td>2 años</td></tr>
@@ -177,10 +197,10 @@ ${cfg.ga ? `<p>Andén no usa cookies de publicidad. Solo usa cookies de <strong>
 <p>Puedes cambiar tu decisión cuando quieras con el enlace «Configurar cookies» del pie de página.</p>` : `<p>No. Andén no instala cookies de publicidad, analítica ni seguimiento, por eso no te mostramos ningún aviso de cookies.</p>`}
 
 <h2>Almacenamiento local</h2>
-<p>Si cambias el tamaño del texto o el tema, tu navegador guarda esa preferencia en su almacenamiento local para recordarla la próxima vez. Es un dato técnico necesario para la función que has pedido, no sale de tu dispositivo y puedes borrarlo desde los ajustes del navegador.</p>
+<p>Si activas el modo accesible, cambias el tamaño del texto o el contraste, o decides sobre las cookies, tu navegador guarda esa preferencia en su almacenamiento local para recordarla la próxima vez. Es un dato técnico necesario para la función que has pedido, no sale de tu dispositivo y puedes borrarlo desde los ajustes del navegador.</p>
 
 <h2>Servicios de terceros</h2>
-<p>Las imágenes del mapa vienen de OpenStreetMap, que no instala cookies al servirlas.</p>
+<p>Las imágenes del mapa vienen de CARTO, que no instala cookies al servirlas.</p>
 
 <h2>Cambios</h2>
 <p>Si añadimos otras cookies que necesiten tu permiso, lo indicaremos aquí y te lo pediremos antes de usarlas.</p>
@@ -196,8 +216,8 @@ ${cfg.ga ? `<p>Andén no usa cookies de publicidad. Solo usa cookies de <strong>
 <h2>Qué hemos hecho</h2>
 <ul>
 <li><strong>Letra grande y clara:</strong> usamos la tipografía Atkinson Hyperlegible, creada para personas con baja visión, a 18 píxeles como mínimo.</li>
-<li><strong>Tamaño ajustable:</strong> el botón «Texto» de la parte de arriba agranda toda la web en dos pasos.</li>
-<li><strong>Modo claro y oscuro:</strong> por defecto se usa el tema de tu dispositivo, y puedes cambiarlo con el botón de arriba.</li>
+<li><strong>Modo accesible:</strong> el botón «Modo accesible» de la parte de arriba agranda la letra, aumenta el contraste, hace los botones más grandes, subraya los enlaces y quita las animaciones. Al activarlo aparece un panel para elegir el tamaño del texto (normal, grande o muy grande), el contraste (normal o alto) y si ver los trenes en mapa o en lista.</li>
+<li><strong>Colores tranquilos:</strong> fondo claro y un solo color de acento, para que la información se lea sin esfuerzo.</li>
 <li><strong>Contraste alto:</strong> los colores cumplen como mínimo el nivel AA de las pautas WCAG 2.2.</li>
 <li><strong>Nada depende solo del color:</strong> los retrasos siempre se indican también con texto («En hora», «+7 min»).</li>
 <li><strong>Botones grandes:</strong> todos los botones y enlaces miden al menos 44 píxeles, para pulsarlos con facilidad en el móvil.</li>
@@ -214,6 +234,22 @@ ${cfg.ga ? `<p>Andén no usa cookies de publicidad. Solo usa cookies de <strong>
 
 <h2>Avísanos</h2>
 <p>Si algo no te funciona o te cuesta leerlo, escríbenos a ${mail(cfg)}. Intentaremos arreglarlo.</p>
+`,
+  }),
+
+  page({
+    path: "/contacto",
+    title: "Contacto",
+    description: "Cómo contactar con Andén para avisar de un error, proponer una mejora o ejercer tus derechos de privacidad.",
+    body: `
+<p>Escríbenos a ${mail(cfg)}. Respondemos lo antes posible.</p>
+<h2>Para qué puedes escribirnos</h2>
+<ul>
+<li><strong>Un dato incorrecto:</strong> indica la página y, si puedes, la fuente oficial correcta.</li>
+<li><strong>Algo que no funciona o cuesta leer:</strong> dinos qué dispositivo y navegador usas.</li>
+<li><strong>Privacidad:</strong> para ejercer tus derechos sobre tus datos.</li>
+</ul>
+<p>Andén no atiende reclamaciones de viajeros ni gestiona billetes. Para eso, contacta con tu operador (Renfe, Iryo u Ouigo). En una emergencia, llama al <strong>112</strong>.</p>
 `,
   }),
 

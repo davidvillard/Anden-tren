@@ -3,8 +3,8 @@
 //
 // Variables de entorno (todas opcionales, se configuran en Vercel):
 //   SITE_URL           dominio público, p. ej. https://anden.es
-//   GA_MEASUREMENT_ID  Google Analytics 4, p. ej. G-ABC123XYZ
-//   GSC_VERIFICATION   código de verificación de Google Search Console
+//   GTM_ID             Google Tag Manager (por defecto GTM-NRM83968)
+//   GSC_VERIFICATION   código de verificación de Search Console (por defecto el del proyecto)
 //   CONTACT_EMAIL      correo de contacto que aparece en las páginas legales
 //   OWNER_NAME         nombre del titular (si quieres que aparezca)
 //   OWNER_NIF          NIF del titular (solo si la web pasa a tener actividad económica)
@@ -22,23 +22,25 @@ const env = process.env;
 const SITE_URL = (env.SITE_URL
   || (env.VERCEL_PROJECT_PRODUCTION_URL && `https://${env.VERCEL_PROJECT_PRODUCTION_URL}`)
   || "http://localhost:3000").replace(/\/$/, "");
-const GA = /^G-[A-Z0-9]+$/.test(env.GA_MEASUREMENT_ID || "") ? env.GA_MEASUREMENT_ID : "";
-const GSC = (env.GSC_VERIFICATION || "").replace(/[^A-Za-z0-9_-]/g, "");
+// Google Tag Manager (Analytics) y Search Console: valores del proyecto, con opción de cambiarlos por variable
+const GTM = /^GTM-[A-Z0-9]+$/.test(env.GTM_ID || "") ? env.GTM_ID : "GTM-NRM83968";
+const GSC = (env.GSC_VERIFICATION || "gFf5Yx-WKMqeVB9tL1ZoBHpDn84roE32XKY4qD2je2A").replace(/[^A-Za-z0-9_-]/g, "");
 const cfg = {
-  ga: Boolean(GA),
+  ga: Boolean(GTM),
   contact: env.CONTACT_EMAIL || "davidvillard6@gmail.com",
   ownerName: env.OWNER_NAME || "",
   ownerNif: env.OWNER_NIF || "",
 };
 
 const partial = async (n) => (await readFile(join(ROOT, "partials", `${n}.html`), "utf8")).trim();
-const parts = { head: await partial("head"), header: await partial("header"), footer: await partial("footer") };
+const parts = { head: await partial("head"), header: await partial("header"), footer: await partial("footer"), search: await partial("search") };
 const fill = (html) => html
   .replace("<!--#head-->", parts.head)
   .replace("<!--#header-->", parts.header)
   .replace("<!--#footer-->", parts.footer)
-  .replace("<!--#verification-->", GSC ? `<meta name="google-site-verification" content="${GSC}">` : "")
-  .replaceAll("__GA_ID__", GA)
+  .replace("<!--#search-->", parts.search)
+  .replaceAll("__GSC__", GSC)
+  .replaceAll("__GTM_ID__", GTM)
   .replaceAll("__SITE_URL__", SITE_URL);
 
 async function walk(dir) {
@@ -63,8 +65,9 @@ await cp(SRC, OUT, { recursive: true });
 const sitemap = [];
 for (const file of await walk(OUT)) {
   if (!/\.(html|webmanifest)$/.test(file)) continue;
-  await writeFile(file, fill(await readFile(file, "utf8")));
-  if (file.endsWith(".html")) {
+  const filled = fill(await readFile(file, "utf8"));
+  await writeFile(file, filled);
+  if (file.endsWith(".html") && !filled.includes('content="noindex')) {
     const path = "/" + relative(OUT, file).replace(/index\.html$/, "").replace(/\.html$/, "");
     sitemap.push({ path, priority: path === "/" ? "1.0" : "0.7", freq: path === "/" ? "always" : "daily" });
   }
@@ -96,4 +99,4 @@ Disallow: /api/
 Sitemap: ${SITE_URL}/sitemap.xml
 `);
 
-console.log(`Build listo en dist/ · ${sitemap.length} páginas · ${SITE_URL}${GA ? " · Analytics activo" : ""}${GSC ? " · Search Console verificado" : ""}`);
+console.log(`Build listo en dist/ · ${sitemap.length} páginas · ${SITE_URL}${GTM ? " · Tag Manager " + GTM : ""}${GSC ? " · Search Console verificado" : ""}`);

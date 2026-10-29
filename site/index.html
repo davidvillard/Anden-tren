@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
 <meta charset="utf-8">
-<title>Retrasos Renfe hoy e incidencias de Cercanías en directo · Andén</title>
+<title>Andén · Retrasos de Renfe hoy y Cercanías en directo</title>
 <meta name="description" content="Retrasos de Renfe hoy y en directo: busca tu tren o tu línea de Cercanías y mira su retraso, los avisos de Renfe y la última hora de accidentes de tren en España.">
 <link rel="canonical" href="__SITE_URL__/">
 <meta property="og:type" content="website">
@@ -11,140 +11,73 @@
 <meta property="og:url" content="__SITE_URL__/">
 <!--#head-->
 <script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@graph": [
-    {
-      "@type": "WebSite",
-      "@id": "__SITE_URL__/#web",
-      "name": "Andén",
-      "url": "__SITE_URL__/",
-      "inLanguage": "es-ES",
-      "description": "Retrasos, avisos e incidencias de trenes en España, en directo.",
-      "potentialAction": {
-        "@type": "SearchAction",
-        "target": "__SITE_URL__/?q={search_term_string}",
-        "query-input": "required name=search_term_string"
-      }
-    },
-    {
-      "@type": "Organization",
-      "@id": "__SITE_URL__/#org",
-      "name": "Andén",
-      "url": "__SITE_URL__/",
-      "logo": "__SITE_URL__/assets/img/icon-512.png"
-    }
-  ]
-}
+{"@context":"https://schema.org","@graph":[
+ {"@type":"WebSite","@id":"__SITE_URL__/#web","name":"Andén","url":"__SITE_URL__/","inLanguage":"es-ES","description":"Retrasos, avisos e incidencias de trenes en España, en directo.","potentialAction":{"@type":"SearchAction","target":"__SITE_URL__/trenes?q={search_term_string}","query-input":"required name=search_term_string"}},
+ {"@type":"Organization","@id":"__SITE_URL__/#org","name":"Andén","url":"__SITE_URL__/","logo":"__SITE_URL__/assets/img/icon-512.png"}
+]}
 </script>
-<link rel="stylesheet" href="/vendor/leaflet/leaflet.css">
 </head>
-<body>
+<body data-page="home">
 <!--#header-->
 
 <main id="contenido">
-  <section class="hero band" aria-labelledby="titulo">
+  <section class="hero" aria-labelledby="titulo">
     <div class="container">
-      <span class="live-pill" id="live-pill"><span class="pulse off" aria-hidden="true"></span><span id="live-pill-text">Conectando con Renfe…</span></span>
+      <span class="live-pill" id="live-pill"><span class="pulse off" aria-hidden="true"></span><span data-text>Conectando con Renfe…</span></span>
       <h1 id="titulo">¿Cómo va tu tren?</h1>
-      <p class="lead">Busca tu tren o tu línea y mira al momento si va con retraso o si hay avisos.</p>
-
-      <form class="search" role="search" id="search-form" autocomplete="off">
-        <label for="q" class="sr-only">Buscar tren, línea o lugar</label>
-        <div class="search-box">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
-          <input id="q" name="q" type="search" placeholder="Nº de tren, línea (C1, R2…) o lugar"
-                 role="combobox" aria-expanded="false" aria-controls="suggest" aria-autocomplete="list" enterkeyhint="search">
-          <button type="submit">Buscar</button>
-        </div>
-        <ul class="suggest" id="suggest" role="listbox" aria-label="Resultados" hidden></ul>
-      </form>
-      <div class="hints" id="hints"><span>Prueba:</span></div>
+      <p class="lead">Busca tu tren, tu línea o tu ciudad y mira al momento si hay retrasos o avisos.</p>
+      <!--#search-->
     </div>
   </section>
 
-  <div id="focus-wrap" class="section" hidden>
-    <div class="container"><div id="focus" class="card pad focus-card" tabindex="-1" aria-live="polite"></div></div>
-  </div>
-
-  <section class="section" id="suceso-wrap" hidden aria-label="Suceso en curso">
+  <section class="section" id="suceso-wrap" hidden aria-label="Última hora">
     <div class="container" id="suceso"></div>
   </section>
 
   <section class="section" aria-labelledby="ahora-titulo">
     <div class="container">
-      <div class="section-head">
-        <h2 id="ahora-titulo">Ahora mismo en Cercanías</h2>
-        <p class="small" id="ahora-fuente">Datos de Renfe, se actualizan cada 30 segundos.</p>
-      </div>
-      <div class="kpis" id="kpis">
-        <div class="card kpi"><b>—</b><span>trenes circulando</span></div>
-        <div class="card kpi"><b>—</b><span>van con retraso</span></div>
-        <div class="card kpi"><b>—</b><span>retraso medio</span></div>
-        <div class="card kpi"><b>—</b><span>avisos activos</span></div>
-      </div>
+      <div class="section-head"><h2 id="ahora-titulo">Ahora mismo</h2><p class="small">Datos de Renfe, cada 30 segundos.</p></div>
+      <div class="tiles" id="kpis"></div>
     </div>
   </section>
 
-  <section class="section" id="directo" aria-labelledby="directo-titulo">
+  <section class="section" aria-labelledby="lineas-titulo">
     <div class="container">
-      <div class="section-head">
-        <h2 id="directo-titulo">Trenes en directo</h2>
-        <div class="segmented" role="group" aria-label="Forma de ver los trenes">
-          <button type="button" id="view-map" aria-pressed="true">Mapa</button>
-          <button type="button" id="view-list" aria-pressed="false">Lista</button>
-        </div>
-      </div>
-      <div class="filter">
-        <label for="line-filter" class="sr-only">Filtrar por línea</label>
-        <select id="line-filter"><option value="">Todas las líneas</option></select>
-      </div>
-      <div id="map-view" class="card pad">
-        <div id="map" class="map" role="region" aria-label="Mapa con la posición de los trenes de Cercanías"></div>
-        <div class="legend">
-          <span><i style="background:var(--ok)"></i>En hora</span>
-          <span><i style="background:var(--warn)"></i>De 3 a 10 min tarde</span>
-          <span><i style="background:var(--crit)"></i>Más de 10 min tarde</span>
-          <span><i style="background:var(--muted)"></i>Sin dato</span>
-        </div>
-      </div>
-      <div id="list-view" hidden>
-        <div class="list-scroll" id="train-list"></div>
-      </div>
+      <div class="section-head"><h2 id="lineas-titulo">Líneas con más retraso</h2><a class="more" href="/retrasos">Todas las líneas</a></div>
+      <div class="rows" id="top-lines"></div>
     </div>
   </section>
 
-  <section class="section" id="avisos" aria-labelledby="avisos-titulo">
+  <section class="section" aria-labelledby="avisos-titulo">
     <div class="container">
-      <div class="section-head">
-        <h2 id="avisos-titulo">Avisos de Renfe</h2>
-        <p class="small">Obras, cortes y cambios de servicio comunicados por Renfe.</p>
-      </div>
-      <div class="filter">
-        <label for="alert-q" class="sr-only">Buscar en los avisos</label>
-        <input id="alert-q" type="search" placeholder="Buscar en los avisos: línea, estación…">
-      </div>
-      <div class="alerts" id="alerts"><div class="empty">Cargando avisos…</div></div>
-      <button class="btn ghost" type="button" id="alerts-more" hidden>Ver todos los avisos</button>
+      <div class="section-head"><h2 id="avisos-titulo">Avisos de Renfe</h2><a class="more" href="/avisos">Todos los avisos</a></div>
+      <div class="alerts" id="alerts"></div>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="redes-titulo">
+    <div class="container">
+      <div class="section-head"><h2 id="redes-titulo">Cercanías por ciudad</h2><a class="more" href="/trenes">Ver el mapa</a></div>
+      <div class="chips" id="redes"></div>
     </div>
   </section>
 
   <section class="section" aria-labelledby="acc-titulo">
     <div class="container">
       <div class="card pad promo">
-        <div style="display:grid;gap:6px;max-width:60ch">
+        <div style="display:grid;gap:4px;max-width:60ch">
           <h2 id="acc-titulo">Accidentes e investigaciones</h2>
-          <p class="muted">Dónde y cuándo han ocurrido los accidentes ferroviarios graves en España, qué los causó y en qué punto está cada investigación.</p>
+          <p class="muted">Última hora de accidentes ferroviarios y registro de los más graves en España desde 2003.</p>
         </div>
-        <a class="btn" href="/accidentes">Ver el registro</a>
+        <div class="focus-actions"><a class="btn ghost" href="/accidente-tren-hoy">Última hora</a><a class="btn ghost" href="/accidentes">Registro</a></div>
       </div>
     </div>
   </section>
 </main>
 
 <!--#footer-->
-<script src="/vendor/leaflet/leaflet.js"></script>
 <script src="/assets/js/sucesos.js"></script>
-<script src="/assets/js/home.js"></script>
+<script src="/assets/js/live-core.js"></script>
+<script src="/assets/js/live-pages.js"></script>
 </body>
 </html>

@@ -1,90 +1,87 @@
 "use strict";
-// Preferencias de lectura (tamaño de texto y tema) y enlace activo del menú.
+// Modo accesible, enlace activo del menú, cookies (Google Tag Manager) y utilidades.
+
 (function () {
   const root = document.documentElement;
-  const store = (k, v) => { try { v === null ? localStorage.removeItem(k) : localStorage.setItem(k, v); } catch (e) {} };
+  const store = (k, v) => { try { v ? localStorage.setItem("anden-" + k, v) : localStorage.removeItem("anden-" + k); } catch (e) {} };
+  const setPref = (k, v) => { if (v) root.dataset[k] = v; else delete root.dataset[k]; store(k, v); };
 
-  const SIZES = [
-    { key: null, label: "Texto" },
-    { key: "l", label: "Texto +" },
-    { key: "xl", label: "Texto ++" },
-  ];
-  const textBtn = document.getElementById("btn-text");
-  const textLabel = document.getElementById("btn-text-label");
-  const curSize = () => Math.max(0, SIZES.findIndex((s) => s.key === (root.dataset.text || null)));
-  const paintText = () => {
-    const s = SIZES[curSize()];
-    textLabel.textContent = s.label;
-    textBtn.setAttribute("aria-label", `Tamaño del texto: ${["normal", "grande", "muy grande"][curSize()]}. Pulsa para cambiarlo`);
+  // ---- Modo accesible ----
+  const toggle = document.getElementById("a11y-toggle");
+  const panel = document.getElementById("a11y-panel");
+  const paint = () => {
+    const on = root.dataset.a11y === "on";
+    toggle?.setAttribute("aria-pressed", String(on));
+    if (panel) panel.hidden = !on;
+    panel?.querySelectorAll("[data-text]").forEach((b) => b.setAttribute("aria-pressed", String((root.dataset.text || "") === b.dataset.text)));
+    panel?.querySelectorAll("[data-contrast]").forEach((b) => b.setAttribute("aria-pressed", String((root.dataset.contrast || "") === b.dataset.contrast)));
+    panel?.querySelectorAll("[data-maps]").forEach((b) => b.setAttribute("aria-pressed", String((root.dataset.maps || "on") === b.dataset.maps)));
   };
-  textBtn?.addEventListener("click", () => {
-    const next = SIZES[(curSize() + 1) % SIZES.length].key;
-    if (next) root.dataset.text = next; else delete root.dataset.text;
-    store("anden-text", next);
-    paintText();
-    window.dispatchEvent(new Event("resize"));
+  toggle?.addEventListener("click", () => {
+    const on = root.dataset.a11y !== "on";
+    setPref("a11y", on ? "on" : "");
+    if (on && !root.dataset.maps) setPref("maps", "off"); // en modo accesible, la lista es más cómoda que el mapa
+    if (!on) { setPref("text", ""); setPref("contrast", ""); setPref("maps", ""); }
+    paint();
+    window.dispatchEvent(new CustomEvent("anden:prefs"));
   });
-  if (textBtn) paintText();
-
-  const themeBtn = document.getElementById("btn-theme");
-  const themeLabel = document.getElementById("btn-theme-label");
-  const isDark = () => root.dataset.theme ? root.dataset.theme === "dark" : matchMedia("(prefers-color-scheme: dark)").matches;
-  const paintTheme = () => {
-    themeLabel.textContent = isDark() ? "Claro" : "Oscuro";
-    themeBtn.setAttribute("aria-label", isDark() ? "Cambiar a modo claro" : "Cambiar a modo oscuro");
-  };
-  themeBtn?.addEventListener("click", () => {
-    const next = isDark() ? "light" : "dark";
-    root.dataset.theme = next;
-    store("anden-theme", next);
-    paintTheme();
-    window.dispatchEvent(new CustomEvent("anden:theme"));
+  panel?.addEventListener("click", (e) => {
+    const b = e.target.closest("button"); if (!b) return;
+    if ("text" in b.dataset) setPref("text", b.dataset.text);
+    if ("contrast" in b.dataset) setPref("contrast", b.dataset.contrast);
+    if ("maps" in b.dataset) setPref("maps", b.dataset.maps === "off" ? "off" : "");
+    paint();
+    window.dispatchEvent(new CustomEvent("anden:prefs"));
   });
-  if (themeBtn) paintTheme();
+  paint();
 
+  // ---- Enlace activo ----
   const path = location.pathname.replace(/\.html$/, "").replace(/\/$/, "") || "/";
   document.querySelectorAll(".nav a").forEach((a) => {
     const href = a.getAttribute("href");
-    if ((href === "/" && path === "/" ) || (href !== "/" && !href.includes("#") && path === href)) a.setAttribute("aria-current", "page");
+    const match = href === "/" ? path === "/" : path === href || path.startsWith(href + "/") ||
+      (href === "/accidente-tren-hoy" && /^\/(accidentes|accidente-tren)/.test(path)) ||
+      (href === "/trenes" && /^\/(tren|cercanias)/.test(path)) || (href === "/retrasos" && path === "/linea");
+    if (match) a.setAttribute("aria-current", "page");
   });
 })();
 
-// Google Analytics: solo si está configurado y la persona lo acepta.
+// ---- Google Tag Manager / Analytics: solo con consentimiento ----
 (function () {
-  const id = window.ANDEN_GA;
-  if (!id || !/^G-[A-Z0-9]+$/.test(id)) return;
+  const id = window.ANDEN_GTM;
+  if (!id || !/^GTM-[A-Z0-9]+$/.test(id)) return;
   document.querySelectorAll("[data-ga-only]").forEach((el) => { el.hidden = false; });
   const KEY = "anden-consent";
   const get = () => { try { return localStorage.getItem(KEY); } catch (e) { return null; } };
   const set = (v) => { try { localStorage.setItem(KEY, v); } catch (e) {} };
   let loaded = false;
-  function loadGA() {
+  function load() {
     if (loaded) return; loaded = true;
     window.dataLayer = window.dataLayer || [];
     window.gtag = function () { window.dataLayer.push(arguments); };
     window.gtag("js", new Date());
-    window.gtag("config", id);
+    window.dataLayer.push({ "gtm.start": Date.now(), event: "gtm.js" });
     const s = document.createElement("script");
-    s.async = true; s.src = `https://www.googletagmanager.com/gtag/js?id=${id}`;
+    s.async = true; s.src = `https://www.googletagmanager.com/gtm.js?id=${id}`;
     document.head.appendChild(s);
   }
   function banner() {
     if (document.getElementById("consent")) return;
     const el = document.createElement("div");
     el.className = "consent"; el.id = "consent"; el.setAttribute("role", "dialog"); el.setAttribute("aria-label", "Cookies");
-    el.innerHTML = '<div class="consent-in"><p>Usamos cookies de Google Analytics para saber cuánta gente visita Andén y mejorarlo. Solo se activan si las aceptas. <a href="/cookies">Más información</a></p><div class="row-btns"><button type="button" class="btn ghost" data-v="no">Rechazar</button><button type="button" class="btn" data-v="si">Aceptar</button></div></div>';
+    el.innerHTML = '<div class="consent-in"><p>Usamos cookies de Google Analytics para contar visitas de forma anónima y mejorar Andén. Solo se activan si las aceptas. <a href="/cookies">Más información</a></p><div class="row-btns"><button type="button" class="btn ghost" data-v="no">Rechazar</button><button type="button" class="btn" data-v="si">Aceptar</button></div></div>';
     el.addEventListener("click", (e) => {
       const v = e.target.closest("button")?.dataset.v; if (!v) return;
       set(v); el.remove();
-      if (v === "si") loadGA(); else if (loaded) location.reload();
+      if (v === "si") load(); else if (loaded) location.reload();
     });
     document.body.appendChild(el);
   }
-  if (get() === "si") loadGA(); else if (!get()) banner();
+  if (get() === "si") load(); else if (!get()) banner();
   document.getElementById("cookie-settings")?.addEventListener("click", banner);
 })();
 
-// Utilidades compartidas
+// ---- Utilidades compartidas ----
 window.Anden = {
   h(tag, attrs = {}, ...children) {
     const el = document.createElement(tag);
@@ -110,12 +107,20 @@ window.Anden = {
     if (s < 60) return `hace ${s} s`;
     const m = Math.round(s / 60);
     if (m < 60) return `hace ${m} min`;
-    return `a las ${Anden.fmtTime(unix)}`;
+    return `a las ${window.Anden.fmtTime(unix)}`;
   },
-  tiles(map) {
-    L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
-      maxZoom: 17,
-      attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+  mapsOff: () => document.documentElement.dataset.maps === "off",
+  // Mapa base suave (CARTO Positron) con zoom por rueda, doble clic y pellizco
+  makeMap(id, bounds) {
+    const map = L.map(id, {
+      scrollWheelZoom: true, wheelPxPerZoomLevel: 90, zoomSnap: 0.25, zoomDelta: 0.5,
+      doubleClickZoom: true, touchZoom: true, minZoom: 5, maxZoom: 17,
+    });
+    L.tileLayer("https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png", {
+      subdomains: "abcd", maxZoom: 19,
+      attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> · © <a href="https://carto.com/attributions">CARTO</a>',
     }).addTo(map);
+    map.fitBounds(bounds || [[35.9, -9.4], [43.8, 3.4]]);
+    return map;
   },
 };

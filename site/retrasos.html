@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Retrasos de Renfe hoy: Cercanías por línea en directo · Andén</title>
+<meta name="description" content="Retrasos de Renfe ahora mismo: qué líneas de Cercanías van con retraso, retraso medio, trenes más afectados y cancelaciones de alta velocidad y larga distancia.">
+<link rel="canonical" href="__SITE_URL__/retrasos">
+
+<meta property="og:type" content="website">
+<meta property="og:title" content="Retrasos de Renfe hoy: Cercanías por línea en directo · Andén">
+<meta property="og:description" content="Retrasos de Renfe ahora mismo: qué líneas de Cercanías van con retraso, retraso medio, trenes más afectados y cancelaciones de alta velocidad y larga distancia.">
+<meta property="og:url" content="__SITE_URL__/retrasos">
+<!--#head-->
+
+
+</head>
+<body data-page="retrasos">
+<!--#header-->
+<main id="contenido">
+<section class="page-head"><div class="container">
+    <p class="crumbs"><a href="/">Inicio</a> › Retrasos</p>
+    <h1>Retrasos de Renfe hoy</h1>
+    <span class="live-pill" id="live-pill"><span class="pulse off" aria-hidden="true"></span><span data-text>Conectando con Renfe…</span></span>
+  </div></section>
+  <section class="section"><div class="container"><div class="kpis" id="kpis"></div></div></section>
+  <section class="section" aria-labelledby="l-t"><div class="container">
+    <div class="section-head"><h2 id="l-t">Por línea de Cercanías</h2><p class="small">Toca una línea para ver sus trenes y avisos.</p></div>
+    <div id="lines"></div>
+  </div></section>
+  <section class="section" aria-labelledby="t-t"><div class="container">
+    <div class="section-head"><h2 id="t-t">Trenes con más retraso</h2><a class="more" href="/trenes">Ver el mapa</a></div>
+    <div class="rows" id="late-trains"></div>
+  </div></section>
+  <section class="section" id="larga-distancia" aria-labelledby="ld-t"><div class="container">
+    <h2 id="ld-t">Alta velocidad, larga y media distancia</h2>
+    <div class="card pad" id="ld" style="display:grid;gap:6px"></div>
+  </div></section>
+</main>
+<!--#footer-->
+
+<script src="/assets/js/live-core.js"></script>
+<script src="/assets/js/live-pages.js"></script>
+</body>
+</html>

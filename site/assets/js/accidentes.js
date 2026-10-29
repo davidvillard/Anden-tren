@@ -1,6 +1,6 @@
 "use strict";
 (function () {
-  const { h, norm, css, fmtDate, tiles } = window.Anden;
+  const { h, norm, css, fmtDate, makeMap } = window.Anden;
   const STATUS = {
     open: { t: "Investigación abierta", c: "--crit", tag: "crit" },
     final: { t: "Informe final", c: "--ok", tag: "ok" },
@@ -12,8 +12,7 @@
   const visible = (d) => (!st.service.size || st.service.has(d.service)) && (!st.status.size || st.status.has(d.status)) && (!st.q || norm(`${d.place} ${d.prov}`).includes(norm(st.q)));
   const toggle = (set, v) => (set.has(v) ? set.delete(v) : set.add(v));
 
-  const map = L.map("acc-map", { scrollWheelZoom: false, minZoom: 5 }).fitBounds([[35.9, -9.4], [43.8, 3.4]]);
-  tiles(map);
+  const map = makeMap("acc-map");
   const markers = {};
 
   function chips() {
