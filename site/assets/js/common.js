@@ -6,32 +6,41 @@
   const store = (k, v) => { try { v ? localStorage.setItem("anden-" + k, v) : localStorage.removeItem("anden-" + k); } catch (e) {} };
   const setPref = (k, v) => { if (v) root.dataset[k] = v; else delete root.dataset[k]; store(k, v); };
 
-  // ---- Modo accesible ----
+  // ---- Accesibilidad: botón pequeño que abre un panel ----
+  const btn = document.getElementById("a11y-btn");
+  const pop = document.getElementById("a11y-pop");
   const toggle = document.getElementById("a11y-toggle");
   const panel = document.getElementById("a11y-panel");
   const paint = () => {
     const on = root.dataset.a11y === "on";
-    toggle?.setAttribute("aria-pressed", String(on));
+    toggle?.setAttribute("aria-checked", String(on));
     if (panel) panel.hidden = !on;
     panel?.querySelectorAll("[data-text]").forEach((b) => b.setAttribute("aria-pressed", String((root.dataset.text || "") === b.dataset.text)));
     panel?.querySelectorAll("[data-contrast]").forEach((b) => b.setAttribute("aria-pressed", String((root.dataset.contrast || "") === b.dataset.contrast)));
     panel?.querySelectorAll("[data-maps]").forEach((b) => b.setAttribute("aria-pressed", String((root.dataset.maps || "on") === b.dataset.maps)));
   };
+  const openPop = (open) => {
+    if (!pop || !btn) return;
+    pop.hidden = !open;
+    btn.setAttribute("aria-expanded", String(open));
+  };
+  btn?.addEventListener("click", (e) => { e.stopPropagation(); openPop(pop.hidden); if (!pop.hidden) toggle?.focus(); });
+  document.addEventListener("click", (e) => { if (pop && !pop.hidden && !e.target.closest(".a11y")) openPop(false); });
+  document.addEventListener("keydown", (e) => { if (e.key === "Escape" && pop && !pop.hidden) { openPop(false); btn.focus(); } });
+  const changed = () => { paint(); window.dispatchEvent(new CustomEvent("anden:prefs")); };
   toggle?.addEventListener("click", () => {
     const on = root.dataset.a11y !== "on";
     setPref("a11y", on ? "on" : "");
-    if (on && !root.dataset.maps) setPref("maps", "off"); // en modo accesible, la lista es más cómoda que el mapa
+    if (on && !root.dataset.maps) setPref("maps", "off"); // en modo fácil, la lista es más cómoda que el mapa
     if (!on) { setPref("text", ""); setPref("contrast", ""); setPref("maps", ""); }
-    paint();
-    window.dispatchEvent(new CustomEvent("anden:prefs"));
+    changed();
   });
   panel?.addEventListener("click", (e) => {
     const b = e.target.closest("button"); if (!b) return;
     if ("text" in b.dataset) setPref("text", b.dataset.text);
     if ("contrast" in b.dataset) setPref("contrast", b.dataset.contrast);
     if ("maps" in b.dataset) setPref("maps", b.dataset.maps === "off" ? "off" : "");
-    paint();
-    window.dispatchEvent(new CustomEvent("anden:prefs"));
+    changed();
   });
   paint();
 

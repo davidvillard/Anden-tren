@@ -12,27 +12,34 @@
       <a href="/avisos">Avisos</a>
       <a href="/accidente-tren-hoy">Accidentes</a>
     </nav>
-    <button class="a11y-toggle" type="button" id="a11y-toggle" aria-pressed="false" aria-controls="a11y-panel">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="4.5" r="1.8"/><path d="M5 8.5l7 1.5 7-1.5M12 10v5m0 0-3 6m3-6 3 6"/></svg>
-      <span>Modo accesible</span>
-    </button>
-  </div>
-  <div class="a11y-panel" id="a11y-panel" hidden>
-    <div class="container" role="group" aria-label="Opciones de accesibilidad">
-      <div class="grp"><span class="lbl">Tamaño del texto:</span>
-        <button class="chip" type="button" data-text="">Normal</button>
-        <button class="chip" type="button" data-text="l">Grande</button>
-        <button class="chip" type="button" data-text="xl">Muy grande</button>
+    <div class="a11y">
+      <button class="a11y-btn" type="button" id="a11y-btn" aria-expanded="false" aria-controls="a11y-pop" aria-label="Accesibilidad" title="Accesibilidad">
+        <span aria-hidden="true" style="font-weight:650;font-size:.9rem;letter-spacing:-.02em">Aa</span><span class="dot" aria-hidden="true"></span>
+      </button>
+      <div class="a11y-pop" id="a11y-pop" role="dialog" aria-label="Accesibilidad" hidden>
+        <button class="switch-row" type="button" role="switch" id="a11y-toggle" aria-checked="false">
+          <span class="txt"><b>Modo fácil de leer</b><small>Letra más grande, más contraste y sin animaciones.</small></span>
+          <span class="switch" aria-hidden="true"></span>
+        </button>
+        <div class="a11y-opts" id="a11y-panel" hidden>
+          <div class="grp"><span class="lbl" id="lbl-text">Tamaño del texto</span>
+            <div class="segmented" role="group" aria-labelledby="lbl-text">
+              <button type="button" data-text="">Normal</button><button type="button" data-text="l">Grande</button><button type="button" data-text="xl">Muy grande</button>
+            </div>
+          </div>
+          <div class="grp"><span class="lbl" id="lbl-contrast">Contraste</span>
+            <div class="segmented" role="group" aria-labelledby="lbl-contrast">
+              <button type="button" data-contrast="">Normal</button><button type="button" data-contrast="high">Alto</button>
+            </div>
+          </div>
+          <div class="grp"><span class="lbl" id="lbl-maps">Trenes en</span>
+            <div class="segmented" role="group" aria-labelledby="lbl-maps">
+              <button type="button" data-maps="on">Mapa</button><button type="button" data-maps="off">Lista</button>
+            </div>
+          </div>
+        </div>
+        <a class="pop-link" href="/accesibilidad">Más sobre accesibilidad</a>
       </div>
-      <div class="grp"><span class="lbl">Contraste:</span>
-        <button class="chip" type="button" data-contrast="">Normal</button>
-        <button class="chip" type="button" data-contrast="high">Alto</button>
-      </div>
-      <div class="grp"><span class="lbl">Trenes:</span>
-        <button class="chip" type="button" data-maps="on">Ver mapa</button>
-        <button class="chip" type="button" data-maps="off">Ver lista</button>
-      </div>
-      <a href="/accesibilidad">Más sobre accesibilidad</a>
     </div>
   </div>
 </header>

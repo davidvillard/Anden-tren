@@ -156,7 +156,7 @@ ${cfg.ownerNif ? `<li><strong>NIF:</strong> ${cfg.ownerNif}</li>` : ""}
 <ul>
 <li><strong>Datos técnicos de la conexión:</strong> al visitar la web, el servidor (Vercel Inc.) registra la dirección IP y datos del navegador para servir la página y protegerla frente a abusos. Base legal: interés legítimo (art. 6.1.f RGPD).</li>
 <li><strong>Mapa:</strong> las imágenes del mapa se cargan desde los servidores de CARTO (con datos de OpenStreetMap), que reciben tu dirección IP para enviarlas.</li>
-<li><strong>Preferencias:</strong> el modo accesible, el tamaño de texto, el contraste y tu decisión sobre las cookies se guardan solo en tu navegador. No nos llegan.</li>
+<li><strong>Preferencias:</strong> el modo fácil de leer, el tamaño de texto, el contraste y tu decisión sobre las cookies se guardan solo en tu navegador. No nos llegan.</li>
 <li><strong>Búsquedas:</strong> lo que escribes en el buscador se procesa en tu navegador y no se guarda.</li>
 <li><strong>Noticias para las cifras de sucesos:</strong> el servidor lee titulares públicos de prensa y los envía a Google Gemini para extraer cifras oficiales. No se envía ningún dato de las personas que visitan la web.</li>
 ${cfg.ga ? `<li><strong>Estadísticas de visitas (solo si las aceptas):</strong> mediante Google Tag Manager, Google Analytics recoge de forma agregada qué páginas se visitan, desde qué tipo de dispositivo y de qué país, para mejorar la web. Base legal: tu consentimiento (art. 6.1.a RGPD), que puedes retirar en cualquier momento con el enlace «Configurar cookies» del pie de página.</li>` : ""}
@@ -197,7 +197,7 @@ ${cfg.ga ? `<p>Andén no usa cookies de publicidad. Solo usa cookies de <strong>
 <p>Puedes cambiar tu decisión cuando quieras con el enlace «Configurar cookies» del pie de página.</p>` : `<p>No. Andén no instala cookies de publicidad, analítica ni seguimiento, por eso no te mostramos ningún aviso de cookies.</p>`}
 
 <h2>Almacenamiento local</h2>
-<p>Si activas el modo accesible, cambias el tamaño del texto o el contraste, o decides sobre las cookies, tu navegador guarda esa preferencia en su almacenamiento local para recordarla la próxima vez. Es un dato técnico necesario para la función que has pedido, no sale de tu dispositivo y puedes borrarlo desde los ajustes del navegador.</p>
+<p>Si activas el modo fácil de leer, cambias el tamaño del texto o el contraste, o decides sobre las cookies, tu navegador guarda esa preferencia en su almacenamiento local para recordarla la próxima vez. Es un dato técnico necesario para la función que has pedido, no sale de tu dispositivo y puedes borrarlo desde los ajustes del navegador.</p>
 
 <h2>Servicios de terceros</h2>
 <p>Las imágenes del mapa vienen de CARTO, que no instala cookies al servirlas.</p>
@@ -215,8 +215,8 @@ ${cfg.ga ? `<p>Andén no usa cookies de publicidad. Solo usa cookies de <strong>
     body: `
 <h2>Qué hemos hecho</h2>
 <ul>
-<li><strong>Letra grande y clara:</strong> usamos la tipografía Atkinson Hyperlegible, creada para personas con baja visión, a 18 píxeles como mínimo.</li>
-<li><strong>Modo accesible:</strong> el botón «Modo accesible» de la parte de arriba agranda la letra, aumenta el contraste, hace los botones más grandes, subraya los enlaces y quita las animaciones. Al activarlo aparece un panel para elegir el tamaño del texto (normal, grande o muy grande), el contraste (normal o alto) y si ver los trenes en mapa o en lista.</li>
+<li><strong>Letra grande y clara:</strong> el texto se muestra a 17 píxeles como mínimo, con buen contraste. En el modo fácil de leer usamos la tipografía Atkinson Hyperlegible, creada para personas con baja visión.</li>
+<li><strong>Modo fácil de leer:</strong> el botón «Aa» de la parte de arriba abre las opciones de accesibilidad. Al activar el modo fácil de leer, la letra se agranda, aumenta el contraste, los botones son más grandes, se subrayan los enlaces y se quitan las animaciones. Además puedes elegir el tamaño del texto (normal, grande o muy grande), el contraste (normal o alto) y si ver los trenes en mapa o en lista.</li>
 <li><strong>Colores tranquilos:</strong> fondo claro y un solo color de acento, para que la información se lea sin esfuerzo.</li>
 <li><strong>Contraste alto:</strong> los colores cumplen como mínimo el nivel AA de las pautas WCAG 2.2.</li>
 <li><strong>Nada depende solo del color:</strong> los retrasos siempre se indican también con texto («En hora», «+7 min»).</li>
