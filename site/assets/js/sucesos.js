@@ -83,8 +83,14 @@
         s.enlaces.map(link).map((e) => h("li", {}, h("a", { href: e.url, target: "_blank", rel: "noopener" }, e.nombre))))) : "");
   }
 
+  // Gravedad: primero los accidentes con víctimas (más fallecidos y heridos, más arriba),
+  // después las incidencias en curso, y a igualdad, la más reciente.
+  const val = (c) => (c && c.valor > 0 ? c.valor : 0);
+  const peso = (s) => (isInc(s) ? 0 : 1e6 + val(s.cifras?.fallecidos) * 1000 + val(s.cifras?.heridos) * 10) + (s.activo ? 1e9 : 0);
+  const porGravedad = (a, b) => peso(b) - peso(a) || new Date(b.inicio) - new Date(a.inicio);
+
   function render(data) {
-    const everything = data.sucesos || [];
+    const everything = [...(data.sucesos || [])].sort(porGravedad);
     const all = everything.filter((s) => !isInc(s));
     const incs = everything.filter(isInc);
     if (modo === "completo") {

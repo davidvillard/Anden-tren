@@ -13,6 +13,9 @@ const fecha = (iso) => new Date(iso).toLocaleDateString("es-ES", { ...TZ, day: "
 const hora = (iso) => new Date(iso).toLocaleTimeString("es-ES", { ...TZ, hour: "2-digit", minute: "2-digit" });
 const cifra = (c) => c && c.valor !== null && c.valor !== undefined ? `${c.prefijo === "≥" ? "al menos " : ""}${c.valor}` : null;
 const isInc = (s) => s.clase === "incidencia";
+// Más grave primero: más fallecidos, luego más heridos, luego más reciente
+const val = (c) => (c && c.valor > 0 ? c.valor : 0);
+const porGravedad = (a, b) => (val(b.cifras?.fallecidos) * 1000 + val(b.cifras?.heridos)) - (val(a.cifras?.fallecidos) * 1000 + val(a.cifras?.heridos)) || new Date(b.inicio) - new Date(a.inicio);
 export const sucesoPath = (s) => s.pagina || (isInc(s) ? `/incidencia/${s.id}` : `/accidente-tren/${s.id}`);
 
 function shell({ path, title, description, ogType = "website", jsonld = [], body, scripts = [], leaflet = false, inline = "", dataPage = "" }) {
@@ -129,7 +132,7 @@ function sucesoPage(s, actualizado) {
 
 function hoyPage(data) {
   const path = "/accidente-tren-hoy";
-  const activos = (data.sucesos || []).filter((s) => s.activo && !isInc(s));
+  const activos = (data.sucesos || []).filter((s) => s.activo && !isInc(s)).sort(porGravedad);
   const title = "Accidente de tren hoy en España: última hora, heridos y trenes afectados";
   const description = activos.length
     ? `Última hora: ${activos.map((s) => s.titulo).join(". ")}. Cifras oficiales, teléfonos para familiares y estado de los trenes.`
