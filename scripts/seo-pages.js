@@ -84,7 +84,7 @@ function sucesoPage(s, actualizado) {
   const f = cifra(s.cifras?.fallecidos), hh = cifra(s.cifras?.heridos);
   const inc = isInc(s);
   const title = s.seo?.title || (inc
-    ? `Incidencia ferroviaria en ${s.lugar}${s.operador ? ` (${s.operador})` : ""}: última hora`
+    ? `Incidencia${s.operador ? ` de ${s.operador}` : " ferroviaria"} en ${s.lugar}: última hora`
     : `Accidente de tren en ${s.lugar}: última hora, fallecidos y heridos`);
   const description = s.seo?.description || `${s.resumen}${f ? ` Balance: ${f} fallecidos` : ""}${hh ? ` y ${hh} heridos` : ""}.`;
   const qs = preguntasSuceso(s);
