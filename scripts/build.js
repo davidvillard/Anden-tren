@@ -9,7 +9,9 @@
 //   OWNER_NAME         nombre del titular (si quieres que aparezca)
 //   OWNER_NIF          NIF del titular (solo si la web pasa a tener actividad económica)
 import { cp, mkdir, readFile, readdir, rm, writeFile } from "node:fs/promises";
+import { readFileSync } from "node:fs";
 import { dirname, join, relative } from "node:path";
+import { createHash } from "node:crypto";
 import { pages as textPages } from "./pages.js";
 import { generate as seoPages } from "./seo-pages.js";
 import { loadState } from "../lib/sucesos-state.js";
@@ -34,14 +36,26 @@ const cfg = {
 
 const partial = async (n) => (await readFile(join(ROOT, "partials", `${n}.html`), "utf8")).trim();
 const parts = { head: await partial("head"), header: await partial("header"), footer: await partial("footer"), search: await partial("search") };
-const fill = (html) => html
+// Cada CSS/JS propio se enlaza con ?v=<huella de su contenido>: al publicar una
+// versión nueva cambia la dirección y el navegador no puede usar la copia antigua.
+const versions = new Map();
+const stamp = (url) => {
+  if (!versions.has(url)) {
+    let v = "";
+    try { v = createHash("sha1").update(readFileSync(join(SRC, url))).digest("hex").slice(0, 10); } catch (e) { /* archivo no encontrado: sin versión */ }
+    versions.set(url, v);
+  }
+  return versions.get(url) ? `${url}?v=${versions.get(url)}` : url;
+};
+const versioned = (html) => html.replace(/(src|href)="(\/assets\/[^"?#]+\.(?:js|css))"/g, (m, attr, url) => `${attr}="${stamp(url)}"`);
+const fill = (html) => versioned(html
   .replace("<!--#head-->", parts.head)
   .replace("<!--#header-->", parts.header)
   .replace("<!--#footer-->", parts.footer)
   .replace("<!--#search-->", parts.search)
   .replaceAll("__GSC__", GSC)
   .replaceAll("__GTM_ID__", GTM)
-  .replaceAll("__SITE_URL__", SITE_URL);
+  .replaceAll("__SITE_URL__", SITE_URL));
 
 async function walk(dir) {
   const out = [];
