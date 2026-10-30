@@ -2,7 +2,7 @@
 // páginas de texto, de sucesos y de redes, el sitemap y el robots.txt.
 //
 // Variables de entorno (todas opcionales, se configuran en Vercel):
-//   SITE_URL           dominio público, p. ej. https://anden.es
+//   SITE_URL           dominio público (por defecto https://andentren.es)
 //   GTM_ID             Google Tag Manager (por defecto GTM-NRM83968)
 //   GSC_VERIFICATION   código de verificación de Search Console (por defecto el del proyecto)
 //   CONTACT_EMAIL      correo de contacto que aparece en las páginas legales
@@ -21,9 +21,8 @@ const SRC = join(ROOT, "site");
 const OUT = join(ROOT, "dist");
 const env = process.env;
 
-const SITE_URL = (env.SITE_URL
-  || (env.VERCEL_PROJECT_PRODUCTION_URL && `https://${env.VERCEL_PROJECT_PRODUCTION_URL}`)
-  || "http://localhost:3000").replace(/\/$/, "");
+// Dominio oficial: andentren.es (andentren.vercel.app y www redirigen aquí)
+const SITE_URL = (env.SITE_URL || "https://andentren.es").replace(/\/$/, "");
 // Google Tag Manager (Analytics) y Search Console: valores del proyecto, con opción de cambiarlos por variable
 const GTM = /^GTM-[A-Z0-9]+$/.test(env.GTM_ID || "") ? env.GTM_ID : "GTM-NRM83968";
 const GSC = (env.GSC_VERIFICATION || "gFf5Yx-WKMqeVB9tL1ZoBHpDn84roE32XKY4qD2je2A").replace(/[^A-Za-z0-9_-]/g, "");
