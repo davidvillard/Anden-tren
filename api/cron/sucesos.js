@@ -57,9 +57,10 @@ export default async function handler(req, res) {
         summary.gemini = { error: String(e.message || e) };
       }
     }
-  } else {
-    ({ state: next, changes } = merge({ state, proposal: { sucesos: [] }, items: [], now }));
   }
+  // Sin consulta a Gemini (en espera, sin cupo o sin titulares nuevos): se aplican
+  // igualmente las reglas de limpieza (duplicados, caducidad de incidencias).
+  if (next === state) ({ state: next, changes } = merge({ state, proposal: { sucesos: [] }, items: [], now }));
 
   await setJSON(KEY_STATE, next);
   await setJSON(KEY_SEEN, seen);
