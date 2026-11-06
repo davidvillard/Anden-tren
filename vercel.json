@@ -63,6 +63,11 @@
       ],
       "destination": "https://andentren.es/$1",
       "permanent": true
+    },
+    {
+      "source": "/trenes",
+      "destination": "/mapa-trenes",
+      "permanent": true
     }
   ]
 }

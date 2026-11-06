@@ -73,7 +73,7 @@
   function kpis(el, s, links = true) {
     if (!el) return;
     el.replaceChildren(
-      A.kpi(s.trains.toLocaleString("es-ES"), s.trains === 1 ? "tren circulando" : "trenes circulando", links && "/trenes"),
+      A.kpi(s.trains.toLocaleString("es-ES"), s.trains === 1 ? "tren circulando" : "trenes circulando", links && "/mapa-trenes"),
       A.kpi(A.fmtPct(s.pctLate), "van con 3 min o más de retraso", links && "/retrasos"),
       A.kpi(A.fmtMin(s.avg), "de retraso medio", links && "/retrasos"),
       A.kpi(s.alerts.toLocaleString("es-ES"), "avisos de Renfe", links && "/avisos"),
@@ -142,7 +142,7 @@
             ? `Renfe informa de ${s.ldCancelled.toLocaleString("es-ES")} ${s.ldCancelled === 1 ? "tren cancelado" : "trenes cancelados"} en este momento.`
             : "Renfe no informa ahora mismo de cancelaciones."),
           ...(tarde.length ? [h("div", { class: "rows" }, tarde.sort((a, b) => b.delayMin - a.delayMin).slice(0, 10).map(A.trainRow))] : []),
-          h("a", { class: "more", href: "/trenes" }, "Ver todos en el mapa"));
+          h("a", { class: "more", href: "/mapa-trenes" }, "Ver todos en el mapa"));
       });
     },
     avisos() {
@@ -197,7 +197,7 @@
       let map = null, marker = null;
       A.onUpdate(() => {
         const t = A.trains(null).find((x) => String(x.id) === id) || A.ldTrains().find((x) => x.id === id);
-        if (!t) { $("card").replaceChildren(h("p", {}, A.S.live ? "Este tren ya no aparece en los datos de Renfe. Puede que haya terminado su recorrido." : "Cargando…"), h("a", { class: "more", href: "/trenes" }, "Ver todos los trenes")); return; }
+        if (!t) { $("card").replaceChildren(h("p", {}, A.S.live ? "Este tren ya no aparece en los datos de Renfe. Puede que haya terminado su recorrido." : "Cargando…"), h("a", { class: "more", href: "/mapa-trenes" }, "Ver todos los trenes")); return; }
         const d = A.delayInfo(t.delayMin);
         document.title = `${A.trainTitle(t)}${!t.ld && t.code ? " · " + t.code : ""}: retraso en directo · Andén`;
         $("title").textContent = A.trainTitle(t);
