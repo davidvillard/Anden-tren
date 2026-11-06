@@ -216,10 +216,10 @@ function lineaPage(l, red, hermanas) {
   const path = lineaPath(l);
   const nombre = `${l.code} ${red.nombre}`;
   const title = `${nombre} hoy: retrasos, avisos y trenes en directo`;
-  const description = `Retrasos de la ${l.code} de ${red.nombre} (${recorridoTxt(l)}) ahora mismo: trenes en el mapa, minutos de retraso y avisos de Renfe, actualizados cada 30 segundos.`;
+  const description = `Retrasos de la ${l.code} de ${red.nombre} (${recorridoTxt(l)}) ahora mismo: trenes en el mapa, minutos de retraso y avisos de Renfe, actualizados cada 15 segundos.`;
   const estaciones = [...new Set(l.recorridos.flatMap((r) => r.paradas))];
   const qs = [
-    { p: `¿Hay retrasos en la ${l.code} de ${red.corto} ahora?`, r: `En esta página ves en directo cuántos trenes de la ${l.code} circulan, cuántos van con 3 minutos o más de retraso y el retraso medio, con datos de Renfe actualizados cada 30 segundos.` },
+    { p: `¿Hay retrasos en la ${l.code} de ${red.corto} ahora?`, r: `En esta página ves en directo cuántos trenes de la ${l.code} circulan, cuántos van con 3 minutos o más de retraso y el retraso medio, con datos de Renfe actualizados cada 15 segundos.` },
     { p: `¿Qué recorrido hace la ${l.code}?`, r: `${l.recorridos.map((r) => `${l.recorridos.length > 1 ? `La ${r.variante} va` : "Va"} de ${r.desde} a ${r.hasta} (${r.paradas.length} estaciones)`).join(". ")}, según los horarios que publica Renfe.` },
     { p: `¿Qué estaciones tiene la ${l.code}?`, r: `${estaciones.join(", ")}.` },
     { p: `¿Hay obras o incidencias en la ${l.code}?`, r: `La sección de avisos muestra las obras, cortes y cambios de servicio que Renfe comunica para la ${l.code}. Si no aparece ninguno, Renfe no tiene avisos publicados para esta línea.` },
@@ -255,9 +255,9 @@ function lineaPage(l, red, hermanas) {
 function redPage(red, redes, lineas) {
   const path = `/cercanias/${red.slug}`;
   const title = `${red.nombre} hoy: retrasos, incidencias y trenes en directo`;
-  const description = `Retrasos de ${red.nombre} ahora mismo: estado de cada línea, trenes en el mapa y avisos de Renfe, actualizados cada 30 segundos.`;
+  const description = `Retrasos de ${red.nombre} ahora mismo: estado de cada línea, trenes en el mapa y avisos de Renfe, actualizados cada 15 segundos.`;
   const qs = [
-    { p: `¿Hay retrasos en ${red.nombre} ahora?`, r: `En esta página ves en directo cuántos trenes de ${red.nombre} circulan, cuántos van con retraso y el estado de cada línea, con datos de Renfe actualizados cada 30 segundos.` },
+    { p: `¿Hay retrasos en ${red.nombre} ahora?`, r: `En esta página ves en directo cuántos trenes de ${red.nombre} circulan, cuántos van con retraso y el estado de cada línea, con datos de Renfe actualizados cada 15 segundos.` },
     { p: `¿Cómo sé si mi tren de ${red.corto} va con retraso?`, r: "Toca tu línea en la tabla o busca el número del tren. Verás su retraso, su posición y los avisos de su línea." },
     { p: `¿Hay obras o incidencias en ${red.nombre}?`, r: "La sección de avisos muestra las obras, cortes y cambios de servicio que Renfe comunica para esta red." },
   ];

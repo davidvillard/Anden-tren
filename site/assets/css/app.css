@@ -223,6 +223,10 @@ a.tile:hover .more{color:var(--accent)}
 .mapbox{padding:6px}
 .legend{display:flex;flex-wrap:wrap;gap:6px 18px;font-size:.84rem;color:var(--muted);padding:10px 8px 2px}
 .legend i{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:6px;vertical-align:-1px}
+.legend i.ring{width:12px;height:12px;background:var(--surface);border:3px solid #fff;box-shadow:0 0 0 1px var(--line-2)}
+.type-filter{margin:12px 0 4px}
+.chip .dot{width:12px;height:12px;border-radius:50%;margin:0 8px 0 -4px;background:var(--surface);border:3px solid #fff;box-shadow:0 0 0 1px var(--line-2);flex:none}
+.chip[aria-pressed="false"]{opacity:.55;box-shadow:none}
 .map-hint{font-size:.8rem;color:var(--faint);padding:2px 8px 6px}
 
 /* Listas agrupadas en una sola tarjeta, con separadores */

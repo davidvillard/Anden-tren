@@ -4,7 +4,7 @@
 (function () {
   const { h, norm, css, fmtTime, ago } = window.Anden;
   const LIVE_URL = "/api/live";
-  const REFRESH_MS = 30000;
+  const REFRESH_MS = 15000;
   const S = { live: null, redes: [], acc: [], subs: [], scope: window.ANDEN_RED || null };
 
   /* ---------- Trenes y líneas ---------- */
@@ -40,6 +40,14 @@
     });
   }
   const trains = (scope = S.scope) => allTrains().filter((t) => !scope || t.red?.slug === scope);
+
+  // Alta velocidad, larga y media distancia (visor de Renfe). grupo: av, ld o md
+  const GRUPOS = { cerc: "Cercanías", md: "Media distancia y regionales", ld: "Larga distancia", av: "Alta velocidad" };
+  const GRUPO_COLOR = { md: "#E07B00", ld: "#1E3BA6", av: "#7B2D8E" };
+  const TIPO_CORTO = { AVE: "AVE", Avlo: "AVLO", Avant: "AVANT", Euromed: "EMED", Alvia: "ALVIA", Intercity: "IC", "Media Distancia": "MD", Regional: "R", "Regional Exprés": "RE" };
+  const tipoCorto = (tipo) => TIPO_CORTO[tipo] || "LD";
+  const ldTrains = () => (S.live?.largaDistancia?.trains || []).map((t) => ({ ...t, ld: true, code: tipoCorto(t.tipo) }));
+  const trainTitle = (t) => (t.ld ? `${t.tipo} ${t.num}` : `Tren ${t.num}`);
 
   // routeId de Renfe: <red>T<nº><línea>, p. ej. 10T0011C4 → red 10, línea C4
   const routeRed = (r) => { const m = /^(\d{2})T/.exec(r || ""); return m ? S.redes.find((x) => (x.codigos || []).includes(m[1])) || null : null; };
@@ -93,10 +101,11 @@
   const lineBadge = (code) => h("span", { class: "line-badge" }, code || "—");
   const trainRow = (t) => {
     const d = delayInfo(t.delayMin);
+    const sub = t.ld ? [t.origen && t.destino ? `${t.origen} → ${t.destino}` : "", t.ts ? `posición de las ${fmtTime(t.ts)}` : ""]
+      : [t.red && !S.scope ? t.red.corto : "", t.ts ? `posición de las ${fmtTime(t.ts)}` : ""];
     return h("a", { class: "row", href: trainUrl(t) },
       lineBadge(t.code),
-      h("span", { class: "grow" }, h("strong", {}, `Tren ${t.num}`),
-        h("span", {}, [t.red && !S.scope ? t.red.corto : "", t.ts ? `posición de las ${fmtTime(t.ts)}` : ""].filter(Boolean).join(" · "))),
+      h("span", { class: "grow" }, h("strong", {}, trainTitle(t)), h("span", {}, sub.filter(Boolean).join(" · "))),
       h("span", { class: `tag ${d.cls}` }, d.short));
   };
   const alertCard = (a) => h("article", { class: "card alert-item", id: `aviso-${a.id}` },
@@ -106,17 +115,63 @@
     a.start || a.end ? h("p", { class: "small muted" }, [a.start ? `Desde el ${new Date(a.start * 1000).toLocaleString("es-ES", { timeZone: "Europe/Madrid", dateStyle: "medium", timeStyle: "short" })}` : "", a.end ? `hasta el ${new Date(a.end * 1000).toLocaleString("es-ES", { timeZone: "Europe/Madrid", dateStyle: "medium", timeStyle: "short" })}` : ""].filter(Boolean).join(" ")) : "");
   const kpi = (val, label, href) => h(href ? "a" : "div", { class: "card kpi tile", href }, h("b", {}, val), h("span", {}, label), href ? h("span", { class: "more" }, "Ver") : "");
 
-  function drawTrains(map, layer, list) {
-    layer.clearLayers();
-    for (const t of list) {
-      const d = delayInfo(t.delayMin);
-      L.circleMarker([t.lat, t.lon], { radius: 6, color: "#fff", weight: 1.5, fillColor: d.color, fillOpacity: 0.95 })
-        .bindPopup(() => h("div", {},
-          h("strong", {}, t.line ? `${lineName(t.line, true)} · tren ${t.num}` : `Tren ${t.num}`), h("br"),
-          h("span", { class: `tag ${d.cls}` }, d.text), h("br"),
-          h("a", { href: trainUrl(t) }, "Ver ficha del tren")))
-        .addTo(layer);
+  // Capa de trenes del mapa. Cada tren conserva su punto entre actualizaciones y,
+  // cuando llega una posición nueva, se desliza hasta ella durante el intervalo de
+  // refresco: así los trenes se ven moverse aunque Renfe dé la posición cada pocos segundos.
+  const reducedMotion = window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
+  const popupOf = (t) => {
+    const d = delayInfo(t.delayMin);
+    return h("div", {},
+      h("strong", {}, t.ld ? trainTitle(t) : t.line ? `${lineName(t.line, true)} · tren ${t.num}` : `Tren ${t.num}`), h("br"),
+      t.ld && t.origen ? [h("span", {}, `${t.origen} → ${t.destino}`), h("br")] : "",
+      h("span", { class: `tag ${d.cls}` }, d.text), h("br"),
+      h("a", { href: trainUrl(t) }, "Ver ficha del tren"));
+  };
+  function trainLayer(map) {
+    const group = L.layerGroup().addTo(map), marks = new Map();
+    let raf = null;
+    function tick(now) {
+      let moving = false;
+      for (const m of marks.values()) {
+        const a = m.anim; if (!a) continue;
+        const k = Math.min(1, (now - a.t0) / a.dur);
+        m.setLatLng([a.from[0] + (a.to[0] - a.from[0]) * k, a.from[1] + (a.to[1] - a.from[1]) * k]);
+        if (k < 1) moving = true; else m.anim = null;
+      }
+      raf = moving ? requestAnimationFrame(tick) : null;
     }
+    function update(list) {
+      const seen = new Set(), now = performance.now();
+      for (const t of list) {
+        seen.add(t.id);
+        const style = { fillColor: delayInfo(t.delayMin).color, color: t.ld ? GRUPO_COLOR[t.grupo] : "#fff", weight: t.ld ? 3 : 1.5, radius: t.ld ? 7 : 6 };
+        let m = marks.get(t.id);
+        if (!m) {
+          m = L.circleMarker([t.lat, t.lon], { ...style, fillOpacity: 0.95 }).bindPopup(() => popupOf(m.train)).addTo(group);
+          marks.set(t.id, m);
+        } else {
+          m.setStyle(style);
+          // Si el navegador no ha podido animar (pestaña en segundo plano, ahorro de energía),
+          // el punto salta a donde debía llegar antes de seguir
+          if (m.anim && now - m.anim.t0 >= m.anim.dur) { m.setLatLng(m.anim.to); m.anim = null; }
+          const to = [t.lat, t.lon], target = m.anim ? m.anim.to : [m.getLatLng().lat, m.getLatLng().lng];
+          if (target[0] !== to[0] || target[1] !== to[1]) {
+            const cur = m.getLatLng();
+            // Saltos grandes (datos raros) o movimiento reducido: sin animación
+            if (reducedMotion || document.hidden || map.distance(cur, to) > 30000) { m.anim = null; m.setLatLng(to); }
+            // Dura lo que tardó en llegar esta posición (Renfe no actualiza todos los trenes a la vez),
+            // para que el tren no se pare a mitad de camino esperando la siguiente
+            else m.anim = { from: [cur.lat, cur.lng], to, t0: now, dur: Math.min(3 * REFRESH_MS, Math.max(REFRESH_MS, now - (m.changedAt || now))) };
+            m.changedAt = now;
+          }
+        }
+        m.train = t;
+        if (m.isPopupOpen()) m.setPopupContent(popupOf(t));
+      }
+      for (const [id, m] of marks) if (!seen.has(id)) { group.removeLayer(m); marks.delete(id); }
+      if (!raf && [...marks.values()].some((m) => m.anim)) raf = requestAnimationFrame(tick);
+    }
+    return { update };
   }
 
   function paintPill() {
@@ -141,6 +196,7 @@
         out.push({ href: lineUrl(o.key), badge: o.code, title: `Línea ${lineName(o.key, true)}`, sub: `${o.trains.length} ${o.trains.length === 1 ? "tren" : "trenes"} · ${lineStatus(o).text}`, group: "Líneas" });
       for (const r of S.redes) if (norm(`${r.nombre} ${r.claves.join(" ")}`).includes(q)) out.push({ href: `/cercanias/${r.slug}`, badge: "C", title: r.nombre, sub: "Retrasos e incidencias de la red", group: "Redes de Cercanías" });
       for (const t of trains()) if ([t.num, t.label, t.tripId, t.id].some((v) => v && norm(v).includes(q))) out.push({ href: trainUrl(t), badge: t.code || "—", title: `Tren ${t.num}${t.line ? " · " + lineName(t.line) : ""}`, sub: delayInfo(t.delayMin).text, group: "Trenes" });
+      if (!S.scope) for (const t of ldTrains()) if ([t.num, `${t.tipo} ${t.num}`, t.origen, t.destino].some((v) => v && norm(v).includes(q))) out.push({ href: trainUrl(t), badge: t.code, title: trainTitle(t), sub: `${t.origen ? `${t.origen} → ${t.destino} · ` : ""}${delayInfo(t.delayMin).text}`, group: "Alta velocidad, larga y media distancia" });
       for (const a of alerts()) if (alertText(a).includes(q)) out.push({ href: `/avisos#aviso-${a.id}`, badge: "!", title: a.header || a.desc, sub: alertLines(a).map((k) => lineName(k, true)).slice(0, 3).join(", ") || "Aviso de Renfe", group: "Avisos" });
       for (const d of S.acc) if (norm(`${d.place} ${d.prov}`).includes(q)) out.push({ href: `/accidentes#${d.id}`, badge: "⚑", title: `${d.place} (${d.prov})`, sub: `${d.type} · ${window.Anden.fmtDate(d.date)}`, group: "Accidentes" });
       const per = {};
@@ -198,8 +254,8 @@
 
   window.AndenLive = {
     S, start, onUpdate: (f) => S.subs.push(f), attachSearch,
-    trains, alerts, alertsOfLine, alertLines, alertRedes, lines, lineStatus, summary, redBySlug,
-    delayInfo, lineName, lineCode, lineUrl, trainUrl, lineKey,
-    fmtMin, fmtPct, lineBadge, trainRow, alertCard, kpi, drawTrains,
+    trains, ldTrains, alerts, alertsOfLine, alertLines, alertRedes, lines, lineStatus, summary, redBySlug,
+    delayInfo, lineName, lineCode, lineUrl, trainUrl, lineKey, trainTitle, GRUPOS, GRUPO_COLOR, REFRESH_MS,
+    fmtMin, fmtPct, lineBadge, trainRow, alertCard, kpi, trainLayer,
   };
 })();

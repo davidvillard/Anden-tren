@@ -18,7 +18,7 @@
     function ensureMap() {
       if (map || !mapEl) return;
       map = makeMap(mapId, bounds && bounds());
-      layer = L.layerGroup().addTo(map);
+      layer = A.trainLayer(map);
     }
     function setView(v) {
       viewMap?.setAttribute("aria-pressed", String(v === "map"));
@@ -30,7 +30,7 @@
     }
     function draw() {
       const list = getTrains();
-      if (map && !mapWrap?.hidden) A.drawTrains(map, layer, list);
+      if (map && !mapWrap?.hidden) layer.update(list);
       if (listEl && !listWrap?.hidden) {
         const rows = [...list].sort((a, b) => (b.delayMin ?? -99) - (a.delayMin ?? -99));
         if (!rows.length) { listEl.replaceChildren(h("div", { class: "empty" }, A.S.live ? "No hay trenes que mostrar ahora mismo." : "Cargando trenes…")); return; }
@@ -96,11 +96,32 @@
     trenes() {
       const red = params.get("red");
       const sel = $("red-filter");
-      const ml = mapAndList({ mapId: "map", listId: "train-list", getTrains: () => A.trains(sel.value || null), bounds: () => bbox(A.redBySlug(red)) });
-      sel.addEventListener("change", () => { ml.fit(bbox(A.redBySlug(sel.value)) || [[35.9, -9.4], [43.8, 3.4]]); ml.draw(); history.replaceState(null, "", sel.value ? `?red=${sel.value}` : location.pathname); });
+      // Filtro por tipo de tren: Cercanías, media distancia, larga distancia y alta velocidad
+      const on = new Set(Object.keys(A.GRUPOS));
+      const tipos = $("type-filter");
+      const enRed = (t, r) => !r || (t.lat >= r.bbox[0] && t.lat <= r.bbox[2] && t.lon >= r.bbox[1] && t.lon <= r.bbox[3]);
+      const visibles = () => {
+        const r = A.redBySlug(sel.value);
+        return [...(on.has("cerc") ? A.trains(sel.value || null) : []), ...A.ldTrains().filter((t) => on.has(t.grupo) && enRed(t, r))];
+      };
+      const ml = mapAndList({ mapId: "map", listId: "train-list", getTrains: visibles, bounds: () => bbox(A.redBySlug(red)) });
+      const chips = Object.entries(A.GRUPOS).map(([g, label]) => {
+        const b = h("button", { type: "button", class: "chip", "aria-pressed": "true", "data-grupo": g },
+          h("i", { class: "dot", style: g === "cerc" ? "" : `border-color:${A.GRUPO_COLOR[g]}`, "aria-hidden": "true" }), h("span", {}, label));
+        b.addEventListener("click", () => { on.has(g) ? on.delete(g) : on.add(g); b.setAttribute("aria-pressed", String(on.has(g))); ml.draw(); });
+        return b;
+      });
+      tipos.replaceChildren(...chips);
+      const contar = () => {
+        const r = A.redBySlug(sel.value), n = { cerc: A.trains(sel.value || null).length };
+        for (const t of A.ldTrains()) if (enRed(t, r)) n[t.grupo] = (n[t.grupo] || 0) + 1;
+        for (const b of chips) b.lastChild.textContent = `${A.GRUPOS[b.dataset.grupo]} (${n[b.dataset.grupo] || 0})`;
+      };
+      sel.addEventListener("change", () => { ml.fit(bbox(A.redBySlug(sel.value)) || [[35.9, -9.4], [43.8, 3.4]]); contar(); ml.draw(); history.replaceState(null, "", sel.value ? `?red=${sel.value}` : location.pathname); });
       let filled = false;
       A.onUpdate(() => {
         if (!filled && A.S.redes.length) { sel.append(...A.S.redes.map((r) => h("option", { value: r.slug }, r.nombre))); sel.value = red || ""; filled = true; if (red) ml.fit(bbox(A.redBySlug(red))); }
+        contar();
         ml.draw();
       });
     },
@@ -111,10 +132,17 @@
         const late = A.trains().filter((t) => t.delayMin >= 3).sort((a, b) => b.delayMin - a.delayMin).slice(0, 15);
         $("late-trains").replaceChildren(...(late.length ? late.map(A.trainRow) : [h("div", { class: "empty" }, A.S.live ? "Ningún tren de Cercanías va con 3 minutos o más de retraso." : "Cargando…")]));
         const s = A.summary();
-        $("ld").replaceChildren(h("p", {}, s.ld
-          ? `Renfe informa de ${s.ldCancelled.toLocaleString("es-ES")} ${s.ldCancelled === 1 ? "tren cancelado" : "trenes cancelados"} de alta velocidad, larga y media distancia en este momento.`
-          : "Renfe no informa ahora mismo de cambios en alta velocidad, larga y media distancia."),
-          h("p", { class: "small muted" }, "Renfe no publica en abierto los minutos de retraso ni la posición de estos trenes, solo las cancelaciones."));
+        const ld = A.ldTrains(), conDato = ld.filter((t) => t.delayMin !== null), tarde = conDato.filter((t) => t.delayMin >= 5);
+        const media = conDato.length ? conDato.reduce((a, t) => a + Math.max(0, t.delayMin), 0) / conDato.length : null;
+        $("ld").replaceChildren(
+          h("p", {}, ld.length
+            ? `Ahora circulan ${ld.length} trenes de alta velocidad, larga y media distancia: ${tarde.length} van con 5 minutos o más de retraso y el retraso medio es de ${A.fmtMin(media)}.`
+            : A.S.live ? "Renfe no da ahora mismo la posición de los trenes de alta velocidad, larga y media distancia." : "Cargando…"),
+          h("p", {}, s.ld
+            ? `Renfe informa de ${s.ldCancelled.toLocaleString("es-ES")} ${s.ldCancelled === 1 ? "tren cancelado" : "trenes cancelados"} en este momento.`
+            : "Renfe no informa ahora mismo de cancelaciones."),
+          ...(tarde.length ? [h("div", { class: "rows" }, tarde.sort((a, b) => b.delayMin - a.delayMin).slice(0, 10).map(A.trainRow))] : []),
+          h("a", { class: "more", href: "/trenes" }, "Ver todos en el mapa"));
       });
     },
     avisos() {
@@ -168,15 +196,17 @@
       const id = params.get("id");
       let map = null, marker = null;
       A.onUpdate(() => {
-        const t = A.trains(null).find((x) => String(x.id) === id);
+        const t = A.trains(null).find((x) => String(x.id) === id) || A.ldTrains().find((x) => x.id === id);
         if (!t) { $("card").replaceChildren(h("p", {}, A.S.live ? "Este tren ya no aparece en los datos de Renfe. Puede que haya terminado su recorrido." : "Cargando…"), h("a", { class: "more", href: "/trenes" }, "Ver todos los trenes")); return; }
         const d = A.delayInfo(t.delayMin);
-        document.title = `Tren ${t.num}${t.code ? " · " + t.code : ""}: retraso en directo · Andén`;
-        $("title").textContent = `Tren ${t.num}`;
+        document.title = `${A.trainTitle(t)}${!t.ld && t.code ? " · " + t.code : ""}: retraso en directo · Andén`;
+        $("title").textContent = A.trainTitle(t);
         const la = t.line ? A.alertsOfLine(t.line) : [];
+        const hora = (iso) => iso.slice(11, 16);
         $("card").replaceChildren(
-          h("div", { class: "focus-head" }, A.lineBadge(t.code), h("h2", {}, t.line ? `Línea ${A.lineName(t.line, true)}` : "Cercanías")),
+          h("div", { class: "focus-head" }, A.lineBadge(t.code), h("h2", {}, t.ld ? (t.origen ? `${t.origen} → ${t.destino}` : t.tipo) : t.line ? `Línea ${A.lineName(t.line, true)}` : "Cercanías")),
           h("p", {}, h("span", { class: `tag ${d.cls}`, style: "font-size:1.05rem;padding:6px 12px" }, d.text)),
+          t.ld && t.siguiente ? h("p", {}, `Próxima parada: `, h("strong", {}, t.siguiente), t.llegada ? `, llegada prevista a las ${hora(t.llegada)}` : "", ".") : "",
           h("p", { class: "muted" }, t.ts ? `Última posición recibida a las ${fmtTime(t.ts)}.` : "Renfe no indica la hora de la posición."),
           h("div", { class: "focus-actions" },
             t.line ? h("a", { class: "btn", href: A.lineUrl(t.line) }, "Ver la línea") : "",

@@ -2,13 +2,13 @@
 <html lang="es">
 <head>
 <meta charset="utf-8">
-<title>Trenes de Cercanías en directo: mapa y retrasos · Andén</title>
-<meta name="description" content="Mapa en directo de los trenes de Cercanías y Rodalies de España con su retraso, actualizado cada 30 segundos con datos de Renfe.">
+<title>Mapa de trenes en tiempo real: AVE, media distancia y Cercanías · Andén</title>
+<meta name="description" content="Mapa en tiempo real de los trenes de Renfe en toda España: AVE, Avlo, Avant, Alvia, media distancia, regionales y Cercanías, con su retraso. Datos de Renfe cada 15 segundos.">
 <link rel="canonical" href="__SITE_URL__/trenes">
 
 <meta property="og:type" content="website">
-<meta property="og:title" content="Trenes de Cercanías en directo: mapa y retrasos · Andén">
-<meta property="og:description" content="Mapa en directo de los trenes de Cercanías y Rodalies de España con su retraso, actualizado cada 30 segundos con datos de Renfe.">
+<meta property="og:title" content="Mapa de trenes en tiempo real: AVE, media distancia y Cercanías · Andén">
+<meta property="og:description" content="Mapa en tiempo real de los trenes de Renfe en toda España: AVE, Avlo, Avant, Alvia, media distancia, regionales y Cercanías, con su retraso. Datos de Renfe cada 15 segundos.">
 <meta property="og:url" content="__SITE_URL__/trenes">
 <!--#head-->
 <link rel="stylesheet" href="/vendor/leaflet/leaflet.css">
@@ -20,14 +20,16 @@
 <section class="page-head"><div class="container">
     <p class="crumbs"><a href="/">Inicio</a> › Trenes</p>
     <h1>Trenes en directo</h1>
+    <p>Todos los trenes de Renfe en el mapa: alta velocidad, larga y media distancia, regionales y Cercanías, con su retraso.</p>
     <span class="live-pill" id="live-pill"><span class="pulse off" aria-hidden="true"></span><span data-text>Conectando con Renfe…</span></span>
     <!--#search-->
   </div></section>
   <section class="section" aria-labelledby="directo-titulo"><div class="container">
-    <div class="filter"><label for="red-filter" class="sr-only">Red de Cercanías</label><select id="red-filter"><option value="">Toda España</option></select></div>
+    <div class="filter"><label for="red-filter" class="sr-only">Zona</label><select id="red-filter"><option value="">Toda España</option></select></div>
+    <div class="chips type-filter" id="type-filter" role="group" aria-label="Tipos de tren"></div>
     <div class="section-head"><h2 id="directo-titulo">Trenes en directo</h2>
       <div class="segmented" role="group" aria-label="Forma de ver los trenes"><button type="button" id="view-map" aria-pressed="true">Mapa</button><button type="button" id="view-list" aria-pressed="false">Lista</button></div></div>
-    <div class="card mapbox"><div id="map" class="map" role="region" aria-label="Mapa con la posición de los trenes"></div><div class="legend"><span><i style="background:var(--ok)"></i>En hora</span><span><i style="background:var(--warn)"></i>De 3 a 10 min tarde</span><span><i style="background:var(--crit)"></i>Más de 10 min tarde</span><span><i style="background:var(--faint)"></i>Sin dato</span></div><p class="map-hint">Usa la rueda del ratón o pellizca para acercar. Toca un tren para ver su ficha.</p></div>
+    <div class="card mapbox"><div id="map" class="map" role="region" aria-label="Mapa con la posición de los trenes"></div><div class="legend"><span><i style="background:var(--ok)"></i>En hora</span><span><i style="background:var(--warn)"></i>De 3 a 10 min tarde</span><span><i style="background:var(--crit)"></i>Más de 10 min tarde</span><span><i style="background:var(--faint)"></i>Sin dato</span></div><div class="legend"><span><i class="ring" style="border-color:#7B2D8E"></i>Alta velocidad</span><span><i class="ring" style="border-color:#1E3BA6"></i>Larga distancia</span><span><i class="ring" style="border-color:#E07B00"></i>Media distancia</span><span><i class="ring"></i>Cercanías</span></div><p class="map-hint">Usa la rueda del ratón o pellizca para acercar. Toca un tren para ver su ficha.</p></div>
     <div data-list hidden><div class="list-scroll" id="train-list"></div></div>
   </div></section>
 </main>

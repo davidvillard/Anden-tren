@@ -17,8 +17,9 @@ Retrasos, avisos e incidencias de trenes en España, en directo y con datos ofic
 | `scripts/og.js` | Imágenes para compartir (1200×630) de cada red, línea y tema |
 | `lib/temas.js` | Palabras clave de las páginas de huelga y obras |
 | `lib/social.js` | Publicación en Telegram y Bluesky |
-| `api/live.js` | Función de Vercel: `GET /api/live` resume los feeds en directo de Renfe (caché de 30 s) |
-| `lib/renfe.js` | Lectura de los feeds GTFS-Realtime de Renfe |
+| `api/live.js` | Función de Vercel: `GET /api/live` resume los feeds en directo de Renfe (caché de 15 s) |
+| `lib/renfe.js` | Lectura de los feeds de Renfe: Cercanías (GTFS-Realtime) y alta velocidad, larga y media distancia (visor de Renfe, con el GTFS-Realtime de larga distancia como respaldo) |
+| `lib/estaciones.json` | Código → nombre de cada estación (se genera con `scripts/estaciones.js`) |
 
 ## Actualización automática de sucesos
 
@@ -93,6 +94,18 @@ curl -L -o fomento_transit.zip https://ssl.renfe.com/ftransit/Fichero_CER_FOMENT
 
 ```bash
 mkdir gtfs && tar -xf fomento_transit.zip -C gtfs && node scripts/lineas.js gtfs
+```
+
+### Actualizar las estaciones
+
+El visor de Renfe da las estaciones por código. Si aparece alguna sin nombre, regenera la tabla:
+
+```bash
+curl -L -o estaciones.csv https://ssl.renfe.com/ftransit/Fichero_estaciones/estaciones.csv
+```
+
+```bash
+node scripts/estaciones.js estaciones.csv
 ```
 
 ## Publicación en redes sociales
