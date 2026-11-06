@@ -11,6 +11,7 @@
     "preview": "node scripts/build.js && python3 -m http.server 3000 --directory dist"
   },
   "dependencies": {
-    "@google/genai": "^2.31.0"
+    "@google/genai": "^2.31.0",
+    "@resvg/resvg-js": "^2.6.2"
   }
 }

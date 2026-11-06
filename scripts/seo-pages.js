@@ -4,8 +4,11 @@
 //  - /incidencias                  averías, trenes parados y cortes de vía en curso
 //  - /incidencia/<id>              una por incidencia
 //  - /cercanias/<red>              retrasos e incidencias de cada red de Cercanías
+//  - /cercanias/<red>/<línea>      una por línea (C5, R2…), con su recorrido y estaciones
+//  - /huelga-renfe, /obras-cercanias  avisos de Renfe por tema (lib/temas.js)
 // El contenido principal va escrito en el HTML para que Google lo lea sin JS;
 // después los scripts lo actualizan en directo.
+import { TEMAS, avisosDe } from "../lib/temas.js";
 
 const esc = (s) => String(s ?? "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
 const TZ = { timeZone: "Europe/Madrid" };
@@ -192,9 +195,64 @@ function incidenciasPage(data) {
     html: shell({ path, title: `${title} · Andén`, description, body, jsonld: [faqLd(qs), crumbs([["Inicio", "/"], ["Incidencias", path]])], scripts: ["/assets/js/sucesos.js"] }) };
 }
 
-/* ---------- Redes de Cercanías ---------- */
+/* ---------- Redes y líneas de Cercanías ---------- */
 
-function redPage(red, redes) {
+export const lineaPath = (l) => `/cercanias/${l.red}/${l.slug}`;
+const recorridoTxt = (l) => l.recorridos.map((r) => `${l.recorridos.length > 1 ? `${r.variante}: ` : ""}${r.desde} – ${r.hasta}`).join(" · ");
+const lineaChips = (lineas) => `<div class="chips">${lineas.map((l) => `<a class="chip" href="${lineaPath(l)}"><span class="line-badge">${esc(l.code)}</span> ${esc(l.recorridos[0].desde)} – ${esc(l.recorridos[0].hasta)}</a>`).join("")}</div>`;
+
+const liveTrains = `
+  <section class="section" aria-labelledby="directo-titulo"><div class="container">
+    <div class="section-head"><h2 id="directo-titulo">Trenes en directo</h2>
+      <div class="segmented" role="group" aria-label="Forma de ver los trenes"><button type="button" id="view-map" aria-pressed="true">Mapa</button><button type="button" id="view-list" aria-pressed="false">Lista</button></div></div>
+    <div class="card mapbox"><div id="map" class="map" role="region" aria-label="Mapa con la posición de los trenes"></div>
+      <div class="legend"><span><i style="background:var(--ok)"></i>En hora</span><span><i style="background:var(--warn)"></i>De 3 a 10 min tarde</span><span><i style="background:var(--crit)"></i>Más de 10 min tarde</span><span><i style="background:var(--faint)"></i>Sin dato</span></div>
+      <p class="map-hint">Usa la rueda del ratón o pellizca para acercar. Toca un tren para ver su ficha.</p></div>
+    <div data-list hidden><div class="list-scroll" id="train-list"></div></div>
+  </div></section>`;
+const liveScripts = ["/vendor/leaflet/leaflet.js", "/assets/js/live-core.js", "/assets/js/live-pages.js"];
+
+function lineaPage(l, red, hermanas) {
+  const path = lineaPath(l);
+  const nombre = `${l.code} ${red.nombre}`;
+  const title = `${nombre} hoy: retrasos, avisos y trenes en directo`;
+  const description = `Retrasos de la ${l.code} de ${red.nombre} (${recorridoTxt(l)}) ahora mismo: trenes en el mapa, minutos de retraso y avisos de Renfe, actualizados cada 30 segundos.`;
+  const estaciones = [...new Set(l.recorridos.flatMap((r) => r.paradas))];
+  const qs = [
+    { p: `¿Hay retrasos en la ${l.code} de ${red.corto} ahora?`, r: `En esta página ves en directo cuántos trenes de la ${l.code} circulan, cuántos van con 3 minutos o más de retraso y el retraso medio, con datos de Renfe actualizados cada 30 segundos.` },
+    { p: `¿Qué recorrido hace la ${l.code}?`, r: `${l.recorridos.map((r) => `${l.recorridos.length > 1 ? `La ${r.variante} va` : "Va"} de ${r.desde} a ${r.hasta} (${r.paradas.length} estaciones)`).join(". ")}, según los horarios que publica Renfe.` },
+    { p: `¿Qué estaciones tiene la ${l.code}?`, r: `${estaciones.join(", ")}.` },
+    { p: `¿Hay obras o incidencias en la ${l.code}?`, r: `La sección de avisos muestra las obras, cortes y cambios de servicio que Renfe comunica para la ${l.code}. Si no aparece ninguno, Renfe no tiene avisos publicados para esta línea.` },
+  ];
+  const body = `
+  <section class="page-head"><div class="container">
+    <p class="crumbs"><a href="/">Inicio</a> › <a href="/cercanias">Cercanías</a> › <a href="/cercanias/${red.slug}">${esc(red.corto)}</a> › ${esc(l.code)}</p>
+    <h1>${esc(l.code)} ${esc(red.nombre)}: retrasos hoy</h1>
+    <p>${esc(recorridoTxt(l))}</p>
+    <div id="status"></div>
+    <span class="live-pill" id="live-pill"><span class="pulse off" aria-hidden="true"></span><span data-text>Conectando con Renfe…</span></span>
+  </div></section>
+  <section class="section"><div class="container"><div class="kpis" id="kpis"></div></div></section>
+  ${liveTrains}
+  <section class="section" id="avisos" aria-labelledby="a-t"><div class="container">
+    <h2 id="a-t">Avisos de la ${esc(l.code)}</h2><div class="alerts" id="alerts"></div>
+  </div></section>
+  <section class="section" aria-labelledby="e-t"><div class="container">
+    <h2 id="e-t">Recorrido y estaciones de la ${esc(l.code)}</h2>
+    ${l.recorridos.map((r) => `<div class="card pad" style="margin-top:12px"><h3>${l.recorridos.length > 1 ? `${esc(r.variante)}: ` : ""}${esc(r.desde)} – ${esc(r.hasta)}</h3><ol class="stations">${r.paradas.map((p) => `<li>${esc(p)}</li>`).join("")}</ol></div>`).join("")}
+    <p class="small muted">Según los horarios que publica Renfe en datos abiertos.</p>
+  </div></section>
+  ${faqHtml(qs)}
+  ${hermanas.length ? `<section class="section"><div class="container"><h2>Otras líneas de ${esc(red.nombre)}</h2>${lineaChips(hermanas)}<p style="margin-top:12px"><a class="more" href="/cercanias/${red.slug}">Ver toda la red de ${esc(red.corto)}</a></p></div></section>` : ""}`;
+  return { path, priority: "0.8", freq: "always",
+    og: { badge: l.code, color: l.color, titulo: red.nombre, subtitulo: `${l.recorridos[0].desde} – ${l.recorridos[0].hasta} · Retrasos en directo` },
+    html: shell({ path, title: `${title} · Andén`, description, body, leaflet: true, dataPage: "linea",
+      jsonld: [faqLd(qs), crumbs([["Inicio", "/"], ["Cercanías", "/cercanias"], [red.nombre, `/cercanias/${red.slug}`], [l.code, path]])],
+      inline: `window.ANDEN_LINEA=${JSON.stringify({ red: red.slug, l: l.code })};`,
+      scripts: liveScripts }) };
+}
+
+function redPage(red, redes, lineas) {
   const path = `/cercanias/${red.slug}`;
   const title = `${red.nombre} hoy: retrasos, incidencias y trenes en directo`;
   const description = `Retrasos de ${red.nombre} ahora mismo: estado de cada línea, trenes en el mapa y avisos de Renfe, actualizados cada 30 segundos.`;
@@ -215,30 +273,65 @@ function redPage(red, redes) {
     <div class="section-head"><h2 id="l-t">Estado de las líneas</h2><p class="small">Toca una línea para ver sus trenes y avisos.</p></div>
     <div id="lines"></div>
   </div></section>
-  <section class="section" aria-labelledby="directo-titulo"><div class="container">
-    <div class="section-head"><h2 id="directo-titulo">Trenes en directo</h2>
-      <div class="segmented" role="group" aria-label="Forma de ver los trenes"><button type="button" id="view-map" aria-pressed="true">Mapa</button><button type="button" id="view-list" aria-pressed="false">Lista</button></div></div>
-    <div class="card mapbox"><div id="map" class="map" role="region" aria-label="Mapa con la posición de los trenes"></div>
-      <div class="legend"><span><i style="background:var(--ok)"></i>En hora</span><span><i style="background:var(--warn)"></i>De 3 a 10 min tarde</span><span><i style="background:var(--crit)"></i>Más de 10 min tarde</span><span><i style="background:var(--faint)"></i>Sin dato</span></div>
-      <p class="map-hint">Usa la rueda del ratón o pellizca para acercar. Toca un tren para ver su ficha.</p></div>
-    <div data-list hidden><div class="list-scroll" id="train-list"></div></div>
-  </div></section>
+  ${liveTrains}
   <section class="section" aria-labelledby="a-t"><div class="container">
     <div class="section-head"><h2 id="a-t">Avisos de Renfe</h2><a class="more" href="/avisos?red=${red.slug}">Todos los avisos de ${esc(red.corto)}</a></div>
     <div class="alerts" id="alerts"></div>
   </div></section>
+  ${lineas.length ? `<section class="section" aria-labelledby="ls-t"><div class="container"><h2 id="ls-t">Líneas de ${esc(red.nombre)}</h2>${lineaChips(lineas)}</div></section>` : ""}
   ${faqHtml(qs)}
   <section class="section"><div class="container"><h2>Otras redes de Cercanías</h2><div class="chips">${others}</div></div></section>`;
   return { path, priority: "0.8", freq: "always",
+    og: { badge: red.slug === "rodalies-catalunya" ? "R" : "C", color: "#1446D8", titulo: red.nombre, subtitulo: "Retrasos, avisos y trenes en directo" },
     html: shell({ path, title: `${title} · Andén`, description, body, leaflet: true, dataPage: "red",
       jsonld: [faqLd(qs), crumbs([["Inicio", "/"], ["Cercanías", "/cercanias"], [red.nombre, path]])],
       inline: `window.ANDEN_RED=${JSON.stringify(red.slug)};`,
-      scripts: ["/vendor/leaflet/leaflet.js", "/assets/js/live-core.js", "/assets/js/live-pages.js"] }) };
+      scripts: liveScripts }) };
 }
 
-export function generate({ sucesos, redes }) {
+/* ---------- Avisos de Renfe por tema (huelga, obras) ---------- */
+
+function temaPage(tema, live) {
+  const path = `/${tema.slug}`;
+  const ahora = live ? avisosDe(tema, live.cercanias.alerts) : null;
+  const cuando = live ? `${fecha(live.generatedAt * 1000)}, ${hora(live.generatedAt * 1000)}` : "";
+  const periodo = (a) => [a.start && `desde el ${fecha(a.start * 1000)}`, a.end && `hasta el ${fecha(a.end * 1000)}`].filter(Boolean).join(" ");
+  // Lo que había al publicar la página: Google lo lee sin JS y el script lo sustituye por el directo
+  const foto = !ahora ? '<div class="empty">Cargando avisos de Renfe…</div>'
+    : !ahora.length ? `<div class="empty">${esc(tema.vacio)}</div>`
+    : ahora.slice(0, 30).map((a) => `<article class="card alert-item"><h3>${esc(a.header || a.desc)}</h3>${a.desc && a.desc !== a.header ? `<p>${esc(a.desc.slice(0, 400))}</p>` : ""}${periodo(a) ? `<p class="small muted">${esc(periodo(a))}</p>` : ""}</article>`).join("");
+  const body = `
+  <section class="page-head band"><div class="container">
+    <p class="crumbs"><a href="/">Inicio</a> › <a href="/avisos">Avisos</a> › ${esc(tema.h1)}</p>
+    <h1>${esc(tema.h1)}</h1>
+    <p>${esc(tema.intro)}</p>
+    <span class="live-pill" id="live-pill"><span class="pulse off" aria-hidden="true"></span><span data-text>Conectando con Renfe…</span></span>
+  </div></section>
+  ${tema.slug === "huelga-renfe" ? '<section class="section"><div class="container"><div class="kpis" id="kpis"></div></div></section>' : ""}
+  <section class="section" aria-labelledby="t-a"><div class="container">
+    <div class="section-head"><h2 id="t-a">Avisos de Renfe</h2><span class="small muted" id="count">${ahora ? `${ahora.length} ${ahora.length === 1 ? "aviso" : "avisos"} · ${esc(cuando)}` : ""}</span></div>
+    <div class="alerts" id="alerts">${foto}</div>
+  </div></section>
+  ${faqHtml(tema.preguntas)}
+  <section class="section"><div class="container"><div class="card pad promo">
+    <div style="display:grid;gap:6px"><h2>¿Cómo va tu línea?</h2><p class="muted">Retrasos y avisos de tu línea de Cercanías, en directo.</p></div>
+    <a class="btn" href="/cercanias">Ver Cercanías</a>
+  </div></div></section>`;
+  return { path, priority: "0.8", freq: "always", og: tema.og,
+    html: shell({ path, title: `${tema.titulo} · Andén`, description: tema.descripcion, body, dataPage: "tema",
+      jsonld: [faqLd(tema.preguntas), crumbs([["Inicio", "/"], ["Avisos", "/avisos"], [tema.h1, path]])],
+      inline: `window.ANDEN_TEMA=${JSON.stringify({ patron: tema.patron, vacio: tema.vacio, ld: tema.slug === "huelga-renfe" })};`,
+      scripts: ["/assets/js/live-core.js", "/assets/js/live-pages.js"] }) };
+}
+
+export function generate({ sucesos, redes, lineas, live }) {
   const pages = [hoyPage(sucesos), incidenciasPage(sucesos)];
   for (const s of sucesos.sucesos || []) pages.push(sucesoPage(s, sucesos.actualizado));
-  for (const r of redes.redes) pages.push(redPage(r, redes.redes));
+  for (const r of redes.redes) {
+    const deRed = lineas.filter((l) => l.red === r.slug);
+    pages.push(redPage(r, redes.redes, deRed));
+    for (const l of deRed) pages.push(lineaPage(l, r, deRed.filter((x) => x !== l)));
+  }
+  for (const t of TEMAS) pages.push(temaPage(t, live));
   return pages;
 }

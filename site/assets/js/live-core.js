@@ -26,7 +26,11 @@
   const lineKey = (code, slug) => `${code}|${slug || "otras"}`;
   const lineName = (key, withRed = !S.scope) => { if (!key) return null; const [code, slug] = key.split("|"); const r = redBySlug(slug); return withRed && r ? `${code} · ${r.corto}` : code; };
   const lineCode = (key) => (key ? key.split("|")[0] : null);
-  const lineUrl = (key) => { const [code, slug] = key.split("|"); return `/linea?red=${encodeURIComponent(slug)}&l=${encodeURIComponent(code)}`; };
+  // Las líneas de redes.json tienen su propia página; el resto usa la ficha genérica
+  const lineUrl = (key) => {
+    const [code, slug] = key.split("|");
+    return redBySlug(slug)?.lineas?.includes(code) ? `/cercanias/${slug}/${code.toLowerCase()}` : `/linea?red=${encodeURIComponent(slug)}&l=${encodeURIComponent(code)}`;
+  };
   const trainUrl = (t) => `/tren?id=${encodeURIComponent(t.id)}`;
 
   function allTrains() {

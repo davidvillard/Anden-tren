@@ -10,9 +10,16 @@ import { extract, QuotaError } from "../../lib/extract.js";
 import { merge } from "../../lib/merge.js";
 import { getJSON, setJSON, storeEnabled } from "../../lib/store.js";
 import { loadState, KEY_STATE, KEY_SEEN, KEY_LAST_CALL } from "../../lib/sucesos-state.js";
+import { fetchAlerts } from "../../lib/renfe.js";
+import { TEMAS, avisosDe } from "../../lib/temas.js";
+import { publish, socialEnabled } from "../../lib/social.js";
 
 const KEY_LAST_DEPLOY = "sucesos:ultimo-despliegue";
 const KEY_PAUSE = "sucesos:pausa-cupo";
+const KEY_PENDING_DEPLOY = "sucesos:despliegue-pendiente";
+const KEY_TEMAS = "temas:avisos"; // ids de los avisos de cada tema en la última revisión
+const SITE = (process.env.SITE_URL || "https://andentren.es").replace(/\/$/, "");
+const recorta = (s, n) => (s.length > n ? s.slice(0, n - 1).trimEnd() + "…" : s);
 
 const MIN_INTERVAL_MS = Number(process.env.GEMINI_MIN_INTERVAL_MIN || 10) * 60_000;
 const QUOTA_PAUSE_MS = 60 * 60_000; // si se agota el cupo gratuito, se espera una hora
@@ -65,13 +72,59 @@ export default async function handler(req, res) {
   await setJSON(KEY_STATE, next);
   await setJSON(KEY_SEEN, seen);
 
-  // Si han cambiado las cifras, se vuelve a publicar la web para que las
-  // páginas que lee Google lleven el dato nuevo (como mucho cada 15 min).
-  if (changes.length && process.env.DEPLOY_HOOK_URL) {
+  // Avisos de Renfe por tema urgente (huelga): si cambian, se republica la web
+  // para que su página lleve la lista nueva y los nuevos se publican en redes.
+  let temasCambian = false;
+  const avisosNuevos = [];
+  const alerts = await fetchAlerts();
+  if (alerts) {
+    const antes = await getJSON(KEY_TEMAS);
+    const ahora = {};
+    for (const t of TEMAS) {
+      const lista = avisosDe(t, alerts);
+      ahora[t.slug] = lista.map((a) => a.id).sort();
+      if (!antes) continue; // primera revisión: solo se guarda, sin publicar nada
+      const previos = new Set(antes[t.slug] || []);
+      if (!t.urgente) continue;
+      if (ahora[t.slug].join() !== [...previos].sort().join()) temasCambian = true;
+      for (const a of lista) if (!previos.has(a.id)) avisosNuevos.push({ tema: t, aviso: a });
+    }
+    await setJSON(KEY_TEMAS, ahora);
+  }
+
+  // Redes sociales: sucesos nuevos en curso y avisos nuevos de huelga.
+  // Se enlaza a la página de lista, que ya existe; la del suceso tarda un minuto en publicarse.
+  if (socialEnabled()) {
+    const previos = new Set((state.sucesos || []).map((s) => s.id));
+    const posts = [
+      ...(next.sucesos || []).filter((s) => s.activo && !previos.has(s.id)).map((s) => ({
+        texto: `${s.clase === "incidencia" ? "⚠️" : "🚨"} ${s.titulo}\n\n${recorta(s.resumen || "", 180)}`,
+        url: `${SITE}${s.clase === "incidencia" ? "/incidencias" : "/accidente-tren-hoy"}`,
+      })),
+      ...avisosNuevos.slice(0, 3).map(({ tema, aviso }) => ({
+        texto: `📢 Aviso de Renfe: ${recorta(aviso.header || aviso.desc, 200)}`,
+        url: `${SITE}/${tema.slug}`,
+      })),
+    ];
+    if (posts.length) summary.redes = await Promise.all(posts.map((p) => publish(p.texto, p.url)));
+  }
+
+  // Si han cambiado las cifras o los avisos por tema, se vuelve a publicar la web
+  // para que las páginas que lee Google lleven el dato nuevo (como mucho cada 15 min).
+  // Un cambio que llega antes de esos 15 min queda pendiente para la siguiente revisión.
+  const pendiente = changes.length || temasCambian || (await getJSON(KEY_PENDING_DEPLOY));
+  if (pendiente && process.env.DEPLOY_HOOK_URL) {
     const lastDeploy = (await getJSON(KEY_LAST_DEPLOY)) || 0;
     if (now - lastDeploy > 15 * 60_000) {
-      try { await fetch(process.env.DEPLOY_HOOK_URL, { method: "POST" }); await setJSON(KEY_LAST_DEPLOY, now.getTime()); summary.redeploy = true; }
-      catch (e) { summary.redeploy = `error: ${e.message}`; }
+      try {
+        await fetch(process.env.DEPLOY_HOOK_URL, { method: "POST" });
+        await setJSON(KEY_LAST_DEPLOY, now.getTime());
+        await setJSON(KEY_PENDING_DEPLOY, false);
+        summary.redeploy = true;
+      } catch (e) { summary.redeploy = `error: ${e.message}`; await setJSON(KEY_PENDING_DEPLOY, true); }
+    } else {
+      await setJSON(KEY_PENDING_DEPLOY, true);
+      summary.redeploy = "pendiente";
     }
   }
   res.status(200).json({ ok: true, ...summary, cambios: changes });

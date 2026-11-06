@@ -1,5 +1,5 @@
 // Build de la web: copia site/ en dist/, inserta cabecera y pie, genera las
-// páginas de texto, de sucesos y de redes, el sitemap y el robots.txt.
+// páginas de texto, de sucesos, de redes, de líneas y de temas, sus imágenes para compartir, el sitemap y el robots.txt.
 //
 // Variables de entorno (todas opcionales, se configuran en Vercel):
 //   SITE_URL           dominio público (por defecto https://andentren.es)
@@ -12,11 +12,14 @@ import { cp, mkdir, readFile, readdir, rm, writeFile } from "node:fs/promises";
 import { readFileSync } from "node:fs";
 import { dirname, join, relative } from "node:path";
 import { createHash } from "node:crypto";
+import { fileURLToPath } from "node:url";
 import { pages as textPages } from "./pages.js";
 import { generate as seoPages } from "./seo-pages.js";
+import { ogImage } from "./og.js";
 import { loadState } from "../lib/sucesos-state.js";
+import { buildLive } from "../lib/renfe.js";
 
-const ROOT = new URL("..", import.meta.url).pathname;
+const ROOT = fileURLToPath(new URL("..", import.meta.url));
 const SRC = join(ROOT, "site");
 const OUT = join(ROOT, "dist");
 const env = process.env;
@@ -47,8 +50,9 @@ const stamp = (url) => {
   return versions.get(url) ? `${url}?v=${versions.get(url)}` : url;
 };
 const versioned = (html) => html.replace(/(src|href)="(\/assets\/[^"?#]+\.(?:js|css))"/g, (m, attr, url) => `${attr}="${stamp(url)}"`);
-const fill = (html) => versioned(html
+const fill = (html, og = "/assets/img/og.png") => versioned(html
   .replace("<!--#head-->", parts.head)
+  .replaceAll("__OG_IMAGE__", SITE_URL + og)
   .replace("<!--#header-->", parts.header)
   .replace("<!--#footer-->", parts.footer)
   .replace("<!--#search-->", parts.search)
@@ -65,10 +69,17 @@ async function walk(dir) {
   }
   return out;
 }
-async function writePage(path, html) {
+// og: datos de la imagen para compartir propia de la página (si no, la general)
+async function writePage(path, html, og) {
   const file = join(OUT, `${path.slice(1)}.html`);
   await mkdir(dirname(file), { recursive: true });
-  await writeFile(file, fill(html));
+  let ogPath;
+  if (og) {
+    ogPath = `/og${path}.png`;
+    await mkdir(dirname(join(OUT, ogPath.slice(1))), { recursive: true });
+    await writeFile(join(OUT, ogPath.slice(1)), ogImage(og));
+  }
+  await writeFile(file, fill(html, ogPath));
 }
 
 await rm(OUT, { recursive: true, force: true });
@@ -94,9 +105,14 @@ for (const p of textPages(cfg)) {
 const sucesos = await loadState();
 await writeFile(join(OUT, "data", "sucesos.json"), JSON.stringify(sucesos));
 const redes = JSON.parse(await readFile(join(SRC, "data", "redes.json"), "utf8"));
-for (const p of seoPages({ sucesos, redes })) {
-  await writePage(p.path, p.html);
-  sitemap.push(p);
+const { lineas } = JSON.parse(await readFile(join(SRC, "data", "lineas.json"), "utf8"));
+// Avisos de Renfe en el momento de publicar, para las páginas de huelga y obras.
+// Si Renfe no responde, esas páginas se publican sin la lista y la cargan en directo.
+const live = await buildLive();
+const avisos = live.sources.alerts?.ok ? live : null;
+for (const p of seoPages({ sucesos, redes, lineas, live: avisos })) {
+  await writePage(p.path, p.html, p.og);
+  sitemap.push({ path: p.path, priority: p.priority, freq: p.freq });
 }
 
 const today = new Date().toISOString().slice(0, 10);

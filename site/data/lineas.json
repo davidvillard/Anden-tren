@@ -1,0 +1,2091 @@
+{
+ "nota": "Generado con scripts/lineas.js a partir del GTFS de Cercanías de Renfe (datos abiertos).",
+ "lineas": [
+  {
+   "red": "asturias",
+   "code": "C1",
+   "slug": "c1",
+   "color": "#EC3541",
+   "recorridos": [
+    {
+     "variante": "C1",
+     "desde": "Gijón-Sanz Crespo",
+     "hasta": "Puente de los Fierros",
+     "paradas": [
+      "Gijón-Sanz Crespo",
+      "Calzada de Asturias",
+      "Veriña",
+      "Monteana",
+      "Serín",
+      "Villabona-Tabladielillo",
+      "Villabona de Asturias",
+      "Lugo de Llanera",
+      "Lugones",
+      "La Corredoria",
+      "Oviedo",
+      "Llamaquique",
+      "El Caleyo",
+      "Las Segadas",
+      "Soto de Rey",
+      "Olloniego",
+      "La Pereda-Riosa",
+      "Ablaña",
+      "Mieres-Puente",
+      "Santullano",
+      "Ujo",
+      "Villallana",
+      "Pola de Lena",
+      "La Cobertoria",
+      "Campomanes",
+      "La Frecha",
+      "Puente de los Fierros"
+     ]
+    }
+   ]
+  },
+  {
+   "red": "asturias",
+   "code": "C2",
+   "slug": "c2",
+   "color": "#009746",
+   "recorridos": [
+    {
+     "variante": "C2",
+     "desde": "Oviedo",
+     "hasta": "El Entrego",
+     "paradas": [
+      "Oviedo",
+      "Llamaquique",
+      "El Caleyo",
+      "Las Segadas",
+      "Soto de Rey",
+      "Santa Eulalia de Manzaneda",
+      "Tudela-Veguín",
+      "Peña Rubia",
+      "Barros",
+      "La Felguera",
+      "Sama",
+      "Ciaño",
+      "El Entrego"
+     ]
+    }
+   ]
+  },
+  {
+   "red": "asturias",
+   "code": "C3",
+   "slug": "c3",
+   "color": "#0060C4",
+   "recorridos": [
+    {
+     "variante": "C3",
+     "desde": "Llamaquique",
+     "hasta": "San Juan de Nieva",
+     "paradas": [
+      "Llamaquique",
+      "Oviedo",
+      "La Corredoria",
+      "Lugones",
+      "Lugo de Llanera",
+      "Villabona de Asturias",
+      "Ferroñes",
+      "Cancienes",
+      "Nubledo",
+      "Los Campos",
+      "Villalegre",
+      "La Rocica",
+      "Avilés",
+      "San Juan de Nieva"
+     ]
+    }
+   ]
+  },
+  {
+   "red": "asturias",
+   "code": "C4",
+   "slug": "c4",
+   "color": "#E93CAC",
+   "recorridos": [
+    {
+     "variante": "C4",
+     "desde": "Cudillero",
+     "hasta": "Gijón-Sanz Crespo",
+     "paradas": [
+      "Cudillero",
+      "El Pito Piñera",
+      "Muros del Nalón",
+      "Los Cabos",
+      "Santianes",
+      "Pravia",
+      "Peñaullán",
+      "Riberas",
+      "Soto del Barco",
+      "El Parador",
+      "Santiago del Monte",
+      "Vegarrozadas",
+      "Piedras Blancas",
+      "Salinas",
+      "Raíces",
+      "Cristalería",
+      "Avilés",
+      "Avilés-Apeadero",
+      "Llaranes",
+      "Trasona",
+      "Gudín Laminación",
+      "Zanzabornín",
+      "Regueral",
+      "Candás",
+      "Candás-Apeadero",
+      "Perlora",
+      "Xivares",
+      "Aboño Apeadero",
+      "Veriña",
+      "Centro de Transportes",
+      "Tremañes Carreño",
+      "Gijón-Sanz Crespo"
+     ]
+    }
+   ]
+  },
+  {
+   "red": "asturias",
+   "code": "C5",
+   "slug": "c5",
+   "color": "#C4D600",
+   "recorridos": [
+    {
+     "variante": "C5",
+     "desde": "Laviana",
+     "hasta": "Gijón-Sanz Crespo",
+     "paradas": [
+      "Laviana",
+      "Barredos",
+      "Blimea",
+      "Sotrondio",
+      "San Martín",
+      "Carrocera",
+      "El Entrego-La Oscura",
+      "San Vicente",
+      "Ciaño Escobio",
+      "Sama los Llerones",
+      "La Felguera N. Langreo-N. Llangréu",
+      "Tuilla",
+      "Curuxona",
+      "Carbayín",
+      "Valdesoto",
+      "Bendición",
+      "Xixún",
+      "El Berrón",
+      "Noreña",
+      "La Florida",
+      "Puente Buracos",
+      "Aguda",
+      "Pinzales",
+      "Sotiello",
+      "Tremañes-Langreo",
+      "Gijón-Sanz Crespo"
+     ]
+    },
+    {
+     "variante": "C5a",
+     "desde": "Gijón-Sanz Crespo",
+     "hasta": "Oviedo",
+     "paradas": [
+      "Gijón-Sanz Crespo",
+      "Noreña",
+      "El Berrón",
+      "Colloto",
+      "Parque Principado",
+      "Oviedo"
+     ]
+    }
+   ]
+  },
+  {
+   "red": "asturias",
+   "code": "C6",
+   "slug": "c6",
+   "color": "#579BE2",
+   "recorridos": [
+    {
+     "variante": "C6",
+     "desde": "Infiesto Apeadero",
+     "hasta": "Oviedo",
+     "paradas": [
+      "Infiesto Apeadero",
+      "Infiesto",
+      "Pintueles",
+      "Carancos",
+      "Ceceda",
+      "Fuente Santa de Nava",
+      "Nava",
+      "Llames",
+      "El Remedio",
+      "Lieres",
+      "Los Corros",
+      "Pola de Siero",
+      "La Carrera de Siero",
+      "El Berrón",
+      "Fonciello",
+      "Meres",
+      "Colloto",
+      "Parque Principado",
+      "La Corredoria",
+      "Oviedo"
+     ]
+    }
+   ]
+  },
+  {
+   "red": "asturias",
+   "code": "C7",
+   "slug": "c7",
+   "color": "#ED7D31",
+   "recorridos": [
+    {
+     "variante": "C7",
+     "desde": "San Esteban",
+     "hasta": "Oviedo",
+     "paradas": [
+      "San Esteban",
+      "San Ranón",
+      "Pravia",
+      "Beifar",
+      "San Román",
+      "Aces",
+      "Sandiche",
+      "Grado",
+      "Peñaflor de Grado",
+      "Vega de Anzo",
+      "Santa María de Grado",
+      "Trubia",
+      "Soto Udrión",
+      "San Pedro de Nora",
+      "San Claudio",
+      "Las Mazas",
+      "Las Campas",
+      "Argañosa-Lavapiés",
+      "Vallobín",
+      "Oviedo"
+     ]
+    }
+   ]
+  },
+  {
+   "red": "asturias",
+   "code": "C8",
+   "slug": "c8",
+   "color": "#FDC02C",
+   "recorridos": [
+    {
+     "variante": "C8",
+     "desde": "Collanzo",
+     "hasta": "Baiña",
+     "paradas": [
+      "Collanzo",
+      "Levinco",
+      "Cabañaquinta",
+      "Santa Ana-Soto",
+      "Corigos",
+      "Piñeres",
+      "San Antonio",
+      "Oyanco",
+      "Moreda de Aller",
+      "Caborana",
+      "Santa Cruz",
+      "Ujo Taruelo",
+      "Figaredo",
+      "Caudalia",
+      "Mieres Vasco",
+      "Ablaña",
+      "La Pereda-Riosa",
+      "Baiña"
+     ]
+    }
+   ]
+  },
+  {
+   "red": "bilbao",
+   "code": "C1",
+   "slug": "c1",
+   "color": "#D7001E",
+   "recorridos": [
+    {
+     "variante": "C1",
+     "desde": "Santurtzi",
+     "hasta": "Bilbao-Intermod. Abando Indalecio Prieto",
+     "paradas": [
+      "Santurtzi",
+      "Peñota",
+      "Portugalete",
+      "La Iberia",
+      "Sestao",
+      "Desertu-Barakaldo",
+      "Lutxana-Barakaldo",
+      "Zorrotza",
+      "Olabeaga",
+      "San Mamés",
+      "Autonomía",
+      "Ametzola",
+      "Zabalburu",
+      "Bilbao-Intermod. Abando Indalecio Prieto"
+     ]
+    }
+   ]
+  },
+  {
+   "red": "bilbao",
+   "code": "C2",
+   "slug": "c2",
+   "color": "#0F8C2D",
+   "recorridos": [
+    {
+     "variante": "C2",
+     "desde": "Muskiz",
+     "hasta": "Bilbao-Intermod. Abando Indalecio Prieto",
+     "paradas": [
+      "Muskiz",
+      "Putxeta",
+      "Gallarta",
+      "Ortuella",
+      "Sagrada Familia",
+      "Urioste",
+      "Valle de Trápaga/Trapagaran",
+      "Trápaga",
+      "Galindo",
+      "Desertu-Barakaldo",
+      "Lutxana-Barakaldo",
+      "Zorrotza",
+      "Olabeaga",
+      "San Mamés",
+      "Autonomía",
+      "Ametzola",
+      "Zabalburu",
+      "Bilbao-Intermod. Abando Indalecio Prieto"
+     ]
+    }
+   ]
+  },
+  {
+   "red": "bilbao",
+   "code": "C3",
+   "slug": "c3",
+   "color": "#78B4E1",
+   "recorridos": [
+    {
+     "variante": "C3",
+     "desde": "Bilbao-Intermod. Abando Indalecio Prieto",
+     "hasta": "Orduña",
+     "paradas": [
+      "Bilbao-Intermod. Abando Indalecio Prieto",
+      "Miribilla",
+      "La Peña de Bilbao",
+      "Ollargan",
+      "Bidebieta-Basauri",
+      "Abaroa-San Miguel",
+      "Basauri",
+      "Arrigorriaga",
+      "Ugao-Miraballes",
+      "Bakiola",
+      "Arrankudiaga",
+      "Arbide",
+      "Arakaldo",
+      "Areta",
+      "Llodio",
+      "Santa Cruz de Llodio",
+      "Luiaondo",
+      "Salbio",
+      "Amurrio Iparralde",
+      "Amurrio",
+      "Iñarratxu",
+      "Orduña"
+     ]
+    }
+   ]
+  },
+  {
+   "red": "bilbao",
+   "code": "C4",
+   "slug": "c4",
+   "color": "#E93CAC",
+   "recorridos": [
+    {
+     "variante": "C4",
+     "desde": "Bilbao la Concordia",
+     "hasta": "La Asunción Universidad",
+     "paradas": [
+      "Bilbao la Concordia",
+      "Ametzola",
+      "Basurto Hospital",
+      "Zorrotza Zorrozgoiti",
+      "Santa Águeda",
+      "Kastrexana",
+      "Irauregui",
+      "Zaramillo",
+      "La Quadra",
+      "Sodupe",
+      "Artxube",
+      "Lambarri",
+      "Güeñes",
+      "Aranguren",
+      "Aranguren-Apeadero",
+      "Zalla",
+      "Colegio",
+      "Ibarra",
+      "La Herrera",
+      "Balmaseda",
+      "Arla Berrón",
+      "Ungo Nava",
+      "Mercadillo Villasana",
+      "Cadagua",
+      "Bercedo-Montija",
+      "Quintana de los Prados",
+      "Espinosa de los Monteros",
+      "Redondo",
+      "Sotoscueva",
+      "Pedrosa",
+      "Dosante Cidad",
+      "Robredo Ahedo",
+      "Soncillo",
+      "Cabañas de Virtus",
+      "Arija",
+      "Llano",
+      "Las Rozas de Valdearroyo",
+      "Montes Claros",
+      "Los Carabeos",
+      "Mataporquera",
+      "Cillamayor",
+      "Salinas de Pisuerga",
+      "Vado-Cervera",
+      "Castrejón de la Peña",
+      "Villaverde Tarilonte",
+      "Santibáñez de la Peña",
+      "Guardo Apeadero",
+      "Guardo",
+      "La Espina",
+      "Valcuende",
+      "Puente Almuhey",
+      "Cerezal de la Guzpeña",
+      "Prado de la Guzpeña",
+      "La Llama de la Guzpeña",
+      "Valle de las Casas",
+      "Sorriba",
+      "Cistierna",
+      "La Ercina",
+      "Boñar",
+      "La Vecilla",
+      "Matallana",
+      "San Feliz",
+      "La Asunción Universidad"
+     ]
+    }
+   ]
+  },
+  {
+   "red": "bilbao",
+   "code": "C5",
+   "slug": "c5",
+   "color": "#2C2A86",
+   "recorridos": [
+    {
+     "variante": "C5",
+     "desde": "Karrantza",
+     "hasta": "Bilbao la Concordia",
+     "paradas": [
+      "Karrantza",
+      "Villaverde de Trucios",
+      "Artzentales",
+      "Traslaviña",
+      "Mimetiz",
+      "Aranguren",
+      "Sodupe",
+      "Zaramillo",
+      "Irauregui",
+      "Zorrotza Zorrozgoiti",
+      "Basurto Hospital",
+      "Ametzola",
+      "Bilbao la Concordia"
+     ]
+    }
+   ]
+  },
+  {
+   "red": "cadiz",
+   "code": "C1",
+   "slug": "c1",
+   "color": "#D7001E",
+   "recorridos": [
+    {
+     "variante": "C1",
+     "desde": "Cádiz",
+     "hasta": "Aeropuerto de Jerez",
+     "paradas": [
+      "Cádiz",
+      "San Severiano",
+      "Segunda Aguada",
+      "Cádiz-Estadio",
+      "Cortadura",
+      "Río Arillo",
+      "San Fernando-Bahía Sur",
+      "San Fernando-Centro",
+      "Puerto Real",
+      "Las Aletas",
+      "Valdelagrana",
+      "Puerto de Santa María",
+      "Jerez de la Frontera",
+      "Aeropuerto de Jerez"
+     ]
+    },
+    {
+     "variante": "C1a",
+     "desde": "Las Aletas",
+     "hasta": "Universidad de Cádiz",
+     "paradas": [
+      "Las Aletas",
+      "Universidad de Cádiz"
+     ]
+    }
+   ]
+  },
+  {
+   "red": "cadiz",
+   "code": "T1",
+   "slug": "t1",
+   "color": "#C4D600",
+   "recorridos": [
+    {
+     "variante": "T1",
+     "desde": "Cádiz",
+     "hasta": "Pelagatos",
+     "paradas": [
+      "Cádiz",
+      "San Severiano",
+      "Segunda Aguada",
+      "Cádiz-Estadio",
+      "Cortadura",
+      "Río Arillo",
+      "La Ardila",
+      "Santo Entierro",
+      "Plaza del Carmen",
+      "Compañía de María",
+      "Plaza del Rey",
+      "Plaza de la Iglesia",
+      "Venta de Vargas",
+      "Tres Caminos",
+      "Pinar de los Franceses",
+      "Marquesado",
+      "Alameda Solano",
+      "Nuestra Señora de los Remedios",
+      "Reyes Católicos",
+      "La Hoya",
+      "Pelagatos"
+     ]
+    }
+   ]
+  },
+  {
+   "red": "cantabria",
+   "code": "C1",
+   "slug": "c1",
+   "color": "#EF3340",
+   "recorridos": [
+    {
+     "variante": "C1",
+     "desde": "Reinosa",
+     "hasta": "Santander",
+     "paradas": [
+      "Reinosa",
+      "Río Ebro",
+      "Lantueno-Santiurde",
+      "Pesquera",
+      "Pujayo",
+      "Bárcena",
+      "Molledo-Portolín",
+      "Santa Cruz de Iguña",
+      "Arenas de Iguña",
+      "Las Fraguas",
+      "Los Corrales de Buelna",
+      "Lombera",
+      "Las Caldas de Besaya",
+      "Viérnoles",
+      "Torrelavega",
+      "Sierrapando",
+      "Zurita",
+      "Vioño",
+      "Renedo",
+      "Parbayón",
+      "Guarnizo",
+      "Boo",
+      "Maliaño",
+      "Muriedas-Bahía",
+      "Nueva Montaña apeadero",
+      "Valdecilla",
+      "Santander"
+     ]
+    }
+   ]
+  },
+  {
+   "red": "cantabria",
+   "code": "C2",
+   "slug": "c2",
+   "color": "#009645",
+   "recorridos": [
+    {
+     "variante": "C2",
+     "desde": "Cabezón de la Sal",
+     "hasta": "Santander",
+     "paradas": [
+      "Cabezón de la Sal",
+      "Ontoria",
+      "Virgen de la Peña",
+      "Casar de Periedo",
+      "Golbardo",
+      "San Pedro de Rudagüera",
+      "Santa Isabel de Quijas",
+      "Puente San Miguel",
+      "Ganzo",
+      "Altamira",
+      "Torrelavega-Centro",
+      "Barreda",
+      "Requejada",
+      "Mar",
+      "Gornazo",
+      "Mogro",
+      "Boo de Piélagos",
+      "Mortera",
+      "Bezana",
+      "Adarzo",
+      "Cazoña",
+      "Valdecilla la Marga",
+      "Santander"
+     ]
+    }
+   ]
+  },
+  {
+   "red": "cantabria",
+   "code": "C3",
+   "slug": "c3",
+   "color": "#0060A9",
+   "recorridos": [
+    {
+     "variante": "C3",
+     "desde": "Marrón",
+     "hasta": "Santander",
+     "paradas": [
+      "Marrón",
+      "Limpias",
+      "Treto",
+      "Cicero",
+      "Gama",
+      "Beranga",
+      "Hoz de Anero",
+      "Villaverde de Pontones",
+      "Puente Agüero",
+      "Orejo",
+      "Heras",
+      "San Salvador",
+      "La Cantábrica",
+      "Astillero",
+      "Maliaño Vidriera",
+      "Valle Real",
+      "Nueva Montaña",
+      "Valdecilla la Marga",
+      "Santander"
+     ]
+    }
+   ]
+  },
+  {
+   "red": "madrid",
+   "code": "C1",
+   "slug": "c1",
+   "color": "#75B6E0",
+   "recorridos": [
+    {
+     "variante": "C1",
+     "desde": "Madrid-Atocha Cercanías",
+     "hasta": "Madrid-Aeropuerto T4",
+     "paradas": [
+      "Madrid-Atocha Cercanías",
+      "Madrid-Recoletos",
+      "Madrid-Nuevos Ministerios",
+      "Madrid-Chamartín-Clara Campoamor",
+      "Fuente de la Mora",
+      "Valdebebas",
+      "Madrid-Aeropuerto T4"
+     ]
+    }
+   ]
+  },
+  {
+   "red": "madrid",
+   "code": "C2",
+   "slug": "c2",
+   "color": "#00943D",
+   "recorridos": [
+    {
+     "variante": "C2",
+     "desde": "Madrid-Chamartín-Clara Campoamor",
+     "hasta": "Guadalajara",
+     "paradas": [
+      "Madrid-Chamartín-Clara Campoamor",
+      "Madrid-Nuevos Ministerios",
+      "Madrid-Recoletos",
+      "Madrid-Atocha Cercanías",
+      "Asamblea de Madrid-Entrevías",
+      "El Pozo",
+      "Vallecas",
+      "Santa Eugenia",
+      "Vicálvaro",
+      "Coslada",
+      "San Fernando de Henares",
+      "Torrejón de Ardoz",
+      "Soto del Henares",
+      "La Garena",
+      "Alcalá de Henares",
+      "Alcalá de Henares-Universidad",
+      "Meco",
+      "Azuqueca",
+      "Guadalajara"
+     ]
+    }
+   ]
+  },
+  {
+   "red": "madrid",
+   "code": "C3",
+   "slug": "c3",
+   "color": "#952585",
+   "recorridos": [
+    {
+     "variante": "C3",
+     "desde": "Madrid-Chamartín-Clara Campoamor",
+     "hasta": "Aranjuez",
+     "paradas": [
+      "Madrid-Chamartín-Clara Campoamor",
+      "Madrid-Nuevos Ministerios",
+      "Sol",
+      "Madrid-Atocha Cercanías",
+      "Madrid-Villaverde Bajo",
+      "San Cristóbal de los Ángeles",
+      "San Cristóbal Industrial",
+      "El Casar",
+      "Getafe-Industrial",
+      "Pinto",
+      "Valdemoro",
+      "Ciempozuelos",
+      "Aranjuez"
+     ]
+    }
+   ]
+  },
+  {
+   "red": "madrid",
+   "code": "C4",
+   "slug": "c4",
+   "color": "#2C2A86",
+   "recorridos": [
+    {
+     "variante": "C4",
+     "desde": "Madrid-Chamartín-Clara Campoamor",
+     "hasta": "Parla",
+     "paradas": [
+      "Madrid-Chamartín-Clara Campoamor",
+      "Madrid-Nuevos Ministerios",
+      "Sol",
+      "Madrid-Atocha Cercanías",
+      "Madrid-Villaverde Bajo",
+      "Madrid-Villaverde Alto",
+      "Las Margaritas",
+      "Getafe-Centro",
+      "Getafe-Sector 3",
+      "Parla"
+     ]
+    },
+    {
+     "variante": "C4a",
+     "desde": "Parla",
+     "hasta": "Alcobendas-San Sebastián de los Reyes",
+     "paradas": [
+      "Parla",
+      "Getafe-Sector 3",
+      "Getafe-Centro",
+      "Las Margaritas",
+      "Madrid-Villaverde Alto",
+      "Madrid-Villaverde Bajo",
+      "Madrid-Atocha Cercanías",
+      "Sol",
+      "Madrid-Nuevos Ministerios",
+      "Madrid-Chamartín-Clara Campoamor",
+      "Fuencarral",
+      "Universidad-Cantoblanco",
+      "Universidad Pontificia de Comillas",
+      "Valdelasfuentes",
+      "Alcobendas-San Sebastián de los Reyes"
+     ]
+    },
+    {
+     "variante": "C4b",
+     "desde": "Colmenar Viejo",
+     "hasta": "Parla",
+     "paradas": [
+      "Colmenar Viejo",
+      "Tres Cantos",
+      "El Goloso",
+      "Universidad-Cantoblanco",
+      "Fuencarral",
+      "Madrid-Chamartín-Clara Campoamor",
+      "Madrid-Nuevos Ministerios",
+      "Sol",
+      "Madrid-Atocha Cercanías",
+      "Madrid-Villaverde Bajo",
+      "Madrid-Villaverde Alto",
+      "Las Margaritas",
+      "Getafe-Centro",
+      "Getafe-Sector 3",
+      "Parla"
+     ]
+    }
+   ]
+  },
+  {
+   "red": "madrid",
+   "code": "C5",
+   "slug": "c5",
+   "color": "#FECB00",
+   "recorridos": [
+    {
+     "variante": "C5",
+     "desde": "Móstoles-El Soto",
+     "hasta": "Humanes",
+     "paradas": [
+      "Móstoles-El Soto",
+      "Móstoles",
+      "Las Retamas",
+      "Alcorcón",
+      "San José de Valderas",
+      "Cuatro Vientos",
+      "Las Águilas",
+      "Maestra Justa Freire-Polidep. Aluche",
+      "Aluche",
+      "Laguna",
+      "Embajadores",
+      "Madrid-Atocha Cercanías",
+      "Méndez Álvaro P.V.",
+      "Doce de Octubre",
+      "Orcasitas",
+      "Puente Alcocer",
+      "Madrid-Villaverde Alto",
+      "Zarzaquemada",
+      "Leganés",
+      "Parque Polvoranca",
+      "La Serna-Fuenlabrada",
+      "Fuenlabrada",
+      "Humanes"
+     ]
+    }
+   ]
+  },
+  {
+   "red": "madrid",
+   "code": "C7",
+   "slug": "c7",
+   "color": "#E5202A",
+   "recorridos": [
+    {
+     "variante": "C7",
+     "desde": "Guadalajara",
+     "hasta": "Madrid-Príncipe Pío",
+     "paradas": [
+      "Guadalajara",
+      "Azuqueca",
+      "Meco",
+      "Alcalá de Henares-Universidad",
+      "Alcalá de Henares",
+      "La Garena",
+      "Soto del Henares",
+      "Torrejón de Ardoz",
+      "San Fernando de Henares",
+      "Coslada",
+      "Vicálvaro",
+      "Santa Eugenia",
+      "Vallecas",
+      "El Pozo",
+      "Asamblea de Madrid-Entrevías",
+      "Madrid-Atocha Cercanías",
+      "Madrid-Recoletos",
+      "Madrid-Nuevos Ministerios",
+      "Madrid-Chamartín-Clara Campoamor",
+      "Madrid-Ramón y Cajal",
+      "Mirasierra-Paco de Lucía",
+      "Pitis",
+      "Las Rozas",
+      "Majadahonda",
+      "El Barrial-Centro Comercial Pozuelo",
+      "Pozuelo",
+      "Aravaca",
+      "Madrid-Príncipe Pío"
+     ]
+    }
+   ]
+  },
+  {
+   "red": "madrid",
+   "code": "C8",
+   "slug": "c8",
+   "color": "#868584",
+   "recorridos": [
+    {
+     "variante": "C8a",
+     "desde": "El Escorial",
+     "hasta": "Madrid-Chamartín-Clara Campoamor",
+     "paradas": [
+      "El Escorial",
+      "Las Zorreras-Navalquejigo",
+      "San Yago",
+      "Villalba de Guadarrama",
+      "Galapagar-La Navata",
+      "Torrelodones",
+      "Las Matas",
+      "Pinar de las Rozas",
+      "Pitis",
+      "Mirasierra-Paco de Lucía",
+      "Madrid-Ramón y Cajal",
+      "Madrid-Chamartín-Clara Campoamor"
+     ]
+    },
+    {
+     "variante": "C8b",
+     "desde": "Cercedilla",
+     "hasta": "Madrid-Chamartín-Clara Campoamor",
+     "paradas": [
+      "Cercedilla",
+      "Los Molinos-Guadarrama",
+      "Collado Mediano",
+      "Alpedrete",
+      "Los Negrales",
+      "Villalba de Guadarrama",
+      "Galapagar-La Navata",
+      "Torrelodones",
+      "Las Matas",
+      "Pinar de las Rozas",
+      "Pitis",
+      "Mirasierra-Paco de Lucía",
+      "Madrid-Ramón y Cajal",
+      "Madrid-Chamartín-Clara Campoamor"
+     ]
+    }
+   ]
+  },
+  {
+   "red": "madrid",
+   "code": "C9",
+   "slug": "c9",
+   "color": "#915419",
+   "recorridos": [
+    {
+     "variante": "C9",
+     "desde": "Los Cotos",
+     "hasta": "Cercedilla",
+     "paradas": [
+      "Los Cotos",
+      "Puerto de Navacerrada",
+      "Cercedilla"
+     ]
+    }
+   ]
+  },
+  {
+   "red": "madrid",
+   "code": "C10",
+   "slug": "c10",
+   "color": "#BCCF00",
+   "recorridos": [
+    {
+     "variante": "C10",
+     "desde": "Villalba de Guadarrama",
+     "hasta": "Madrid-Chamartín-Clara Campoamor",
+     "paradas": [
+      "Villalba de Guadarrama",
+      "Galapagar-La Navata",
+      "Torrelodones",
+      "Las Matas",
+      "Pinar de las Rozas",
+      "Las Rozas",
+      "Majadahonda",
+      "El Barrial-Centro Comercial Pozuelo",
+      "Pozuelo",
+      "Aravaca",
+      "Madrid-Príncipe Pío",
+      "Pirámides",
+      "Delicias",
+      "Méndez Álvaro P.V.",
+      "Madrid-Atocha Cercanías",
+      "Madrid-Recoletos",
+      "Madrid-Nuevos Ministerios",
+      "Madrid-Chamartín-Clara Campoamor"
+     ]
+    }
+   ]
+  },
+  {
+   "red": "malaga",
+   "code": "C1",
+   "slug": "c1",
+   "color": "#4a8ccc",
+   "recorridos": [
+    {
+     "variante": "C1",
+     "desde": "Fuengirola",
+     "hasta": "Málaga-Centro Alameda",
+     "paradas": [
+      "Fuengirola",
+      "Los Boliches",
+      "Torreblanca del Sol",
+      "Carvajal",
+      "Torremuelle",
+      "Benalmádena-Arroyo de la Miel",
+      "El Pinillo",
+      "Montemar Alto",
+      "Torremolinos",
+      "La Colina",
+      "Los Álamos",
+      "Plaza Mayor",
+      "Málaga-Aeropuerto",
+      "Guadalhorce",
+      "Victoria Kent",
+      "Málaga M.Z. Cercanías",
+      "Málaga-Centro Alameda"
+     ]
+    }
+   ]
+  },
+  {
+   "red": "malaga",
+   "code": "C2",
+   "slug": "c2",
+   "color": "#0fcf34",
+   "recorridos": [
+    {
+     "variante": "C2",
+     "desde": "Álora",
+     "hasta": "Málaga-Centro Alameda",
+     "paradas": [
+      "Álora",
+      "Pizarra",
+      "Aljaima",
+      "Cártama",
+      "Campanillas",
+      "Málaga-Los Prados",
+      "Victoria Kent",
+      "Málaga M.Z. Cercanías",
+      "Málaga-Centro Alameda"
+     ]
+    }
+   ]
+  },
+  {
+   "red": "murcia-alicante",
+   "code": "C1",
+   "slug": "c1",
+   "color": "#73B6E0",
+   "recorridos": [
+    {
+     "variante": "C1",
+     "desde": "Murcia del Carmen",
+     "hasta": "Alicante/Alacant-Terminal",
+     "paradas": [
+      "Murcia del Carmen",
+      "Beniel",
+      "Orihuela-Miguel Hernández",
+      "Callosa de Segura",
+      "San Isidro-Albatera-Catral",
+      "Crevillente",
+      "Elche/Elx-Carrús",
+      "Elche/Elx-Parc",
+      "Torrellano",
+      "Sant Gabriel",
+      "Alicante/Alacant-Terminal"
+     ]
+    }
+   ]
+  },
+  {
+   "red": "murcia-alicante",
+   "code": "C2",
+   "slug": "c2",
+   "color": "#E93CAC",
+   "recorridos": [
+    {
+     "variante": "C2",
+     "desde": "Águilas",
+     "hasta": "Murcia del Carmen",
+     "paradas": [
+      "Águilas",
+      "Águilas-El Labradorcico",
+      "Jaravía",
+      "Pulpí",
+      "Almendricos",
+      "Puerto Lumbreras",
+      "Lorca-Sutullena",
+      "Lorca-San Diego",
+      "Totana",
+      "Alhama de Murcia",
+      "Murcia del Carmen"
+     ]
+    }
+   ]
+  },
+  {
+   "red": "murcia-alicante",
+   "code": "C3",
+   "slug": "c3",
+   "color": "#7D2486",
+   "recorridos": [
+    {
+     "variante": "C3",
+     "desde": "Sant Vicent Centre",
+     "hasta": "Alicante/Alacant-Terminal",
+     "paradas": [
+      "Sant Vicent Centre",
+      "Universidad de Alicante",
+      "Alicante/Alacant-Terminal"
+     ]
+    }
+   ]
+  },
+  {
+   "red": "rodalies-catalunya",
+   "code": "R1",
+   "slug": "r1",
+   "color": "#7DBCEC",
+   "recorridos": [
+    {
+     "variante": "R1",
+     "desde": "Maçanet-Massanes",
+     "hasta": "L'Hospitalet de Llobregat",
+     "paradas": [
+      "Maçanet-Massanes",
+      "Tordera",
+      "Blanes",
+      "Malgrat de Mar",
+      "Santa Susanna",
+      "Pineda de Mar",
+      "Calella",
+      "Sant Pol de Mar",
+      "Canet de Mar",
+      "Arenys de Mar",
+      "Caldes d'Estrac",
+      "Sant Andreu de Llavaneres",
+      "Mataró",
+      "Cabrera de Mar-Vilassar de Mar",
+      "Vilassar de Mar",
+      "Premià de Mar",
+      "Ocata",
+      "El Masnou",
+      "Montgat-Nord",
+      "Montgat",
+      "Badalona",
+      "Sant Adrià de Besòs",
+      "Barcelona El Clot",
+      "Barcelona Arc de Triomf",
+      "Barcelona Plaça de Catalunya",
+      "Barcelona-Sants",
+      "L'Hospitalet de Llobregat"
+     ]
+    }
+   ]
+  },
+  {
+   "red": "rodalies-catalunya",
+   "code": "R2",
+   "slug": "r2",
+   "color": "#D0DF00",
+   "recorridos": [
+    {
+     "variante": "R2",
+     "desde": "Vilanova i la Geltrú",
+     "hasta": "Maçanet-Massanes",
+     "paradas": [
+      "Vilanova i la Geltrú",
+      "Sitges",
+      "Garraf",
+      "Platja de Castelldefels",
+      "Castelldefels",
+      "Gavà",
+      "Viladecans",
+      "El Prat de Llobregat",
+      "Bellvitge - Gornal",
+      "Barcelona-Sants",
+      "Barcelona-Passeig de Gràcia",
+      "Barcelona El Clot",
+      "Barcelona Sant Andreu",
+      "Montcada i Reixac",
+      "La Llagosta",
+      "Mollet-Sant Fost",
+      "Montmeló",
+      "Granollers Centre",
+      "Les Franqueses-Granollers Nord",
+      "Cardedeu",
+      "Llinars del Vallès",
+      "Palautordera",
+      "Sant Celoni",
+      "Gualba",
+      "Riells i Viabrea-Breda",
+      "Hostalric",
+      "Maçanet-Massanes"
+     ]
+    },
+    {
+     "variante": "R2N",
+     "desde": "El Prat Aeroport",
+     "hasta": "Maçanet-Massanes",
+     "paradas": [
+      "El Prat Aeroport",
+      "El Prat de Llobregat",
+      "Bellvitge - Gornal",
+      "Barcelona-Sants",
+      "Barcelona-Passeig de Gràcia",
+      "Barcelona El Clot",
+      "Barcelona Sant Andreu",
+      "Montcada i Reixac",
+      "La Llagosta",
+      "Mollet-Sant Fost",
+      "Montmeló",
+      "Granollers Centre",
+      "Les Franqueses-Granollers Nord",
+      "Cardedeu",
+      "Llinars del Vallès",
+      "Palautordera",
+      "Sant Celoni",
+      "Gualba",
+      "Riells i Viabrea-Breda",
+      "Hostalric",
+      "Maçanet-Massanes"
+     ]
+    },
+    {
+     "variante": "R2S",
+     "desde": "Barcelona Estació de França",
+     "hasta": "Flix",
+     "paradas": [
+      "Barcelona Estació de França",
+      "Barcelona-Passeig de Gràcia",
+      "Barcelona-Sants",
+      "Vilanova i la Geltrú",
+      "Sant Vicenç de Calders",
+      "Torredembarra",
+      "Altafulla-Tamarit",
+      "Tarragona",
+      "Vila-seca",
+      "Reus",
+      "Les Borges del Camp",
+      "Riudecanyes-Botarell",
+      "Duesaigües-L'Argentera",
+      "Pradell",
+      "Marçà-Falset",
+      "Capçanes",
+      "Móra la Nova",
+      "Ascó",
+      "Flix"
+     ]
+    }
+   ]
+  },
+  {
+   "red": "rodalies-catalunya",
+   "code": "R3",
+   "slug": "r3",
+   "color": "#E54A3C",
+   "recorridos": [
+    {
+     "variante": "R3",
+     "desde": "La Tor de Querol-Enveig",
+     "hasta": "La Garriga",
+     "paradas": [
+      "La Tor de Querol-Enveig",
+      "Puigcerdà",
+      "Urtx-Alp",
+      "La Molina",
+      "Toses",
+      "Planoles",
+      "Ribes de Freser",
+      "Campdevànol",
+      "Ripoll",
+      "La Farga de Bebié",
+      "Sant Quirze de Besora-Montesquiu",
+      "Borgonyà",
+      "Torelló",
+      "Manlleu",
+      "Vic",
+      "Balenyà-Tona-Seva",
+      "Balenyà-Els Hostalets",
+      "Centelles",
+      "Sant Martí de Centelles",
+      "Figaró",
+      "La Garriga"
+     ]
+    }
+   ]
+  },
+  {
+   "red": "rodalies-catalunya",
+   "code": "R4",
+   "slug": "r4",
+   "color": "#F7A30D",
+   "recorridos": [
+    {
+     "variante": "R4",
+     "desde": "Sant Vicenç de Calders",
+     "hasta": "Manresa",
+     "paradas": [
+      "Sant Vicenç de Calders",
+      "El Vendrell",
+      "L'Arboç",
+      "Els Monjos",
+      "Vilafranca del Penedès",
+      "La Granada",
+      "Lavern-Subirats",
+      "Sant Sadurní d'Anoia",
+      "Gelida",
+      "Martorell Central",
+      "Castellbisbal",
+      "El Papiol",
+      "Molins de Rei",
+      "Sant Feliu de Llobregat",
+      "Sant Joan Despí",
+      "Cornellà",
+      "L'Hospitalet de Llobregat",
+      "Barcelona-Sants",
+      "Barcelona Plaça de Catalunya",
+      "Barcelona Arc de Triomf",
+      "Barcelona La Sagrera-Meridiana",
+      "Barcelona Fabra i Puig",
+      "Barcelona Torre Baró -Vallbona",
+      "Montcada-Bifurcació",
+      "Montcada i Reixac-Manresa",
+      "Montcada i Reixac-Santa Maria",
+      "Cerdanyola del Vallès",
+      "Barberà del Vallès",
+      "Sabadell Sud",
+      "Sabadell Centre",
+      "Sabadell Nord",
+      "Terrassa Est",
+      "Terrassa Estació del Nord",
+      "Sant Miquel de Gonteres",
+      "Viladecavalls",
+      "Vacarisses-Torreblanca",
+      "Vacarisses",
+      "Castellbell i el Vilar-Monist Montserrat",
+      "Sant Vicenç de Castellet",
+      "Manresa"
+     ]
+    }
+   ]
+  },
+  {
+   "red": "rodalies-catalunya",
+   "code": "R7",
+   "slug": "r7",
+   "color": "#24A842",
+   "recorridos": [
+    {
+     "variante": "R7",
+     "desde": "Cerdanyola Universitat",
+     "hasta": "Montcada-Bifurcació",
+     "paradas": [
+      "Cerdanyola Universitat",
+      "Cerdanyola del Vallès",
+      "Montcada i Reixac-Santa Maria",
+      "Montcada i Reixac-Manresa",
+      "Montcada-Bifurcació"
+     ]
+    }
+   ]
+  },
+  {
+   "red": "rodalies-catalunya",
+   "code": "R8",
+   "slug": "r8",
+   "color": "#88016A",
+   "recorridos": [
+    {
+     "variante": "R8",
+     "desde": "Martorell Central",
+     "hasta": "Granollers Centre",
+     "paradas": [
+      "Martorell Central",
+      "Castellbisbal",
+      "Rubí Can Vallhonrat",
+      "Sant Cugat Coll Favà",
+      "Cerdanyola Universitat",
+      "Santa Perpètua de Mogoda Riera de Caldes",
+      "Mollet-Sant Fost",
+      "Montmeló",
+      "Granollers Centre"
+     ]
+    }
+   ]
+  },
+  {
+   "red": "rodalies-catalunya",
+   "code": "R11",
+   "slug": "r11",
+   "color": "#0069AA",
+   "recorridos": [
+    {
+     "variante": "R11",
+     "desde": "Barcelona-Sants",
+     "hasta": "Portbou",
+     "paradas": [
+      "Barcelona-Sants",
+      "Barcelona-Passeig de Gràcia",
+      "Barcelona El Clot",
+      "Barcelona Sant Andreu",
+      "Granollers Centre",
+      "Sant Celoni",
+      "Gualba",
+      "Riells i Viabrea-Breda",
+      "Hostalric",
+      "Maçanet-Massanes",
+      "Sils",
+      "Caldes de Malavella",
+      "Riudellots",
+      "Fornells de la Selva",
+      "Girona",
+      "Celrà",
+      "Bordils-Juià",
+      "Flaçà",
+      "Sant Jordi Desvalls",
+      "Camallera",
+      "Sant Miquel de Fluvià",
+      "Vilamalla",
+      "Figueres",
+      "Vilajuïga",
+      "Llançà",
+      "Colera",
+      "Portbou",
+      "Cerbère",
+      "Portbou"
+     ]
+    }
+   ]
+  },
+  {
+   "red": "rodalies-catalunya",
+   "code": "R13",
+   "slug": "r13",
+   "color": "#146520",
+   "recorridos": [
+    {
+     "variante": "R13",
+     "desde": "La Plana-Picamoixons",
+     "hasta": "Lleida-Pirineus",
+     "paradas": [
+      "La Plana-Picamoixons",
+      "La Riba",
+      "Vilaverd",
+      "Montblanc",
+      "L'Espluga de Francolí",
+      "Vimbodí i Poblet",
+      "Vinaixa",
+      "La Floresta",
+      "Les Borges Blanques",
+      "Juneda",
+      "Puigverd de Lleida-Artesa de Lleida",
+      "Lleida-Pirineus"
+     ]
+    }
+   ]
+  },
+  {
+   "red": "rodalies-catalunya",
+   "code": "R14",
+   "slug": "r14",
+   "color": "#6C60A8",
+   "recorridos": [
+    {
+     "variante": "R14",
+     "desde": "La Plana-Picamoixons",
+     "hasta": "Barcelona Estació de França",
+     "paradas": [
+      "La Plana-Picamoixons",
+      "Alcover",
+      "La Selva del Camp",
+      "Reus",
+      "Vila-seca",
+      "Tarragona",
+      "Altafulla-Tamarit",
+      "Torredembarra",
+      "Sant Vicenç de Calders",
+      "Barcelona-Sants",
+      "Barcelona-Passeig de Gràcia",
+      "Barcelona Estació de França"
+     ]
+    }
+   ]
+  },
+  {
+   "red": "rodalies-catalunya",
+   "code": "R15",
+   "slug": "r15",
+   "color": "#978571",
+   "recorridos": [
+    {
+     "variante": "R15",
+     "desde": "Quinto",
+     "hasta": "Barcelona Estació de França",
+     "paradas": [
+      "Quinto",
+      "La Zaida-Sástago",
+      "La Puebla de Híjar",
+      "Samper",
+      "Caspe",
+      "Fabara",
+      "Nonaspe",
+      "Faió-La Pobla de Massaluca",
+      "Riba-roja d'Ebre",
+      "Flix",
+      "Ascó",
+      "Móra la Nova",
+      "Capçanes",
+      "Marçà-Falset",
+      "Les Borges del Camp",
+      "Reus",
+      "Vila-seca",
+      "Tarragona",
+      "Altafulla-Tamarit",
+      "Torredembarra",
+      "Sant Vicenç de Calders",
+      "Vilanova i la Geltrú",
+      "Barcelona-Sants",
+      "Barcelona-Passeig de Gràcia",
+      "Barcelona Estació de França"
+     ]
+    }
+   ]
+  },
+  {
+   "red": "rodalies-catalunya",
+   "code": "R16",
+   "slug": "r16",
+   "color": "#B52B46",
+   "recorridos": [
+    {
+     "variante": "R16",
+     "desde": "Barcelona Estació de França",
+     "hasta": "Tortosa",
+     "paradas": [
+      "Barcelona Estació de França",
+      "Barcelona-Passeig de Gràcia",
+      "Barcelona-Sants",
+      "Sant Vicenç de Calders",
+      "Torredembarra",
+      "Altafulla-Tamarit",
+      "Tarragona",
+      "Vila-seca",
+      "Cambrils",
+      "L'Hospitalet de l'Infant",
+      "L'Ametlla de Mar",
+      "L'Ampolla-El Perelló-Deltebre",
+      "Camarles-Deltebre",
+      "L'Aldea-Amposta-Tortosa",
+      "Camp-redó",
+      "Tortosa"
+     ]
+    }
+   ]
+  },
+  {
+   "red": "rodalies-catalunya",
+   "code": "R17",
+   "slug": "r17",
+   "color": "#F3B12E",
+   "recorridos": [
+    {
+     "variante": "R17",
+     "desde": "Salou-Port Aventura",
+     "hasta": "Barcelona Estació de França",
+     "paradas": [
+      "Salou-Port Aventura",
+      "Tarragona",
+      "Altafulla-Tamarit",
+      "Torredembarra",
+      "Sant Vicenç de Calders",
+      "Vilanova i la Geltrú",
+      "Barcelona-Sants",
+      "Barcelona-Passeig de Gràcia",
+      "Barcelona Estació de França"
+     ]
+    }
+   ]
+  },
+  {
+   "red": "rodalies-catalunya",
+   "code": "RG1",
+   "slug": "rg1",
+   "color": "#409EF5",
+   "recorridos": [
+    {
+     "variante": "RG1",
+     "desde": "Portbou",
+     "hasta": "Maçanet-Massanes",
+     "paradas": [
+      "Portbou",
+      "Colera",
+      "Llançà",
+      "Vilajuïga",
+      "Figueres",
+      "Vilamalla",
+      "Sant Miquel de Fluvià",
+      "Camallera",
+      "Sant Jordi Desvalls",
+      "Flaçà",
+      "Bordils-Juià",
+      "Celrà",
+      "Girona",
+      "Fornells de la Selva",
+      "Riudellots",
+      "Caldes de Malavella",
+      "Sils",
+      "Maçanet-Massanes"
+     ]
+    }
+   ]
+  },
+  {
+   "red": "rodalies-catalunya",
+   "code": "RL3",
+   "slug": "rl3",
+   "color": "#B6AE33",
+   "recorridos": [
+    {
+     "variante": "RL3",
+     "desde": "Lleida-Pirineus",
+     "hasta": "Cervera",
+     "paradas": [
+      "Lleida-Pirineus",
+      "Bell-lloc d'Urgell",
+      "Mollerussa",
+      "Golmés",
+      "Castellnou de Seana",
+      "Bellpuig",
+      "Anglesola",
+      "Tàrrega",
+      "Cervera"
+     ]
+    }
+   ]
+  },
+  {
+   "red": "rodalies-catalunya",
+   "code": "RL4",
+   "slug": "rl4",
+   "color": "#F7A30D",
+   "recorridos": [
+    {
+     "variante": "RL4",
+     "desde": "Lleida-Pirineus",
+     "hasta": "Manresa",
+     "paradas": [
+      "Lleida-Pirineus",
+      "Bell-lloc d'Urgell",
+      "Mollerussa",
+      "Golmés",
+      "Castellnou de Seana",
+      "Bellpuig",
+      "Anglesola",
+      "Tàrrega",
+      "Cervera",
+      "Sant Guim de Freixenet",
+      "Sant Martí Sesgueioles",
+      "Calaf",
+      "Seguers-Sant Pere Sallavinera",
+      "Aguilar de Segarra",
+      "Rajadell",
+      "Manresa"
+     ]
+    }
+   ]
+  },
+  {
+   "red": "rodalies-catalunya",
+   "code": "RT1",
+   "slug": "rt1",
+   "color": "#39D4CC",
+   "recorridos": [
+    {
+     "variante": "RT1",
+     "desde": "La Plana-Picamoixons",
+     "hasta": "Tarragona",
+     "paradas": [
+      "La Plana-Picamoixons",
+      "Alcover",
+      "La Selva del Camp",
+      "Reus",
+      "Vila-seca",
+      "Tarragona"
+     ]
+    }
+   ]
+  },
+  {
+   "red": "rodalies-catalunya",
+   "code": "RT2",
+   "slug": "rt2",
+   "color": "#F965DE",
+   "recorridos": [
+    {
+     "variante": "RT2",
+     "desde": "Salou-Port Aventura",
+     "hasta": "Tarragona",
+     "paradas": [
+      "Salou-Port Aventura",
+      "Tarragona"
+     ]
+    }
+   ]
+  },
+  {
+   "red": "san-sebastian",
+   "code": "C1",
+   "slug": "c1",
+   "color": "#DA001C",
+   "recorridos": [
+    {
+     "variante": "C1",
+     "desde": "Irun",
+     "hasta": "Brinkola",
+     "paradas": [
+      "Irun",
+      "Ventas de Irún",
+      "Lezo-Rentería",
+      "Pasaia",
+      "Herrera",
+      "Intxaurrondo",
+      "Ategorrieta",
+      "Gros",
+      "San Sebastián-Donostia",
+      "Loiola",
+      "Martutene",
+      "Hernani",
+      "Hernani-Erdia",
+      "Urnieta",
+      "Andoain",
+      "Andoain-Centro",
+      "Billabona-Zizurkil",
+      "Anoeta",
+      "Tolosa-Centro",
+      "Tolosa",
+      "Alegia",
+      "Ikaztegieta",
+      "Legorreta",
+      "Itsasondo",
+      "Ordizia",
+      "Beasain",
+      "Ormáiztegui",
+      "Zumarraga",
+      "Legazpi",
+      "Brinkola"
+     ]
+    }
+   ]
+  },
+  {
+   "red": "sevilla",
+   "code": "C1",
+   "slug": "c1",
+   "color": "#78B4E1",
+   "recorridos": [
+    {
+     "variante": "C1",
+     "desde": "Lebrija",
+     "hasta": "Lora del Río",
+     "paradas": [
+      "Lebrija",
+      "Las Cabezas de San Juan",
+      "Utrera",
+      "Cantaelgallo",
+      "Dos Hermanas",
+      "Bellavista",
+      "Jardines de Hércules",
+      "Virgen del Rocío",
+      "San Bernardo",
+      "Sevilla-Santa Justa",
+      "La Rinconada",
+      "El Cáñamo",
+      "Brenes",
+      "Cantillana",
+      "Los Rosales",
+      "Guadajoz",
+      "Lora del Río"
+     ]
+    }
+   ]
+  },
+  {
+   "red": "sevilla",
+   "code": "C2",
+   "slug": "c2",
+   "color": "#067B34",
+   "recorridos": [
+    {
+     "variante": "C2",
+     "desde": "Sevilla-Santa Justa",
+     "hasta": "Cartuja",
+     "paradas": [
+      "Sevilla-Santa Justa",
+      "San Jerónimo",
+      "Estadio Olímpico",
+      "Cartuja"
+     ]
+    }
+   ]
+  },
+  {
+   "red": "sevilla",
+   "code": "C3",
+   "slug": "c3",
+   "color": "#E4242D",
+   "recorridos": [
+    {
+     "variante": "C3",
+     "desde": "Sevilla-Santa Justa",
+     "hasta": "Cazalla-Constantina",
+     "paradas": [
+      "Sevilla-Santa Justa",
+      "La Rinconada",
+      "El Cáñamo",
+      "Brenes",
+      "Cantillana",
+      "Los Rosales",
+      "Tocina",
+      "Alcolea del Río",
+      "Villanueva del Río-Minas",
+      "Pedroso",
+      "Cazalla-Constantina"
+     ]
+    }
+   ]
+  },
+  {
+   "red": "sevilla",
+   "code": "C4",
+   "slug": "c4",
+   "color": "#8E2182",
+   "recorridos": [
+    {
+     "variante": "C4",
+     "desde": "Sevilla-Santa Justa",
+     "hasta": "Sevilla-Santa Justa",
+     "paradas": [
+      "Sevilla-Santa Justa",
+      "Palacio de Congresos",
+      "Padre Pío-Palmete",
+      "Virgen del Rocío",
+      "San Bernardo",
+      "Sevilla-Santa Justa"
+     ]
+    }
+   ]
+  },
+  {
+   "red": "sevilla",
+   "code": "C5",
+   "slug": "c5",
+   "color": "#073588",
+   "recorridos": [
+    {
+     "variante": "C5",
+     "desde": "Benacazón",
+     "hasta": "Dos Hermanas",
+     "paradas": [
+      "Benacazón",
+      "Sanlúcar la Mayor",
+      "Villanueva del Ariscal y Olivares",
+      "Salteras",
+      "Valencina-Santiponce",
+      "Camas",
+      "San Jerónimo",
+      "Sevilla-Santa Justa",
+      "San Bernardo",
+      "Virgen del Rocío",
+      "Jardines de Hércules",
+      "Bellavista",
+      "Dos Hermanas"
+     ]
+    }
+   ]
+  },
+  {
+   "red": "valencia",
+   "code": "C1",
+   "slug": "c1",
+   "color": "#7AB3DE",
+   "recorridos": [
+    {
+     "variante": "C1",
+     "desde": "Gandia",
+     "hasta": "València-Estació del Nord",
+     "paradas": [
+      "Gandia",
+      "Xeraco",
+      "Tavernes de la Valldigna",
+      "Cullera",
+      "Sueca",
+      "Sollana",
+      "El Romaní",
+      "Silla",
+      "Albal",
+      "Catarroja",
+      "Massanassa",
+      "Alfafar-Benetússer",
+      "València-Estació del Nord"
+     ]
+    }
+   ]
+  },
+  {
+   "red": "valencia",
+   "code": "C2",
+   "slug": "c2",
+   "color": "#F79529",
+   "recorridos": [
+    {
+     "variante": "C2",
+     "desde": "L'Alcúdia de Crespins",
+     "hasta": "València-Estació del Nord",
+     "paradas": [
+      "L'Alcúdia de Crespins",
+      "Xàtiva",
+      "Lenova-Manuel",
+      "La Pobla Llarga",
+      "Carcaixent",
+      "Alzira",
+      "Algemesí",
+      "Benifaió",
+      "Silla",
+      "Albal",
+      "Catarroja",
+      "Massanassa",
+      "Alfafar-Benetússer",
+      "València-Estació del Nord"
+     ]
+    }
+   ]
+  },
+  {
+   "red": "valencia",
+   "code": "C3",
+   "slug": "c3",
+   "color": "#7A2780",
+   "recorridos": [
+    {
+     "variante": "C3",
+     "desde": "Buñol",
+     "hasta": "València-Estació del Nord",
+     "paradas": [
+      "Buñol",
+      "Chiva",
+      "Cheste",
+      "Circuit Ricardo Tormo",
+      "Lorigüilla-Reva",
+      "Aldaia",
+      "Xirivella-Alqueries",
+      "València-Sant Isidre",
+      "València-La Font de Sant Lluís",
+      "València-Estació del Nord"
+     ]
+    }
+   ]
+  },
+  {
+   "red": "valencia",
+   "code": "C5",
+   "slug": "c5",
+   "color": "#018A27",
+   "recorridos": [
+    {
+     "variante": "C5",
+     "desde": "Caudiel",
+     "hasta": "València-Estació del Nord",
+     "paradas": [
+      "Caudiel",
+      "Jérica-Viver",
+      "Navajas",
+      "Segorbe-Arrabal",
+      "Segorbe-Ciudad",
+      "Soneja",
+      "Algimia-Ciudad",
+      "Estivella-Albalat Dels Tarongers",
+      "Gilet",
+      "Sagunt",
+      "Puçol",
+      "El Puig",
+      "Albuixech",
+      "València-Cabanyal",
+      "València-La Font de Sant Lluís",
+      "València-Estació del Nord"
+     ]
+    }
+   ]
+  },
+  {
+   "red": "valencia",
+   "code": "C6",
+   "slug": "c6",
+   "color": "#0D3386",
+   "recorridos": [
+    {
+     "variante": "C6",
+     "desde": "València-Estació del Nord",
+     "hasta": "Castelló de la Plana",
+     "paradas": [
+      "València-Estació del Nord",
+      "València-La Font de Sant Lluís",
+      "València-Cabanyal",
+      "Roca-Cúper",
+      "Albuixech",
+      "Massalfassar",
+      "El Puig",
+      "Puçol",
+      "Sagunt",
+      "Les Valls",
+      "Almenara",
+      "La Llosa",
+      "Chilches/Xilxes",
+      "Moncofa",
+      "Nules la Villavella",
+      "Burriana-Alquerías Niño Perdido",
+      "Vila-Real",
+      "Almassora",
+      "Castelló de la Plana"
+     ]
+    }
+   ]
+  },
+  {
+   "red": "zaragoza",
+   "code": "C1",
+   "slug": "c1",
+   "color": "#D90724",
+   "recorridos": [
+    {
+     "variante": "C1",
+     "desde": "Zaragoza-Miraflores",
+     "hasta": "Casetas",
+     "paradas": [
+      "Zaragoza-Miraflores",
+      "Zaragoza-Goya",
+      "Zaragoza-Portillo",
+      "Zaragoza Delicias",
+      "Utebo",
+      "Casetas"
+     ]
+    }
+   ]
+  }
+ ]
+}

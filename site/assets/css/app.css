@@ -267,6 +267,9 @@ tbody tr:hover{background:var(--softer)}
 .chip:hover{border-color:var(--line-2);color:var(--ink)}
 .chip[aria-pressed="true"]{background:var(--ink);color:#fff;border-color:var(--ink)}
 .chip-label{font-weight:600;color:var(--faint);font-size:.84rem;margin-right:2px}
+.chip .line-badge{margin:0 8px 0 -8px;height:26px;min-width:34px}
+.stations{margin:10px 0 0;padding-left:22px;columns:2 220px;column-gap:28px;color:var(--ink-2)}
+.stations li{padding:3px 0;break-inside:avoid}
 .acc-list{display:grid;gap:10px}
 .acc{padding:18px 20px;display:grid;gap:10px;cursor:pointer;transition:border-color .15s,box-shadow .15s}
 .acc:hover{border-color:var(--line-2)}

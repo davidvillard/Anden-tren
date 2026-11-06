@@ -9,9 +9,14 @@ Retrasos, avisos e incidencias de trenes en España, en directo y con datos ofic
 | `site/` | La web: páginas, estilos, scripts, fuentes, iconos y datos |
 | `site/data/accidentes.json` | Registro de accidentes con sus fuentes |
 | `site/data/sucesos.json` | Suceso en curso: cifras, historial y fuente de cada cifra |
+| `site/data/lineas.json` | Líneas de cada red con su recorrido y estaciones (se genera con `scripts/lineas.js`) |
 | `partials/` | Cabecera, pie y etiquetas comunes que se insertan en todas las páginas |
 | `scripts/build.js` | Genera `dist/`: inserta los parciales, crea las páginas legales, `sitemap.xml` y `robots.txt` |
 | `scripts/pages.js` | Contenido de las páginas de texto (fuentes, aviso legal, privacidad, cookies, accesibilidad) |
+| `scripts/seo-pages.js` | Páginas para buscadores: sucesos, redes, líneas y temas (huelga, obras) |
+| `scripts/og.js` | Imágenes para compartir (1200×630) de cada red, línea y tema |
+| `lib/temas.js` | Palabras clave de las páginas de huelga y obras |
+| `lib/social.js` | Publicación en Telegram y Bluesky |
 | `api/live.js` | Función de Vercel: `GET /api/live` resume los feeds en directo de Renfe (caché de 30 s) |
 | `lib/renfe.js` | Lectura de los feeds GTFS-Realtime de Renfe |
 
@@ -41,6 +46,8 @@ El resultado se guarda en Upstash Redis y se sirve en `GET /api/sucesos`. Si Red
 | `CONTACT_EMAIL`, `OWNER_NAME`, `OWNER_NIF` | Datos de las páginas legales | No |
 | `GEMINI_MODELS`, `GEMINI_MIN_INTERVAL_MIN` | Modelos gratuitos a probar en orden y minutos mínimos entre consultas (por defecto 10) | No |
 | `NEWS_FEEDS` | RSS oficiales adicionales, separados por comas | No |
+| `TELEGRAM_BOT_TOKEN`, `TELEGRAM_CHAT_ID` | Publicar avisos en un canal de Telegram | No |
+| `BLUESKY_HANDLE`, `BLUESKY_APP_PASSWORD` | Publicar avisos en Bluesky | No |
 
 ### Programar la revisión cada 5 minutos
 
@@ -72,6 +79,30 @@ npm run live
 
 - `/accidente-tren-hoy` y una página por suceso (`/accidente-tren-toledo`, o `/accidente-tren/<id>` para los detectados automáticamente), con FAQ y datos estructurados `NewsArticle` y `FAQPage`.
 - `/cercanias/<red>` para las 12 redes de Cercanías de `site/data/redes.json`.
+- `/cercanias/<red>/<línea>` (por ejemplo `/cercanias/madrid/c5`) para cada línea de `site/data/lineas.json`, con su recorrido y estaciones. La ficha antigua `/linea?red=…&l=…` redirige aquí.
+- `/huelga-renfe` y `/obras-cercanias`: los avisos de Renfe de ese tema, escritos en la página al publicar y actualizados en directo.
+- Cada red, línea y tema tiene su propia imagen para compartir en `/og/…png`.
+
+### Actualizar las líneas
+
+Cuando Renfe cambie sus líneas (pocas veces al año), regenera `site/data/lineas.json` y la lista de líneas de `site/data/redes.json` con el GTFS de Cercanías:
+
+```bash
+curl -L -o fomento_transit.zip https://ssl.renfe.com/ftransit/Fichero_CER_FOMENTO/fomento_transit.zip
+```
+
+```bash
+mkdir gtfs && tar -xf fomento_transit.zip -C gtfs && node scripts/lineas.js gtfs
+```
+
+## Publicación en redes sociales
+
+El cron publica en Telegram y Bluesky los sucesos e incidencias nuevos y los avisos nuevos de huelga de Renfe. Cada red se activa sola cuando tiene sus variables en Vercel:
+
+- **Telegram:** crea un canal público, crea un bot con @BotFather, añádelo como administrador del canal y pon `TELEGRAM_BOT_TOKEN` y `TELEGRAM_CHAT_ID` (el nombre del canal, por ejemplo `@andentren`).
+- **Bluesky:** crea la cuenta y una contraseña de aplicación (Ajustes → Privacidad y seguridad → Contraseñas de app) y pon `BLUESKY_HANDLE` y `BLUESKY_APP_PASSWORD`.
+
+La primera revisión después de configurarlo solo guarda los avisos que ya hay; desde la siguiente publica los nuevos.
 
 ## Accesibilidad
 

@@ -137,15 +137,20 @@
       });
     },
     linea() {
-      const slug = params.get("red"), code = (params.get("l") || "").toUpperCase(), key = A.lineKey(code, slug);
+      // Página propia de la línea (/cercanias/madrid/c5) o ficha genérica (/linea?red=&l=)
+      const fixed = window.ANDEN_LINEA;
+      const slug = fixed ? fixed.red : params.get("red"), code = (fixed ? fixed.l : params.get("l") || "").toUpperCase(), key = A.lineKey(code, slug);
       const ml = mapAndList({ mapId: "map", listId: "train-list", getTrains: () => A.trains(null).filter((t) => t.line === key) });
       let fitted = false;
       A.onUpdate(() => {
         const r = A.redBySlug(slug);
-        const name = r ? `${code} · ${r.nombre}` : code;
-        document.title = `Línea ${name}: retrasos y avisos en directo · Andén`;
-        $("title").textContent = `Línea ${name}`;
-        $("crumb-red").replaceChildren(r ? h("a", { href: `/cercanias/${r.slug}` }, r.nombre) : "Cercanías");
+        if (!fixed) {
+          if (r?.lineas?.includes(code)) { location.replace(A.lineUrl(key) + location.hash); return; }
+          const name = r ? `${code} · ${r.nombre}` : code;
+          document.title = `Línea ${name}: retrasos y avisos en directo · Andén`;
+          $("title").textContent = `Línea ${name}`;
+          $("crumb-red").replaceChildren(r ? h("a", { href: `/cercanias/${r.slug}` }, r.nombre) : "Cercanías");
+        }
         const o = A.lines(null).find((x) => x.key === key);
         const s = A.lineStatus(o);
         $("status").replaceChildren(h("span", { class: `tag ${s.cls}`, style: "font-size:1rem;padding:5px 12px" }, o ? s.text : "No hay trenes de esta línea circulando ahora"));
@@ -193,6 +198,23 @@
         alertsList($("alerts"), A.alerts(slug), 3, `/avisos?red=${slug}`);
         ml.draw();
         if (!fitted && ml.map && A.redBySlug(slug)) { ml.fit(bbox(A.redBySlug(slug))); fitted = true; }
+      });
+    },
+    tema() {
+      const { patron, vacio, ld } = window.ANDEN_TEMA;
+      const re = new RegExp(patron, "i");
+      A.onUpdate(() => {
+        if (!A.S.live) return; // se queda la lista escrita al publicar la página
+        const list = A.alerts(null).filter((a) => re.test(window.Anden.norm(`${a.header} ${a.desc}`)));
+        $("count").textContent = `${list.length} ${list.length === 1 ? "aviso" : "avisos"} ahora`;
+        if (list.length) alertsList($("alerts"), list); else $("alerts").replaceChildren(h("div", { class: "empty" }, vacio));
+        if (ld) {
+          const s = A.summary(null);
+          $("kpis").replaceChildren(
+            A.kpi(s.ldCancelled.toLocaleString("es-ES"), "trenes de alta velocidad y larga distancia cancelados", "/retrasos#larga-distancia"),
+            A.kpi(list.length.toLocaleString("es-ES"), "avisos de huelga de Renfe"),
+            A.kpi(A.fmtPct(s.pctLate), "de los Cercanías van con retraso", "/retrasos"));
+        }
       });
     },
     cercanias() {
