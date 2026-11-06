@@ -1,4 +1,4 @@
-// Genera lib/estaciones.json (código de estación → nombre) a partir del listado
+// Genera lib/estaciones.js (código de estación → nombre) a partir del listado
 // de estaciones de Renfe (datos abiertos). Lo usa /api/live para nombrar el origen,
 // el destino y la próxima parada de los trenes de media y larga distancia.
 // Se ejecuta a mano cuando Renfe cambie sus estaciones:
@@ -21,5 +21,6 @@ for (const l of lines) {
   const [code, desc] = l.split(";").map((c) => c.replace(/"/g, "").trim());
   if (/^\d+$/.test(code) && desc) out[code] = nombre(desc);
 }
-await writeFile(new URL("../lib/estaciones.json", import.meta.url), JSON.stringify(out) + "\n");
+// Módulo JS (no JSON) para que Vercel lo incluya siempre en la función de /api/live
+await writeFile(new URL("../lib/estaciones.js", import.meta.url), `// Generado con scripts/estaciones.js a partir del listado de estaciones de Renfe.\nexport default ${JSON.stringify(out)};\n`);
 console.log(`${Object.keys(out).length} estaciones`);

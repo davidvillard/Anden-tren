@@ -19,7 +19,7 @@ Retrasos, avisos e incidencias de trenes en España, en directo y con datos ofic
 | `lib/social.js` | Publicación en Telegram y Bluesky |
 | `api/live.js` | Función de Vercel: `GET /api/live` resume los feeds en directo de Renfe (caché de 15 s) |
 | `lib/renfe.js` | Lectura de los feeds de Renfe: Cercanías (GTFS-Realtime) y alta velocidad, larga y media distancia (visor de Renfe, con el GTFS-Realtime de larga distancia como respaldo) |
-| `lib/estaciones.json` | Código → nombre de cada estación (se genera con `scripts/estaciones.js`) |
+| `lib/estaciones.js` | Código → nombre de cada estación (se genera con `scripts/estaciones.js`) |
 
 ## Actualización automática de sucesos
 
