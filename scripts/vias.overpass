@@ -1,0 +1,4 @@
+[out:json][timeout:600];
+area["ISO3166-1"="ES"][admin_level=2]->.es;
+way["railway"~"^(rail|narrow_gauge)$"][!"service"]["usage"!~"industrial|military|tourism|test|freight"](area.es);
+out body geom qt;

@@ -115,10 +115,107 @@
     a.start || a.end ? h("p", { class: "small muted" }, [a.start ? `Desde el ${new Date(a.start * 1000).toLocaleString("es-ES", { timeZone: "Europe/Madrid", dateStyle: "medium", timeStyle: "short" })}` : "", a.end ? `hasta el ${new Date(a.end * 1000).toLocaleString("es-ES", { timeZone: "Europe/Madrid", dateStyle: "medium", timeStyle: "short" })}` : ""].filter(Boolean).join(" ")) : "");
   const kpi = (val, label, href) => h(href ? "a" : "div", { class: "card kpi tile", href }, h("b", {}, val), h("span", {}, label), href ? h("span", { class: "more" }, "Ver") : "");
 
+  /* ---------- Vías: los trenes avanzan siguiendo la vía ---------- */
+  // Red de vías de España simplificada (site/data/vias.json, de OpenStreetMap). Cada posición
+  // se encaja en la vía más cercana y el tren va de una a otra por el camino más corto sobre
+  // la red. Si no hay vía cerca o el camino es raro, se mueve en línea recta.
+  const Vias = (() => {
+    const CELL = 0.02; // celdas de unos 2 km para buscar vías cercanas
+    const MAX_SNAP_M = 150;
+    let pts = [], adj = [], grid = new Map(), ok = false, loading = null;
+    // Distancia en metros (aproximación plana, de sobra para unos km)
+    const dist = (a, b) => { const k = Math.cos((a[0] * Math.PI) / 180); return Math.hypot((b[0] - a[0]) * 111320, (b[1] - a[1]) * 111320 * k); };
+    function build({ tramos }) {
+      const index = new Map();
+      const node = (la, lo) => { const k = la * 1e8 + lo; let id = index.get(k); if (id === undefined) { id = pts.length; index.set(k, id); pts.push([la / 1e5, lo / 1e5]); adj.push([]); } return id; };
+      for (const t of tramos) {
+        let la = t[0], lo = t[1], prev = node(la, lo);
+        for (let i = 2; i < t.length; i += 2) {
+          la += t[i]; lo += t[i + 1];
+          const cur = node(la, lo);
+          if (cur === prev) continue;
+          const d = dist(pts[prev], pts[cur]);
+          adj[prev].push(cur, d); adj[cur].push(prev, d);
+          const [a, b] = [pts[prev], pts[cur]];
+          for (let x = Math.floor(Math.min(a[0], b[0]) / CELL); x <= Math.floor(Math.max(a[0], b[0]) / CELL); x++)
+            for (let y = Math.floor(Math.min(a[1], b[1]) / CELL); y <= Math.floor(Math.max(a[1], b[1]) / CELL); y++) {
+              const k = `${x},${y}`; (grid.get(k) || grid.set(k, []).get(k)).push(prev, cur);
+            }
+          prev = cur;
+        }
+      }
+      ok = true;
+    }
+    // Punto de la vía más cercano a p (a menos de MAX_SNAP_M), con el tramo [a, b] en que cae
+    function snap(p) {
+      let best = null;
+      const cx = Math.floor(p[0] / CELL), cy = Math.floor(p[1] / CELL);
+      for (let x = cx - 1; x <= cx + 1; x++) for (let y = cy - 1; y <= cy + 1; y++) {
+        const segs = grid.get(`${x},${y}`); if (!segs) continue;
+        for (let i = 0; i < segs.length; i += 2) {
+          const A = pts[segs[i]], B = pts[segs[i + 1]];
+          const k = Math.cos((p[0] * Math.PI) / 180);
+          const bx = (B[1] - A[1]) * k, by = B[0] - A[0], px = (p[1] - A[1]) * k, py = p[0] - A[0];
+          const L = bx * bx + by * by, t = L ? Math.max(0, Math.min(1, (px * bx + py * by) / L)) : 0;
+          const q = [A[0] + t * (B[0] - A[0]), A[1] + t * (B[1] - A[1])], d = dist(p, q);
+          if (d <= MAX_SNAP_M && (!best || d < best.d)) best = { a: segs[i], b: segs[i + 1], q, d };
+        }
+      }
+      return best;
+    }
+    // Camino más corto sobre la red desde s1 hasta s2 (Dijkstra con tope de longitud).
+    // Si s2 no se alcanza (p. ej. está en la vía paralela de una vía doble), el tren sigue
+    // por su propia vía hasta el punto más cercano a b, si queda a menos de 300 m.
+    function route(s1, s2, b, maxLen) {
+      if ((s1.a === s2.a && s1.b === s2.b) || (s1.a === s2.b && s1.b === s2.a)) return [s1.q, s2.q];
+      const cost = new Map(), from = new Map(), heap = [];
+      const push = (n, c, f) => { if (c >= (cost.get(n) ?? Infinity) || c > maxLen) return; cost.set(n, c); from.set(n, f); heap.push([c, n]); let i = heap.length - 1; while (i > 0) { const j = (i - 1) >> 1; if (heap[j][0] <= heap[i][0]) break; [heap[i], heap[j]] = [heap[j], heap[i]]; i = j; } };
+      const pop = () => { const top = heap[0], last = heap.pop(); if (heap.length) { heap[0] = last; let i = 0; for (;;) { const l = 2 * i + 1, r = l + 1; let m = i; if (l < heap.length && heap[l][0] < heap[m][0]) m = l; if (r < heap.length && heap[r][0] < heap[m][0]) m = r; if (m === i) break; [heap[i], heap[m]] = [heap[m], heap[i]]; i = m; } } return top; };
+      push(s1.a, dist(s1.q, pts[s1.a]), -1); push(s1.b, dist(s1.q, pts[s1.b]), -1);
+      const goal = new Map([[s2.a, dist(pts[s2.a], s2.q)], [s2.b, dist(pts[s2.b], s2.q)]]);
+      let best = Infinity, end = -1, steps = 0, near = -1, nearD = 300;
+      while (heap.length && steps++ < 20000) {
+        const [c, n] = pop();
+        if (c > (cost.get(n) ?? Infinity) || c >= best) continue;
+        if (goal.has(n) && c + goal.get(n) < best) { best = c + goal.get(n); end = n; }
+        const dn = dist(pts[n], b); if (dn < nearD) { nearD = dn; near = n; }
+        const e = adj[n];
+        for (let i = 0; i < e.length; i += 2) push(e[i], c + e[i + 1], n);
+      }
+      if (end < 0 && near < 0) return null;
+      const path = end >= 0 ? [s2.q] : [];
+      for (let n = end >= 0 ? end : near; n !== -1; n = from.get(n)) path.push(pts[n]);
+      path.push(s1.q);
+      return path.reverse();
+    }
+    return {
+      load() { return (loading ||= fetch("/data/vias.json").then((r) => r.json()).then(build).catch(() => {})); },
+      get ok() { return ok; },
+      dist,
+      // Posición sobre la vía (o la misma si no hay vía cerca)
+      onTrack(p) { const s = ok && snap(p); return s ? s.q : p; },
+      // Recorrido de a a b siguiendo la vía; termina en la vía si b está cerca de una
+      path(a, b) {
+        const s2 = ok && snap(b); if (!s2) return [a, b];
+        const s1 = snap(a); if (!s1) return [a, s2.q];
+        // Si el camino por la vía es mucho más largo que la línea recta, algo no cuadra (vías paralelas, datos raros)
+        return route(s1, s2, b, 1.6 * dist(a, b) + 800) || [a, s2.q];
+      },
+    };
+  })();
+
   // Capa de trenes del mapa. Cada tren conserva su punto entre actualizaciones y,
-  // cuando llega una posición nueva, se desliza hasta ella durante el intervalo de
-  // refresco: así los trenes se ven moverse aunque Renfe dé la posición cada pocos segundos.
+  // cuando llega una posición nueva, avanza hasta ella siguiendo la vía durante el
+  // intervalo de refresco: así los trenes se ven moverse aunque Renfe dé la posición cada pocos segundos.
   const reducedMotion = window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
+  // Punto a una fracción k (0–1) del recorrido
+  function along(a, k) {
+    const goal = a.len * k;
+    while (a.i < a.cum.length - 2 && a.cum[a.i + 1] < goal) a.i++;
+    const seg = a.cum[a.i + 1] - a.cum[a.i], f = seg ? (goal - a.cum[a.i]) / seg : 1;
+    const p = a.path[a.i], q = a.path[a.i + 1];
+    return [p[0] + (q[0] - p[0]) * f, p[1] + (q[1] - p[1]) * f];
+  }
   const popupOf = (t) => {
     const d = delayInfo(t.delayMin);
     return h("div", {},
@@ -129,13 +226,17 @@
   };
   function trainLayer(map) {
     const group = L.layerGroup().addTo(map), marks = new Map();
-    let raf = null;
+    let raf = null, last = 0;
+    Vias.load();
     function tick(now) {
+      // 20 fotogramas por segundo bastan para trenes y ahorran batería en el móvil
+      if (now - last < 50) { raf = requestAnimationFrame(tick); return; }
+      last = now;
       let moving = false;
       for (const m of marks.values()) {
         const a = m.anim; if (!a) continue;
         const k = Math.min(1, (now - a.t0) / a.dur);
-        m.setLatLng([a.from[0] + (a.to[0] - a.from[0]) * k, a.from[1] + (a.to[1] - a.from[1]) * k]);
+        m.setLatLng(along(a, k));
         if (k < 1) moving = true; else m.anim = null;
       }
       raf = moving ? requestAnimationFrame(tick) : null;
@@ -145,26 +246,32 @@
       for (const t of list) {
         seen.add(t.id);
         const style = { fillColor: delayInfo(t.delayMin).color, color: t.ld ? GRUPO_COLOR[t.grupo] : "#fff", weight: t.ld ? 3 : 1.5, radius: t.ld ? 7 : 6 };
+        const raw = [t.lat, t.lon];
         let m = marks.get(t.id);
         if (!m) {
-          m = L.circleMarker([t.lat, t.lon], { ...style, fillOpacity: 0.95 }).bindPopup(() => popupOf(m.train)).addTo(group);
+          m = L.circleMarker(Vias.onTrack(raw), { ...style, fillOpacity: 0.95 }).bindPopup(() => popupOf(m.train)).addTo(group);
           marks.set(t.id, m);
         } else {
           m.setStyle(style);
           // Si el navegador no ha podido animar (pestaña en segundo plano, ahorro de energía),
           // el punto salta a donde debía llegar antes de seguir
-          if (m.anim && now - m.anim.t0 >= m.anim.dur) { m.setLatLng(m.anim.to); m.anim = null; }
-          const to = [t.lat, t.lon], target = m.anim ? m.anim.to : [m.getLatLng().lat, m.getLatLng().lng];
-          if (target[0] !== to[0] || target[1] !== to[1]) {
-            const cur = m.getLatLng();
-            // Saltos grandes (datos raros) o movimiento reducido: sin animación
-            if (reducedMotion || document.hidden || map.distance(cur, to) > 30000) { m.anim = null; m.setLatLng(to); }
-            // Dura lo que tardó en llegar esta posición (Renfe no actualiza todos los trenes a la vez),
-            // para que el tren no se pare a mitad de camino esperando la siguiente
-            else m.anim = { from: [cur.lat, cur.lng], to, t0: now, dur: Math.min(3 * REFRESH_MS, Math.max(REFRESH_MS, now - (m.changedAt || now))) };
+          if (m.anim && now - m.anim.t0 >= m.anim.dur) { m.setLatLng(m.anim.path.at(-1)); m.anim = null; }
+          if (raw[0] !== m.raw[0] || raw[1] !== m.raw[1]) {
+            const cur = m.getLatLng(), from = [cur.lat, cur.lng];
+            // Saltos imposibles (más de 360 km/h: datos raros de Renfe) o movimiento reducido: sin animación
+            const segs = (now - (m.changedAt || now)) / 1000 || REFRESH_MS / 1000;
+            if (reducedMotion || document.hidden || Vias.dist(from, raw) > Math.max(3000, 100 * segs)) { m.anim = null; m.setLatLng(Vias.onTrack(raw)); }
+            else {
+              const path = Vias.path(from, raw), cum = [0];
+              for (let i = 1; i < path.length; i++) cum.push(cum[i - 1] + Vias.dist(path[i - 1], path[i]));
+              // Dura lo que tardó en llegar esta posición (Renfe no actualiza todos los trenes a la vez),
+              // para que el tren no se pare a mitad de camino esperando la siguiente
+              m.anim = { path, cum, len: cum.at(-1), i: 0, t0: now, dur: Math.min(3 * REFRESH_MS, Math.max(REFRESH_MS, now - (m.changedAt || now))) };
+            }
             m.changedAt = now;
           }
         }
+        m.raw = raw;
         m.train = t;
         if (m.isPopupOpen()) m.setPopupContent(popupOf(t));
       }
@@ -256,6 +363,6 @@
     S, start, onUpdate: (f) => S.subs.push(f), attachSearch,
     trains, ldTrains, alerts, alertsOfLine, alertLines, alertRedes, lines, lineStatus, summary, redBySlug,
     delayInfo, lineName, lineCode, lineUrl, trainUrl, lineKey, trainTitle, GRUPOS, GRUPO_COLOR, REFRESH_MS,
-    fmtMin, fmtPct, lineBadge, trainRow, alertCard, kpi, trainLayer,
+    fmtMin, fmtPct, lineBadge, trainRow, alertCard, kpi, trainLayer, Vias,
   };
 })();

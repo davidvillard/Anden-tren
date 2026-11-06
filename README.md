@@ -19,6 +19,7 @@ Retrasos, avisos e incidencias de trenes en España, en directo y con datos ofic
 | `lib/social.js` | Publicación en Telegram y Bluesky |
 | `api/live.js` | Función de Vercel: `GET /api/live` resume los feeds en directo de Renfe (caché de 15 s) |
 | `lib/renfe.js` | Lectura de los feeds de Renfe: Cercanías (GTFS-Realtime) y alta velocidad, larga y media distancia (visor de Renfe, con el GTFS-Realtime de larga distancia como respaldo) |
+| `site/data/vias.json` | Red de vías de España simplificada, de OpenStreetMap (ODbL), para mover los trenes sobre la vía (se genera con `scripts/vias.js`) |
 | `lib/estaciones.js` | Código → nombre de cada estación (se genera con `scripts/estaciones.js`) |
 
 ## Actualización automática de sucesos
@@ -106,6 +107,18 @@ curl -L -o estaciones.csv https://ssl.renfe.com/ftransit/Fichero_estaciones/esta
 
 ```bash
 node scripts/estaciones.js estaciones.csv
+```
+
+### Actualizar las vías
+
+El mapa mueve cada tren por el camino más corto sobre la red de vías. La red sale de OpenStreetMap; para regenerarla:
+
+```bash
+curl -X POST --data-urlencode data@scripts/vias.overpass https://overpass-api.de/api/interpreter -o vias-osm.json
+```
+
+```bash
+node scripts/vias.js vias-osm.json
 ```
 
 ## Publicación en redes sociales
