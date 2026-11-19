@@ -5,6 +5,7 @@
 // 1. Lee titulares recientes sobre sucesos ferroviarios.
 // 2. Si hay titulares nuevos, pide a Gemini (plan gratuito) las cifras y quién las da.
 // 3. Aplica las reglas de lib/merge.js y guarda el resultado en Redis.
+import { createHash } from "node:crypto";
 import { fetchNews } from "../../lib/news.js";
 import { extract, QuotaError } from "../../lib/extract.js";
 import { merge } from "../../lib/merge.js";
@@ -23,7 +24,19 @@ const recorta = (s, n) => (s.length > n ? s.slice(0, n - 1).trimEnd() + "…" : 
 
 const MIN_INTERVAL_MS = Number(process.env.GEMINI_MIN_INTERVAL_MIN || 10) * 60_000;
 const QUOTA_PAUSE_MS = 60 * 60_000; // si se agota el cupo gratuito, se espera una hora
-const SEEN_TTL_MS = 7 * 24 * 3600_000;
+// Noticias ya vistas: huella corta del enlace → minuto en que se vio. Se guardan 3 días
+// (las noticias se buscan de las últimas 48 h). Antes se guardaba la dirección entera de
+// Google News durante 7 días y la lista pasaba de 1 MB: leerla y escribirla cada 5 minutos
+// agotó la transferencia gratuita de Upstash.
+const SEEN_TTL_MIN = 3 * 24 * 60;
+const huella = (link) => createHash("sha1").update(String(link)).digest("base64url").slice(0, 10);
+const minuto = (d) => Math.floor(d.getTime() / 60_000);
+// Guarda solo si el contenido ha cambiado: cada escritura cuenta como transferencia
+async function setIfChanged(key, value, before) {
+  if (JSON.stringify(value) === JSON.stringify(before)) return false;
+  await setJSON(key, value);
+  return true;
+}
 
 export const config = { maxDuration: 120 };
 
@@ -36,11 +49,17 @@ export default async function handler(req, res) {
 
   const now = new Date();
   const state = await loadState();
-  const seen = (await getJSON(KEY_SEEN)) || {};
-  for (const [k, t] of Object.entries(seen)) if (now - new Date(t) > SEEN_TTL_MS) delete seen[k];
+  const seenRaw = (await getJSON(KEY_SEEN)) || {};
+  // Formato antiguo (dirección completa → fecha ISO) se convierte al nuevo sobre la marcha
+  const seen = {};
+  for (const [k, t] of Object.entries(seenRaw)) {
+    const key = k.length > 12 ? huella(k) : k;
+    const m = typeof t === "number" ? t : minuto(new Date(t));
+    if (minuto(now) - m <= SEEN_TTL_MIN) seen[key] = m;
+  }
 
   const { items, errors } = await fetchNews();
-  const fresh = items.filter((it) => !seen[it.link]);
+  const fresh = items.filter((it) => !seen[huella(it.link)]);
   const summary = { titulares: items.length, nuevos: fresh.length, erroresFuentes: errors.length };
 
   let next = state;
@@ -57,7 +76,7 @@ export default async function handler(req, res) {
       try {
         const { data, model } = await extract({ state, items: items.slice(0, 90), now });
         ({ state: next, changes } = merge({ state, proposal: data, items: items.slice(0, 90), now }));
-        for (const it of items) seen[it.link] = now.toISOString();
+        for (const it of items) seen[huella(it.link)] = minuto(now);
         summary.gemini = { modelo: model };
       } catch (e) {
         if (e instanceof QuotaError) await setJSON(KEY_PAUSE, now.getTime() + QUOTA_PAUSE_MS);
@@ -69,8 +88,10 @@ export default async function handler(req, res) {
   // igualmente las reglas de limpieza (duplicados, caducidad de incidencias).
   if (next === state) ({ state: next, changes } = merge({ state, proposal: { sucesos: [] }, items: [], now }));
 
-  await setJSON(KEY_STATE, next);
-  await setJSON(KEY_SEEN, seen);
+  summary.guardado = {
+    estado: await setIfChanged(KEY_STATE, next, state),
+    vistos: await setIfChanged(KEY_SEEN, seen, seenRaw),
+  };
 
   // Avisos de Renfe por tema urgente (huelga): si cambian, se republica la web
   // para que su página lleve la lista nueva y los nuevos se publican en redes.
@@ -89,7 +110,7 @@ export default async function handler(req, res) {
       if (ahora[t.slug].join() !== [...previos].sort().join()) temasCambian = true;
       for (const a of lista) if (!previos.has(a.id)) avisosNuevos.push({ tema: t, aviso: a });
     }
-    await setJSON(KEY_TEMAS, ahora);
+    await setIfChanged(KEY_TEMAS, ahora, antes);
   }
 
   // Redes sociales: sucesos nuevos en curso y avisos nuevos de huelga.
@@ -112,7 +133,8 @@ export default async function handler(req, res) {
   // Si han cambiado las cifras o los avisos por tema, se vuelve a publicar la web
   // para que las páginas que lee Google lleven el dato nuevo (como mucho cada 15 min).
   // Un cambio que llega antes de esos 15 min queda pendiente para la siguiente revisión.
-  const pendiente = changes.length || temasCambian || (await getJSON(KEY_PENDING_DEPLOY));
+  const yaPendiente = process.env.DEPLOY_HOOK_URL ? Boolean(await getJSON(KEY_PENDING_DEPLOY)) : false;
+  const pendiente = changes.length || temasCambian || yaPendiente;
   if (pendiente && process.env.DEPLOY_HOOK_URL) {
     const lastDeploy = (await getJSON(KEY_LAST_DEPLOY)) || 0;
     if (now - lastDeploy > 15 * 60_000) {
@@ -123,7 +145,7 @@ export default async function handler(req, res) {
         summary.redeploy = true;
       } catch (e) { summary.redeploy = `error: ${e.message}`; await setJSON(KEY_PENDING_DEPLOY, true); }
     } else {
-      await setJSON(KEY_PENDING_DEPLOY, true);
+      if (!yaPendiente) await setJSON(KEY_PENDING_DEPLOY, true);
       summary.redeploy = "pendiente";
     }
   }

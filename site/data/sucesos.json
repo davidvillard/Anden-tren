@@ -1,55 +1,1065 @@
 {
-  "actualizado": "2026-10-28T21:00:00+01:00",
-  "sucesos": [
+ "actualizado": "2026-11-19T10:23:34.196Z",
+ "sucesos": [
+  {
+   "id": "incidencia-entre-las-fraguas-y-barcena-2026-11-18",
+   "activo": false,
+   "auto": true,
+   "clase": "incidencia",
+   "operador": "Renfe",
+   "linea": "Cercanías Cantabria",
+   "titulo": "Una avería en un mercancías corta durante más de dos horas los Cercanías entre Las Fraguas y Bárcena",
+   "resumen": "Una avería en un tren de mercancías provocó el corte de la circulación durante más de dos horas entre Las Fraguas y Bárcena.",
+   "lugar": "Entre Las Fraguas y Bárcena (Cantabria)",
+   "inicio": "2026-11-18T11:49:33.000Z",
+   "tipo": "avería del tren",
+   "servicio": "Cercanías",
+   "estado": "provisional",
+   "lat": null,
+   "lon": null,
+   "cifras": {},
+   "circulacion": "Corte de la circulación durante más de dos horas en los servicios afectados, ya restablecida.",
+   "causas": "Avería en un tren de mercancías.",
+   "fuente": "",
+   "historial": [],
+   "enlaces": [
     {
-      "id": "urda-2026-10-28",
-      "activo": true,
-      "pagina": "/accidente-tren-toledo",
-      "accidenteId": "urda",
-      "titulo": "Accidente de tren en Urda (Toledo): choque entre un AVE y un Iryo",
-      "resumen": "Un AVE de Renfe alcanzó por detrás a un tren de Iryo entre Los Yébenes y Urda, en la línea de alta velocidad Madrid–Andalucía. La CIAF y la Guardia Civil investigan las causas.",
-      "lugar": "Entre Los Yébenes y Urda (Toledo)",
-      "inicio": "2026-10-28T08:54:00+01:00",
-      "tipo": "Colisión por alcance",
-      "servicio": "Alta velocidad",
-      "estado": "provisional",
-      "cifras": {
-        "fallecidos": { "valor": 68, "prefijo": "≥", "fuente": "Emergencias de Castilla-La Mancha" },
-        "heridos": { "valor": 53, "prefijo": "≥", "nota": "graves, 15 de ellos muy graves", "fuente": "Emergencias de Castilla-La Mancha" },
-        "aBordo": { "valor": 543, "nota": "según medios" }
-      },
-      "circulacion": "Alta velocidad Madrid–Ciudad Real–Andalucía cortada hasta nuevo aviso. Renfe ofrece lanzaderas de Madrid a Ciudad Real y Puertollano. Iryo ha cancelado sus trenes con origen en Madrid-Puerta de Atocha y Ouigo ha suspendido ocho circulaciones.",
-      "causas": "En investigación. El tren de Renfe alcanzó por detrás al de Iryo. Según el Ministerio de Transportes, el centro de control de Adif en Atocha autorizó al tren a reanudar la marcha. La CIAF y la Guardia Civil investigan.",
-      "telefonos": [
-        { "nombre": "Renfe · familiares y afectados", "numero": "900 10 10 20" },
-        { "nombre": "Emergencias Castilla-La Mancha (desde fuera de la región)", "numero": "900 122 112" }
-      ],
-      "atencion": "Adif ha abierto puntos de atención en las estaciones de Madrid-Puerta de Atocha, Sevilla-Santa Justa y Córdoba Julio Anguita. Iryo ha activado su propia línea de atención: consulta su web oficial.",
-      "billetes": "Renfe permite cambiar o anular sin coste los billetes afectados. Iryo y Ouigo informan a sus viajeros de las cancelaciones y alternativas por sus canales oficiales.",
-      "fuente": "Emergencias y Gobierno de Castilla-La Mancha, recogido por la prensa. Aún sin balance definitivo del Ministerio de Transportes ni de la CIAF.",
-      "historial": [
-        { "cuando": "28 oct, mañana", "texto": "Primer balance: 30 fallecidos", "fuente": "Junta de Castilla-La Mancha" },
-        { "cuando": "28 oct, tarde", "texto": "Se eleva a 64 fallecidos y unos 80 heridos", "fuente": "Gobierno de Castilla-La Mancha" },
-        { "cuando": "28 oct, noche", "texto": "68 fallecidos y 53 heridos graves (15 muy graves)", "fuente": "Emergencias de Castilla-La Mancha" }
-      ],
-      "enlaces": [
-        { "nombre": "eldiario.es (directo)", "url": "https://www.eldiario.es/castilla-la-mancha/accidente-tren-toledo-suspendida-alta-velocidad-madrid-andalucia_133_13620647.html" },
-        { "nombre": "Telecinco", "url": "https://www.telecinco.es/noticias/sociedad/20261028/accidente-trenes-iryo-ave-yebenes-toledo-renfe_18_020556424.html" },
-        { "nombre": "La Cerca (cancelaciones)", "url": "https://www.lacerca.com/noticias/toledo/renfe-iryo-ouigo-medidas-asistencia-cancelaciones-accidente-urda-834608-1.html" },
-        { "nombre": "Libertad Digital (teléfonos)", "url": "https://www.libertaddigital.com/espana/2026-10-28/accidente-de-tren-en-toledo-el-telefono-gratuito-para-familiares-de-las-victimas-y-donde-pedir-informacion-7483167/" }
-      ],
-      "seo": {
-        "title": "Accidente de tren en Toledo (Urda): última hora, fallecidos, heridos y trenes afectados",
-        "description": "Última hora del accidente de tren entre Los Yébenes y Urda (Toledo): cifras de fallecidos y heridos, teléfonos para familiares, trenes cancelados y qué se sabe de las causas."
-      },
-      "preguntas": [
-        { "p": "¿Qué ha pasado en el accidente de tren de Toledo?", "r": "El 28 de octubre de 2026, hacia las 8:54, un AVE de Renfe alcanzó por detrás a un tren de Iryo entre Los Yébenes y Urda (Toledo), en la línea de alta velocidad Madrid–Andalucía." },
-        { "p": "¿Cuántos fallecidos y heridos hay?", "r": "Según el último balance de Emergencias de Castilla-La Mancha, al menos 68 personas han fallecido y 53 están heridas graves, 15 de ellas muy graves. Las cifras son provisionales." },
-        { "p": "¿Qué teléfono pueden llamar los familiares?", "r": "Renfe atiende a familiares y afectados en el 900 10 10 20. Desde fuera de Castilla-La Mancha, Emergencias atiende en el 900 122 112. Iryo tiene su propia línea, publicada en su web oficial." },
-        { "p": "¿Funcionan los trenes entre Madrid y Andalucía?", "r": "No. La alta velocidad Madrid–Ciudad Real–Andalucía está cortada hasta nuevo aviso. Renfe ofrece lanzaderas hasta Ciudad Real y Puertollano." },
-        { "p": "¿Qué pasa con mi billete?", "r": "Renfe permite cambiar o anular sin coste los billetes afectados. Iryo y Ouigo informan de cancelaciones y alternativas por sus canales oficiales." },
-        { "p": "¿Cuál ha sido la causa del accidente?", "r": "Está en investigación. Según el Ministerio de Transportes, el centro de control de Adif autorizó al tren de Renfe a reanudar la marcha con otro tren por delante. La CIAF y la Guardia Civil investigan lo ocurrido." }
-      ]
+     "nombre": "Cantabria Económica",
+     "url": "https://news.google.com/rss/articles/CBMi4AFBVV95cUxPUTluQnF3OTViLVJOejk0OHVPUVQ3QjVLeU5WaXdOUXk1V25hU1R2N1hhSk9aQjFEQ2RsVHpDR0doSEhOZDlZV1ZvbEZONUNqWkpmd1lXaXBMSjBzSVhUcGhTck9RNEMxQjZwdEY4Yms3OHk5TTRRcmRVb1RXMUg1YzUzUk93cXRubzdYNG4wU0FzUU5NLTBUMS1aSThwUlMzaFJCeUt6S1Ywd0UweTJEd3RjeDNRdXdQSHBrOThkd0ZaWm1iOWtXTEtXeUV3QURiV3VaNWE4Q05WU0ZEbk9fVA?oc=5"
+    },
+    {
+     "nombre": "eldiariocantabria.es",
+     "url": "https://news.google.com/rss/articles/CBMi2gFBVV95cUxNbGJFWWpubUlZTWFKUDZuci1uSWwzTVlkVkt1QXdxZGVKejZaYmZDazRnZXBTb2RSY3p5ZjAzbW8wYmNuMGE0U2tiYTFCc0lOLVZyQXNBQWpPeThUbW1tbGFGUjdrczRHbXBNTThPQ2RNQ2RjQmdiZklQYVVkZFJwZnZWcVRkR1FPUGppRkVwQm1NX21tVTBsaHBHNUJnN1kycU5PX2RqSE4xbWppYWxnRTV2UVprWGRoOEd2RmJXZlZzWVg2ZUk2UGZ2UlVHTDl4WmtKMS1sYlRNUdIB3wFBVV95cUxOMVNFemJnWDhpNXhNNmh3REtJNUM3QUVZeVpNZzNsdzRtczNrWmxaMU1sRllxazN1d3U2YVd3STNBbGNFVFpGaWZENVFCcVBWS3h3a0c2dGxZUG5YMlprc2dVM1dPSXVCMmg1aFA3WUN6emg5YkVkNzFKSTJGdVJkRWY2UFIzRUFqVWlFRGNVeHA5QWxTTzVyemdRc19fN1NXMkpTUUJ2UUFnVFZCZXBCOEFnelU5WFVWT1ZQTW5ySDFFMlI5VW13NGdzX1BsTFJqdlk5XzhlOVgyZU5EVUZn?oc=5"
     }
-  ]
+   ],
+   "ultimaNovedad": "2026-11-19T00:15:22.889Z"
+  },
+  {
+   "id": "incidencia-alicante-y-murcia-2026-11-16",
+   "activo": false,
+   "auto": true,
+   "clase": "incidencia",
+   "operador": "Renfe",
+   "linea": "Murcia–Alicante",
+   "titulo": "Interrumpida la circulación ferroviaria entre Murcia y Alicante por falta de tensión en la catenaria",
+   "resumen": "Una avería en la catenaria afectó a la conexión ferroviaria entre Alicante y Murcia.",
+   "lugar": "Alicante y Murcia (Alicante)",
+   "inicio": "2026-11-16T17:22:10.000Z",
+   "tipo": "avería de catenaria",
+   "servicio": "Media distancia",
+   "estado": "provisional",
+   "lat": null,
+   "lon": null,
+   "cifras": {},
+   "circulacion": "Circulación interrumpida temporalmente por la avería en la catenaria.",
+   "causas": "Falta de tensión en la catenaria.",
+   "fuente": "",
+   "historial": [],
+   "enlaces": [
+    {
+     "nombre": "Actualidad 24 Noticias",
+     "url": "https://news.google.com/rss/articles/CBMiyAFBVV95cUxOTVNRUFZaV3hEcmtxZ2t2U0Q1V2ZnUUZLeWdLTlNjSm5qT3hIX1o1UWZsTmwwdURxTl9oZ1p3OEZvRl9KMS1mZHp4YkVSMDZiOHJkYW5EcmJwVWhYV2RNSlAxd2FxZXUzVm1rQTJGdE9RWUR1cjBsSXllQ2Ytb2RveUE3Rkhoa0pHZWxScE91SFZyY1BRU1lLcVZPOEU3VDZTZ1ZZZFVGU3dibHZ3Wk1XODlXcENCY2hJbm5MVVI1MGk1Tll3WjNxVg?oc=5"
+    },
+    {
+     "nombre": "Noticias Ciudadanas",
+     "url": "https://news.google.com/rss/articles/CBMilAFBVV95cUxNN3RVZm1fWUN1YVhFbEFtV0x6bzg1UzZiUHd6dVBLc1hQdWt5N3hsZU1abWxuTHFlRTgxaVFqU0NkSDlmWDF6UUhoTmliVVlDd1FNVzFOcHFob2VFclNjRGlOSWgtdzZZZkVCbGlkVy1WZ2UwUC1oX1pURGhvaE1LandiY296bm8yWDJYN0o4Ymg5RzdN?oc=5"
+    },
+    {
+     "nombre": "Telecinco",
+     "url": "https://news.google.com/rss/articles/CBMivwFBVV95cUxPY1l2VG10Y3NOWXRZT3NZbXU4ZldxNzdqT2xmZkROZGt4cXlVVEtHb1VFd0JDYUpfYUVDb2kyRElpc3JwUXFRRXVVQkxka0NMbmx2blNWbkcxSEhyNV9oVTVYdnFCMndLRzJCZjVTcVRBeWdRRW5lcmJxQmRSRHNiY0lxVzIzZ0tnYy1zNjRobTAyRExieWc5YW5YcG1jaUNwS3ZYMzY1TjdnNmoxYVFvNjZnYkotaTJXdUc5TUhPUQ?oc=5"
+    },
+    {
+     "nombre": "todoalicante.es",
+     "url": "https://news.google.com/rss/articles/CBMisAFBVV95cUxPQUpsMnl5YzRCTWFvZUkxb2hfaFkwZko3d0RaUnpXdWpmNUlrZzBxdG1PemJiNTBZMTA4enhjbmFBWUhZWW5yWTNOeFRzN0JObzlBUEZQa0VPMXM2a05wWlFYMDIwS0MySmdQWjV0S2FzbDFtSXJSa1oydm94VGo3R3FMXzVmYnlLbkhDRjRQTTF2Q3JRX3JSUkItbnhDamdpdGlWSjlvMktQYlhNN1dVadIBtgFBVV95cUxPQWs1LVRtU2ROVlhZeV9OOWVZR0toYmhMU24yNXNCNFQyWFVqR2c0MV9BZEZOaS1icVhIVUVrQWdfNldqZE1zOFF5RHFZNEFRb3hOeTJKbGk4SjNaV1Z4UjJjVjByQkJGeWMwVUNBb3FrSWVlS2tObWVheDBOVzU2V09xMUZjNTBsaEo2SUFoZlU1TjhfdERERnFCaWRpSlVONVhDemZ2ZzBaRDBVZmkxc0hwaG4tQQ?oc=5"
+    }
+   ],
+   "ultimaNovedad": "2026-11-19T00:15:22.889Z"
+  },
+  {
+   "id": "incidencia-madrid-madrid-2026-11-16",
+   "activo": false,
+   "auto": true,
+   "clase": "incidencia",
+   "operador": "Renfe",
+   "linea": "Cercanías Madrid C-7 y C-8",
+   "titulo": "Una avería eléctrica provoca retrasos en las líneas C-7 y C-8 de Cercanías en Madrid",
+   "resumen": "Una bajada de tensión provocó el corte de la circulación en la línea C-8a de Cercanías entre El Escorial y Collado Villalba.",
+   "lugar": "Madrid (Madrid) (Madrid)",
+   "inicio": "2026-11-16T10:08:00.000Z",
+   "tipo": "avería del tren",
+   "servicio": "Cercanías",
+   "estado": "provisional",
+   "lat": null,
+   "lon": null,
+   "cifras": {},
+   "circulacion": "Circulación interrumpida temporalmente en el tramo afectado por la bajada de tensión.",
+   "causas": "Bajada de tensión.",
+   "fuente": "",
+   "historial": [],
+   "enlaces": [
+    {
+     "nombre": "Cadena SER",
+     "url": "https://news.google.com/rss/articles/CBMihgJBVV95cUxNbXV0dzRmZkJLR19HNFBXQzNNUndoX1BmTWFFa2diX0JWRWpVZVdBZ3JfcmJPZnl1b0x5OHJxYWVjZzI0VE0yRC1raUk5MG9pOHJ5RVJGQ0RIZHRINlNrUk9BeW0xNnNDNm9kYVBtZWUzOXB3RVZXQUJMUGpRVk5LVng0R01xTHh2Y1lNWGllYTRyeE5aT3F3VDAycG5yb1A2dll1cjJ2VGZ3dWZRelhnVXdhejkwX1lBNjRUeUczT0xBUW5QOWxuOG5Lck9oNEF0a3ZnVnVOSl9YSFNvaGRyZlI1ZkVFWWpJZHkyZVlUbUNra0prVHRIV3ZUTTlfY3E2YUgtWm1B?oc=5"
+    },
+    {
+     "nombre": "Digital de León",
+     "url": "https://news.google.com/rss/articles/CBMivgFBVV95cUxQMldOY21EOVN3VUFCRllDWE5RWmdpU3NSTVN4akdPQjhGUVpVQWZIN2h6V2wxb0gwWnpKckZzT0tYQktVaGZyUElaMWZ0RXhIa2J0dEdrQXZOZ005bEtmSXA5RUZyYVo2SDd3c3Q3Sm43VGl6Z3drOXJTMkFZaVN0YWFqZFJOZ19WQ2Q4V19MbHh5dHJKeG9ZbEFRcVE0NkpPNlJlR25Mbm5TRjlBZ3FSakdrdWp6aGxmRFhJdU5B0gG-AUFVX3lxTFAyV05jbUQ5U3dVQUJGWUNYTlFaZ2lTc1JNU3hqR09COEZRWlVBZkg3aHpXbDFvSDBaekpyRnNPS1hCS1VoZnJQSVoxZnRFeEhrYnR0R2tBdk5nTTlsS2ZJcDlFRnJhWjZIN3dzdDdKbjdUaXpnd2s5clMyQVlpU3RhYWpkUk5nX1ZDZDhXX0xseHl0ckp4b1lsQVFxUTQ2Sk82UmVHbkxublNGOUFncVJqR2t1anpobGZEWEl1TkE?oc=5"
+    },
+    {
+     "nombre": "La Nueva Crónica",
+     "url": "https://news.google.com/rss/articles/CBMi1gFBVV95cUxNekpWMHM5ME5iQk1jSXB0ZG9CZXM1U3J2RkFvR1I2NmpJMFQ4QXV2RTNuemd2Y25yNnFLYjJrbW1ydzJZRGdOd0JmZUlHTWlYdmwzejN4SWNSbk9wNVAtNDFRYmFmSmJSc1otTTZKaGhIWVEtdTZCdXlfLWY1TFZ1R05pdFl1d2Y4OTBCUkVjUWZnZ1NKa3UtQUN1bElQVFBGTjk5V2l1RWJjcE9Td1A3TkEzOVZGNmNBdXB0blFlMzNpLTVpbkhhNlVyaVBmckljQ1B1Wlp3?oc=5"
+    },
+    {
+     "nombre": "Leonoticias",
+     "url": "https://news.google.com/rss/articles/CBMisgFBVV95cUxOWmhpQnFoRUppTFRySjJRSHZiQjJic3A3VWhOM3BLUkR5WW44WGhQSW9LcXZSbGZ4R1lQUV9SSnRNNERNakJwZU9Zd3lEUl9Oai1fTkljQ2lrcDcwdlpVTFNJSUhVUG1TYm01ODFLSGdwRU01WUo5d3FMS0pxLXR3YThDMXQ0djBGMkZKTDJWM1pwREtGRWY5WXdLTE9QRmxFX2xycnJVcFFMdk1PODhCNHRR0gG3AUFVX3lxTE93Q2FKZk00RHJpRGRMVnI2bkhUSE5mQTBjcExTMFpmQ201VkJtdTNhRG5qNG90OUd1dm1KdWNUcnk2NDV3UnE4UzQ2amdWUnJfUDYwRkZyYjFDazc3SDRWLUY2NjlrVklwYUIzZ2FNeVpyaUVBa3JzcWluTlpwcURldUhsSl9XdjR5YXRpVkkyT2JCQjVkRnNsNktHcWdjVnNSS3kwNURNU25UTjh4QnhGM0V3dFRGMA?oc=5"
+    },
+    {
+     "nombre": "elpuerta.com",
+     "url": "https://news.google.com/rss/articles/CBMiiwJBVV95cUxNNjhWN3RuN2VNZElMaWhEY1l5dTEzMVhwZXZfYzhleHpoZE1EdmVHX2Fib00yZmQ4Wk4xa2RFTlhhM1otc245UFlWMURWcXBJVXZsZFVVa3NJdnptRWI2aWpBUElvLWNFanh1ellQREJBVzFBMVRTd3JyVGk5aE1zVDh2TUpTRTlSSzEyOWYxOHZ1UUgxWTdSeDlRUWRnWWhfR29GZGY5a2tIaFdxSnU4NjFCN2E1c0tPUTlfR05zNmVycEpkMTlXdE5yTzIwQl9KaWdMdkVpRThvREVWR3FNYkEtazRIcDFoSEl3NnRfb001NFA2c3Rxb0tUM1ZFdzFuOWh4aUFBckRBeEXSAZACQVVfeXFMTS1ONVlrM2J2bWE0Z0RnbVRQQ2JKUXdnZE1IVEZjZXhYWlRYRVU3TWt1SlV0dWVqUHV4dHZYVWczSXV5UjVhRGVmeVBhdUREMXZaalhNa2RMaGNEVXhObHk5SVZFZE9HU1FadzVDR2QzZjF5UVpvZ2RRZzFiRHRNSHZPZGpab2NoWFZkcnk5OEtqQ3lnUU10V3JySEZ4VjBFRnhHZGtfZkw2cTdWMDVCLTZPMzl6NHVUUGs1akhLM2ZsQ2xJZU80Zk1UZWNocTM5VU5US1JaUGFySC1DUWlPYS02YXd3QURjWmNQVUFlS1VGanl4R1FpV19SZ2xxYjJGVkVmX3RldUZFUE02V0dfMkQ?oc=5"
+    },
+    {
+     "nombre": "ESdiario",
+     "url": "https://news.google.com/rss/articles/CBMizgFBVV95cUxQWDlhcW5PT2ZXdjNZeHBBZ1hVbEZqWm94Qm5IbE5aVFc1MVptc1M4YS1HaXg1OEFVTXhCcHNxZ0ppRmRERXRPMk5zWTJVcXoweEFXUktES0l4VlBIeWtXSTlDYk1qRVhIazVyT3l5eWxMMWI3MjdsT3pncWxpTE9SR1RkSzFMSHlGQW84T3lBYnB1XzI4eXZ5Ym9CV1pyYXRGMThzUjRwUzFVbHBzbmdvcTY1VWRPZVFsZ1hNYllocnZ0YzdmWWV1Sk1jaDJSQdIB0wFBVV95cUxOMU16RHZxa214NS1STld6ZXIyUWxoTl9lcFllMF8yMVctV2UxSHJNellYQ0NmeU5JSFJCY2V5WXBCWlFnanVzR1BUbjh5RVBLRU1nZUx3NFhhZnotS2xUX2Q3YWk5bmNrcHlNRE9aQmR2SS1DbzQ5SmZIUHhYTXJqMWxlb2pZcjh5T0VucXRFZ05lYWlYSUZkVnhhb2hiWk5wVko5UHVleUpkU2dhLW9WWVJMNXA5WEFZTTk3VEJDR1J0eUZBcnc4U3ZPUXB0MjNFT0w4?oc=5"
+    },
+    {
+     "nombre": "Europa Press",
+     "url": "https://news.google.com/rss/articles/CBMiyAFBVV95cUxQS1FldDRHNGFpdFFIRUtrU1Q0ZVFPTmUwTmhvUFpWeTZhRFByc0ZfZC12b0w3dTA0S2hqZnU5cWM2RVNCaHU0QmRQT2g0REh5UWZOYTlVVGxPUFBuODg5aEFCRm94dlRzR3Z0NkFJdEhoWXN1aWxhTHZfb2NVaF9hYXBNTHFlallhR2xSM3RoVVBULXppcVdQRUI0TXRQbU1sMVp2ajJvM1dtNnJTSnJxYVNrMDc0VlF1RlZ0WVA1YlV4dDN3QzlJdw?oc=5"
+    }
+   ],
+   "ultimaNovedad": "2026-11-19T00:15:22.889Z"
+  },
+  {
+   "id": "incidencia-barcelona-2026-11-16",
+   "activo": false,
+   "auto": true,
+   "clase": "incidencia",
+   "operador": "Renfe",
+   "linea": "Rodalies de Catalunya",
+   "titulo": "Interrumpida la circulación de Rodalies en Barcelona por un operativo policial",
+   "resumen": "Un operativo policial provocó el corte temporal de la circulación de Rodalies en Barcelona.",
+   "lugar": "Barcelona (Barcelona)",
+   "inicio": "2026-11-16T11:28:58.000Z",
+   "tipo": "corte de vía",
+   "servicio": "Cercanías",
+   "estado": "provisional",
+   "lat": 41.385,
+   "lon": 2.173,
+   "cifras": {},
+   "circulacion": "Circulación normalizada.",
+   "causas": "Operativo policial.",
+   "fuente": "",
+   "historial": [],
+   "enlaces": [
+    {
+     "nombre": "SPORT",
+     "url": "https://news.google.com/rss/articles/CBMipAFBVV95cUxPVG5RU0dicUVuUEw3MXVnRWlsM2V6VmVUUUw0Rjd3NENBMDlUeElfX05Bd0hsTGpTNUs3RlRENW5SLUJMTDByQVhud2JyOWhmWUo1UnVGbUczZjBJQjFSbFo0UlNGY2JRRVAxc3NQUnA1RUc2T1N0N3paVko2bWVnMEo1SktOdkwtLUhaYlVRUUM0WThsNlpmaHJOalZSeW5panlyZtIBpAFBVV95cUxQSVpfQUZCX2w3QlFlTkRRV21DaHZrVDZ1YkxLRzJHVjFsNkJ2SVdGUFJZR3EwYlFfSHdURlQyMVhTakRrc01DUGxlUUhIbDFxMlp6NXNoMVZDVlBGZWpXdkpMNWFyb29hSnpUZVdTVnNVZGZwajMyYXNSTUNpTmdKb0VjRjF2NVBDblRyNlAzS3lSdzFrVjZDTG1XQ25IcTNZWVJDQg?oc=5"
+    },
+    {
+     "nombre": "20Minutos",
+     "url": "https://news.google.com/rss/articles/CBMi6wFBVV95cUxQOTFkWUtTZ2xlaVhyZmF4MldzQTFEaG11cENIZHNQWEVYYWRSVV9BeEJfbUN6dVlUODNhNmQzY2ZUenROaEVITUNkTFJ6R2tiMnhPaXJRS3R5RU9yVWFqaFFFREt4YzloLUZWbVE3aDVTZ3RHcUE2VWJHYTRFSVpnYm5KTXpUYnBWQ09XQU1fajBjSGxLX01xQkRfVWx0aUI2OWhpMmJJeklqbGpKcGZ6cVFzNU5YRGlQRmp4R0tXMWVQUFk1dTh5UVJXWXNydldwNU1WdTFySTh3UC0xRGdxZkJjckt3eVZYVWZN?oc=5"
+    },
+    {
+     "nombre": "Libertad Digital",
+     "url": "https://news.google.com/rss/articles/CBMi_wFBVV95cUxQc21ZeXBrRTd3dU90cnIxS1U5ZV9FREt5NzZRdEMzUFJqc2ZteHNWeTI3cEQxYWdxSWtkenlYdGFoMVhVRU5GUnAwLWI3QU03UnpON1RvN2xicTdDbGd2b0NzMmE3c09ONklldUxUczJRUGFqUWJQZUNMM1FSSVdJd2pXQUJxdklqN2NQSUZwWjc3VlRTZWpnUFlBbUwxSzhTSW4yRkJhVXlBWDh1NDIxZnZ3dWhfd255RUpwQTFoR2xtMWtXdHdQMkJhdGVBZFZZOWI5MG9BTG1SSGxJTWRRVW5OcDN6TG5YeEthV3AxWDFFT2RSOXJpVTlyWXMyTHfSAYoCQVVfeXFMTTRqLUh1ZGM5VVdGcnlvNHpsSFZ2cUJld2JTQWFUYUx5TFlqM0FkamZEWGZvVWR5Z0Rxa3JtRFVNUHNNSVJCZ3NxUk5Tdk1BRFNQbmNRb01DczZKaFVYdE9lblhzZUx4dnFiMDRmVDVaN2xVWV9HMnRYaFNDWGZlRFZpTTZoYW1ucFktQ2VjLXZHczZTWXNNaVVjU2FzTUtxNlBtNjlvbFkyUnBjckJNTlNZaGY5SnYyLTNpRUdhbTZRSkYyS1BXOC0xME1kOHlXUlV0UWhOYkhSQ04xM2lMOWp3RHRIZkRGTEpFem94S3VXYVRkNUVXYjd3VzFpMGd3S0JHekVQcXRxM2c?oc=5"
+    },
+    {
+     "nombre": "Crónica Global",
+     "url": "https://news.google.com/rss/articles/CBMixgFBVV95cUxOcHc5NEdfOE54OHdBNkRMYmFlTkhTak15MHhHcThEYnVzR2RDWnJrc3htSmMtT1Y5OTdwVngxcEhQNXlkcV9nX09MT1B1NDQxZHZjckt5eVVueGJhbG9ibVlLOUQ3YW1CM1VEcWFJdkJBNkp5UG02NS12X1ZiZzNWZXVhaklUcHZBakF4ZVRLX1VKd0JQVWRyM3N2aEEyMC1EVWlnMDk2aURFaVJwU25TS08zTjJYUHA5S09vcmJoRUp4X3prLVHSAcsBQVVfeXFMTUhnVThzX3d2MnNkVHY5TGVVcVZyOFdsNktBbFAzWXRTRkZVUmcyWlZyUGxtb0tHckxDVlF6RzhNQ2NkUkRxUVl3YlhPZXVNVk84U3BfLXZGZlZlVFpZbXpFSExMbVRnb2lQVVg4QUpWNFZ6bEswMTNTVTh4aU94T3VMdXVNMUtPMTRsSGJLSHBNMzRhdHhKNXdwSzMwX0pXWkJNWk5BYW92Z1VGd3JOems4S3NXSHd2a25ac3BvbDUwRFUzRjBOeXJicWs?oc=5"
+    }
+   ],
+   "ultimaNovedad": "2026-11-17T11:15:22.928Z"
+  },
+  {
+   "id": "incidencia-torremolinos-2026-11-16",
+   "activo": false,
+   "auto": true,
+   "clase": "incidencia",
+   "operador": "Renfe",
+   "linea": "Cercanías Málaga C-1",
+   "titulo": "Una incidencia en la infraestructura en Torremolinos genera retrasos en Cercanías Málaga",
+   "resumen": "Una incidencia en la infraestructura de Torremolinos causó retrasos y cancelaciones en la línea C-1.",
+   "lugar": "Torremolinos (Málaga)",
+   "inicio": "2026-11-16T10:38:17.000Z",
+   "tipo": "otro",
+   "servicio": "Cercanías",
+   "estado": "provisional",
+   "lat": 36.623,
+   "lon": -4.5,
+   "cifras": {},
+   "circulacion": "Retrasos de hasta 35 minutos y cancelaciones en la línea C-1 de Cercanías Málaga entre Málaga y Fuengirola.",
+   "causas": "Incidencia en la infraestructura en la estación de Torremolinos.",
+   "fuente": "",
+   "historial": [],
+   "enlaces": [
+    {
+     "nombre": "Área Costa del Sol",
+     "url": "https://news.google.com/rss/articles/CBMi1AFBVV95cUxNZ3RqN3doSENhYnlnWFlXdC1FYmZWV3pyc1ZmYTlKT1hGYXFMZ3lnN2R3TEU4OHVFSnpFSjhvYUZGQ1hJLTlxeTBHOVlkczYySWdLUVppcjdDSWVuaTRlcnpHT2lZdTdCTVVMY3l4VURLRW0wVmQ1b01ndV9EYWJBckFnR0pkR0VjclFFQm1NTTF2TERwbVJvTlptMEJNcXZWOFRNQm12U3BHbTZVM0lzeVhQemtCaktIYmszTTUtS0N4TDA5emtLckFEQmMyRUxpZ2VmRg?oc=5"
+    },
+    {
+     "nombre": "101TV",
+     "url": "https://news.google.com/rss/articles/CBMizwFBVV95cUxPV002ZDRHNzZPN3ZZc1dJWmkzVzdRME5KRklST0JTazJITm5MeGthRVlIQVBJVjVYSlJIMTlNSUR6ci1qbEs5azZudTRLUU5MMXltMW53ek1HdUF3Tlh0RlB1cEttLWduS1pMcWcwQjB0VWgzMFNYLVpvNDQ3R1M5V3Q1LXdaWTZwcHVvd0xiVFJiOVhFMVhDNDlfYXdhOE5SYWgyM2ZmR3pKeVYwRUx4NUZyWnV0WTR6YVNrZEtGNlJBNlJHWVpseVp2SENLdU0?oc=5"
+    },
+    {
+     "nombre": "Ultima Hora",
+     "url": "https://news.google.com/rss/articles/CBMi3gFBVV95cUxNZVhKR0R0THotMEsxbGJ1S1Y5SFBOOHd4bjc1SVNBMWJ6VXZIS25uTHBieHNyVUc4Qndsc0JJS2hmUTUwVmZWRFVzM2RlN25MMmVmTTFfRFNFU3U5YUJxZWh3cXYwTHNFTUZCYUtVUlJmaXF1SlVydS1CY0JVQkZTeGpGYlhkdVVDeGpheHpyYTItLW1oVGdUTFNXamQzOHdveHVOQWJ0cFhtWXMxNmVidGtMc09ZV2laRTd4RFFpUXZfeU53d29UZ0o0TnVFUDNaWjh5ZFBaTDFteUxxQ3c?oc=5"
+    },
+    {
+     "nombre": "Cadena SER",
+     "url": "https://news.google.com/rss/articles/CBMi-gFBVV95cUxOM05TQW9JdUJtakJxYmp0OHZWMnBHNlFzcE9NVnpnWVMyUURVZjVCa1d5bzJ1eDllQktMVC1HaDV5MFNzajNOMmRWbm9XRVMxQ0RPOVgyMjNaWUZZYnFoVDdpWG9TS3FJQlFQT050M3VLSUk3RzdxTW1rOVVMZy1TaEJxU09ISlQxQzdJUlVPWlZDSHNncTdJdWhXS20wSGVoellQbTdCNUZNalpxZ1RDbWNsNmRVWGZYN3ZpSkFjNk0xYm9QVkVzYWYwbFJ2RE94eThZblVxZDNSWVRjOGh3VE9iYnpSbW9mbVlNRHF5MS1YcTNQVW9ZM1dB0gGOAkFVX3lxTE1TbHBaOHNqZTBxRHVOSUNRSWpaYnp0ZXJWbjU2ZEUwLXp1V0VLdEZBSFpzcWViTzVuVHg5aU5Za1V2MlMycU1TMlExV1dfd3B1NjcyWG1pczRldUNfdUktam9qaU5aXzlUVWxLNG9LRUVHeHFLZ2VZOXJJZGhTMHByc29DSUtsQy14S0JkRjdDM0xKNnNkSVZMMmd2QlFKcHI1VkFLSXlrRENubHB4VzJQX3VGLVBfUkNGV0Nna3NrMF9VdUVLRXd6aHJOQi1fX3BpdmJqVjQybzBCeVpoRFZ1LWotaXpBckxGTUZEemRsYTdLSk95STY1QkFaTWFIZzlpUGxUM29IOXJBWkt5Zw?oc=5"
+    },
+    {
+     "nombre": "Málaga Hoy",
+     "url": "https://news.google.com/rss/articles/CBMirgFBVV95cUxPMTFWQndRS0EwdUplakZ5YmU4bkpjS1RKYWNNWjNiZy1NTVVNUF9RX1NKdENPYy1mTC1vZVRMNE9oREl3SVBPTmVOT2pxRURSbjNaMUdKdFRmTjhhMFN5V0NEcllqQXJhN3VqT2dReWxwMDdfd1JkRE0wc2syNWY0X0tEd0NBRURYWlkwZVNwc2M0NVNucWlBd2p5clc1Z1dEX3FoU25MenF6dU1HZ0HSAbMBQVVfeXFMUGQtcXFQanpKTnlyN0V0b1M3OXBUNGdpRzIycUF6YTNKellnWFo4dkNPUXlBNWdGSW9TTTB4TW1Dd3g1SEZpTHR4N1FIWjB0NGtuNjJxcFQySF82WjlvdkZNUkw4eWRlRlh0cENmUWViZmY4Szl2czlTdDRWQ3dUdW5VOVNqZ1FJNFVTZDI5YlpraVlWTkM4SzhQZE1sYmFITTFwS05lc0xCQzRMMEhOWXNpTEU?oc=5"
+    },
+    {
+     "nombre": "AZ Costa del Sol",
+     "url": "https://news.google.com/rss/articles/CBMi1AFBVV95cUxNNHRqT3Vhdm9tR0xjWGM2MlVxNVdhZTBwZjdZckdBbEdlck8yNE43aHh3UGdMS2dHb3BOUFhhZlZ3aHhrYkY2ZE5SbG1JZ25pUHRYa083by16czlPM1BJd2g1ai1rbHVMRjJZOEQyRHdoNTBJaFlqNVFjMG5LdzJxX1VtWnczQlpZV1RaQ2o4aWRHbGtPVmdyUVZ2SkpfNXlPcHlCSWVxWnhYVVBOaVotTWhTZHYycWJHUWItanE5MWRWeV9xSENKNnpMYW5PdXliZzVFYQ?oc=5"
+    },
+    {
+     "nombre": "El Español",
+     "url": "https://news.google.com/rss/articles/CBMixAFBVV95cUxNMlhhS3pTaU9aOFBFZldQQ25VZldJN1NKWGJaZEg4SWY2UmtkLTFJeE4yZTRYR2JNME53b1E0aS1PSG9RYTRxb3ZKMXJVOGZRWndQckkwLWJBWUJfbjFjTEpxNS1TenRfdWxTYmZiZ25EbFJIOEJGRzlMRi1TRlFGa3p2R0RHa29wMGJ2cjZVbmJONlQ2SWktMHNQVDJoZHpadjdpZmdFbDZ1RFRMZUZFWjdQd094ZDV0SUd3aWluNUF1eHho0gHKAUFVX3lxTE1QSUlMdUdTNVdxSUlZV283dEFVWEJ4WXhBSlh1Q2xFbjRNNDlLM3NpTDhRel9LZ0tNbGQ5R0tuZDlBbHdKSnBFLUZQMmNWcnN3NlN1T3lrdDhWMkpyZlFhY1gxLTdNYjhwdE5KNmhoM0hJR2pVbnBCSjNLaVkwQWYxSE9raFNRWE9BdUpiZDNhWFp2TTF1cGVKcVQxc0Zhdk92WmdCc3NMTVBjTXk5Slo0cXk4Xy13YXAxX3lVMTdSeS1qOTZ3aXlQQVE?oc=5"
+    }
+   ],
+   "ultimaNovedad": "2026-11-17T13:45:22.668Z"
+  },
+  {
+   "id": "incidencia-zarzalejo-madrid-2026-11-15",
+   "activo": false,
+   "auto": true,
+   "clase": "incidencia",
+   "operador": "Captrain",
+   "linea": "Madrid-Ávila",
+   "titulo": "Descarrila un tren de mercancías en Zarzalejo y se interrumpe la circulación entre Madrid y Ávila",
+   "resumen": "El descarrilamiento de un tren de mercancías en Zarzalejo interrumpió la circulación entre Madrid y Ávila.",
+   "lugar": "Zarzalejo (Madrid) (Madrid)",
+   "inicio": "2026-11-15T09:00:06.000Z",
+   "tipo": "descarrilamiento",
+   "servicio": "Media distancia",
+   "estado": "provisional",
+   "lat": null,
+   "lon": null,
+   "cifras": {},
+   "circulacion": "Adif restablece la circulación total entre Madrid y Ávila tras el descarrilamiento.",
+   "causas": "Desprendimiento de un talud de tierras provocado por las lluvias.",
+   "fuente": "",
+   "historial": [],
+   "enlaces": [
+    {
+     "nombre": "El Correo de Burgos",
+     "url": "https://news.google.com/rss/articles/CBMi4AFBVV95cUxOTTFIcEJwMElXMkVlUThVOGJwNk82aFBFOGFrRl9fcG14RnQ4SWNLSWR1WnczSERMQnBlREplOFJ3UThwbDZpamgxcFJ4SGZkRlV0Yno0VnNINHVmbF9mcEhfNWdrdFlwa3pwVG92emxoZnVfSkNZOGY5TkRZbGZsR1A4SHptYXN0V3NOenVIMFhOVUZzN0k5Y3ZIbklFamlwX0x0U2JyTzBCMDRJVWtHQk43ZWtDd09UZmxoa3NMNUFFRWtoVG8zYndMenh0RzRoZy1aX1BqdFFaMU5Wb1ViV9IB5gFBVV95cUxQZHZNV2JJQmtrcS1RdVV6YzhJZWhfbURxNktSQXFGaTFoUjVSOTZTVFJ5VWs2Y2FrbHd3c3lPQXBEZGl5Y2pNWmZSTzhRTkgwdEZQUVdwOFJJQ3NvV3N4Ykg4bjEwWUZLWFV3TEhBVXpSOWFTT0p1VzJFQ3NXOTJkSHlrUE4xYmoxbW9KNVZRTTVsWWg5LWc5X054M1U2dzBBLW1xSHFDTEFIM1l2a1Nlc1hGa1hqT2N6a0FOSE12Y21hOXdNM3YxQ1ppRnpwckNLODB0VFdha3loR2pHWDgxMjRVWF80Zw?oc=5"
+    },
+    {
+     "nombre": "LT10",
+     "url": "https://news.google.com/rss/articles/CBMingFBVV95cUxQMWNrUUUtTUFoNTh1Um55MUVLMjRUS2pJekpQZVN0UDF3ekpIakJEa1NwQTNyclNNSWhmc0VndF9tdjJXVHkwQXhja0lNZmhSZlNEU2RjaWNiUnZjN0tKZllPVEZFOWliVU4xVHVVLXZibmtoR1B5ZHBPOHI1N0hyd0N4V2VuUTZqZ2VtMTNzYlZLdUZaN01feXEwUzBXQdIBowFBVV95cUxOSTNKZTJBaV9YSGMyY2pDd0VKVXlKaXAwMGZMQlVMZ2ZKSnI2dWhrUnN0WDk5LTVTWVg1dkt1YS1jRTVkRmhpWmFOQzA0enVkamF4blctZHVTY3pLU3hNaUs3RWgtUWVpQTk2NW43RU40T2Jhd2oydVB2VWhFOGg1Zk1QUkJwSXozNVA3QW5zX1ZJdDBMQVAtc3g4enpWS2RGZFkw?oc=5"
+    },
+    {
+     "nombre": "Diario de Castilla y León",
+     "url": "https://news.google.com/rss/articles/CBMigAJBVV95cUxPS2liQ0tUX0JFQU1mZk9VU1c3YzQzTDROQkVXaHozYUNheHRqalN4cmVsRHMwMjdsa2Z6S1BTdTRyWVZTZHJFcnhJQlJwRElvVWpYM0pLY1hwU3N1RWw3bzZjVFJzQThkRXBXaTZqRmFwTGgtMjdGc2dzdUp3bXNYN0x4WkZXMHRaUnBYcThucUgyQVBZWktERzh3d2k1bGdDMkI1SHY5SFo3YWdVMnZoVnNoXzhFMEkyRG5URHJKOE9ob0NHcnBfOFMwRWwtc2QzXzd4NUF1b3c1cWgwclllUHpyeFdhTmcybVViUWctZERMejR2VTkzVlBuOVVNcUVE0gGAAkFVX3lxTE9LaWJDS1RfQkVBTWZmT1VTVzdjNDNMNE5CRVdoejNhQ2F4dGpqU3hyZWxEczAyN2xrZnpLUFN1NHJZVlNkckVyeElCUnBESW9ValgzSktjWHBTc3VFbDdvNmNUUnNBOGRFcFdpNmpGYXBMaC0yN0ZzZ3N1Sndtc1g3THhaRlcwdFpScFhxOG5xSDJBUFlaS0RHOHd3aTVsZ0MyQjVIdjlIWjdhZ1UydmhWc2hfOEUwSTJEblREcko4T2hvQ0dycF84UzBFbC1zZDNfN3g1QXVvdzVxaDByWWVQenJ4V2FOZzJtVWJRZy1kREx6NHZVOTNWUG45VU1xRUQ?oc=5"
+    },
+    {
+     "nombre": "Madrid Actual",
+     "url": "https://news.google.com/rss/articles/CBMi0AFBVV95cUxNRHlLZmtLR3dZRTVoTEUyNTFTLWFnMDJBRHFVc2VUcDVtdnpuRkhVbjlTZG82M01VNmtybWhwZXNpLVoxSi1Ya2ZIdFhCam52QmlMMDFWSnEtRnpGVlZRX2tXckRONHQwLWtQelkwR0RBSTZSc1VtVUJLMnpNMEc1SzJfejc1QUhJYi1Xa1FxMU9vVzU4MDMzZnlLaXhILXBSWGxaN3RYSi1SbmZMS1Y4alJMUENUeUIxeElfaV9fMlJqTGxVUnZrd0UwdHdFUVJm?oc=5"
+    },
+    {
+     "nombre": "Valencia Noticias",
+     "url": "https://news.google.com/rss/articles/CBMikAFBVV95cUxQcW9nSHJlcXl4QjN4WjFJSGZ5T1BoUHVGRXVUOFY0bERlQUtIZklpSEk2Ykx1UktFTVplMXE3aWJvYUw2OGY5dG40b3YyOHVnRG8yYnZoU1hodng3T2tWN3RmOFV1UHM5dVJkY3VkTWpxNWk5endrUTA5NGNOT2diUW53Zk42MllpblM5TnRvS1c?oc=5"
+    },
+    {
+     "nombre": "La Gaceta de Salamanca",
+     "url": "https://news.google.com/rss/articles/CBMivwFBVV95cUxNT1IwcGI0SDNOdjd3TmMzQml2RV9ULW5pdy0zYUhLZ1UxbjJPTkFkeDNVaHF0Z1FRUVdfcnhHcDNSZ0hnLXA2emNnZ3lhc2syRkt5S0k2cFVXMGhWQUlvQno2UEZUbGJEUDNocGpyVGgwb1NkT2ZWdE82a0NGdHNDRFFIWlpnbE92OHl0c2d1M1lFM2I5VnNhQzUteDFKMU9Zb0VUc0Rjb1o5Y3FEaHh4OUZhY3habUZHVXc3VDZKRdIBxAFBVV95cUxNOVF1YkJXTEZSRXhIREpDRTgzMnNTU1VFYktKNHdyeXd4cHAwTlBXUWdUQnBvdUtoaTEycDJJMXE2Y2FVbjFxUDVobmZzTGVVcGdGT0pJS0xtS0t5cTQ0U0lvT1RER1NsY3Q2U3BtVW5pQUp5Q2hXYWRfXzZoS0RBazNpNENYZTVJOFpDX1pzY0pzdG1ja2lIZ1ExRGJNUy05M1Jld3RDZ2E4WkVoVXNvZUF0b3FveTFsZ0h4M1N3NU00V2lV?oc=5"
+    },
+    {
+     "nombre": "El Mirador de Madrid",
+     "url": "https://news.google.com/rss/articles/CBMioAFBVV95cUxPLXBlNG9wZTROT19QNjRBVm15N2sxZDdTaDJoSkU1YzlCU056cmdBMUQxeTNxTWRIX1JPTW5iQU0zeTN0cE0tVlpUQTJjSUFzUHJkUUxNUFNLUl83a2RQNHFESGJkU1FuOC1QVktnMUJTQWJyR2dCSGhMbmwzN3VfVDI5Szg4VE5Fd2tRTzNJdDh5d2d2aU5ERVM3RXZjQ0ZH?oc=5"
+    }
+   ],
+   "ultimaNovedad": "2026-11-18T11:45:22.618Z"
+  },
+  {
+   "id": "incidencia-barakaldo-2026-11-13",
+   "activo": false,
+   "auto": true,
+   "clase": "incidencia",
+   "operador": "Renfe",
+   "linea": "Cercanías Bilbao C-2",
+   "titulo": "Interrumpida la circulación de la línea C-2 de Cercanías Renfe entre Galindo y Barakaldo",
+   "resumen": "Interrupción de la circulación de la línea C-2 de Cercanías Renfe entre Galindo y Barakaldo por una incidencia de señalización.",
+   "lugar": "Barakaldo (Vizcaya)",
+   "inicio": "2026-11-13T07:14:10.000Z",
+   "tipo": "corte de vía",
+   "servicio": "Cercanías",
+   "estado": "provisional",
+   "lat": null,
+   "lon": null,
+   "cifras": {},
+   "circulacion": "Los trenes de las líneas C1 y C2 de Cercanías Bilbao sufren retrasos y cortes puntuales por una incidencia de señalización en Desertu-Barakaldo.",
+   "causas": "Incidencia de señalización.",
+   "fuente": "",
+   "historial": [],
+   "enlaces": [
+    {
+     "nombre": "El Confidencial",
+     "url": "https://news.google.com/rss/articles/CBMisgFBVV95cUxNVEtTNjYxNmh1X3FFaWtKSElfVVBMMVhsTnM0bnktWFQxZUxiQzJ4bVYydTJZT0dWU2dtbkZydmpuOUd3ZVJONjd1c19IdUwxT1hId0FTcTBKeC1UTUZ1UktudXdhZHUtVnNmaWg3WXVKODZYbVQzYTRfU1A4Nk1pU1RlYzRNdGFOUXM0cXdIR3RmMzJGMnNnU3l2MkRFbmJNb21jaGJCZkRUanNCbkc2a3NR?oc=5"
+    },
+    {
+     "nombre": "Onda Vasca",
+     "url": "https://news.google.com/rss/articles/CBMitgFBVV95cUxPWE5lZnJuN2hid1RMTGhVSk9lRmNVN3lwV096d2hRNmZObDROVmJoM0tiel9PTUhaRVJVODF4RGNsMUg1b0VMRnF4cmpSOUVVckJDSVE5VzZzclU1NkI3RjhQbU1KbDQzbXJyQktIaVFhbWtZT29FY1cwRmVQdWpMaVNLaS0zbUFLSXl1ZnYzeWx3NVZNYmFPUU5xbWE4VzFvOS1RMTBneVgwMWNSR2h2YldwT1lnd9IBuwFBVV95cUxPM2hzTUYzY2JuZ1dKczZhV01ydmlxMDNGVnV3ZWpmaEc5Wk9pZHdMYktBOXJWbEJFbVZoTklHb19jTUZBbXRwUzVGVDFJZ2VJNzBNZEJDdVB2RmtGcXVIVUlscVlrM3hHX1VYclVMejluSXI3REdyYndfQnhMdmYtUjhnNWdZMi1QUWduYW1XQnFkTXBkb05JanlncHNiNmpHTEtuVTFJcHFSMjZvendTS04yNHFYaVhXOWUw?oc=5"
+    }
+   ],
+   "ultimaNovedad": "2026-11-14T16:30:35.999Z"
+  },
+  {
+   "id": "incidencia-cataluna-2026-11-13",
+   "activo": false,
+   "auto": true,
+   "clase": "incidencia",
+   "operador": "Renfe",
+   "linea": "Rodalies",
+   "titulo": "Caos en Rodalies: Retrasos generalizados por una incidencia operativa y un robo de cable",
+   "resumen": "Retrasos generalizados en la red de Rodalies por incidencias operativas.",
+   "lugar": "Cataluña ()",
+   "inicio": "2026-11-13T07:13:25.000Z",
+   "tipo": "corte de vía",
+   "servicio": "Cercanías",
+   "estado": "provisional",
+   "lat": null,
+   "lon": null,
+   "cifras": {},
+   "circulacion": "Retrasos generalizados en la red de Rodalies por incidencias operativas.",
+   "causas": "Incidencia operativa.",
+   "fuente": "",
+   "historial": [],
+   "enlaces": [
+    {
+     "nombre": "El Boletín",
+     "url": "https://news.google.com/rss/articles/CBMijAFBVV95cUxNLThQX21heWtfOFRRc2JMYU00THdWaWJuQTFTSzVxQWZGR2dVS2hkcktsMGlrZ2FOLWtuUjBwRkN3R1hCU0V1UlZhenk4dEpnX0F1NHloNjk3SUdhUlVrTUFfNzd5OVJnTzh6WGJPT0EtcF9aUW96ZjhZYmdyVUVkbTRsekVyeFJnRC1KVdIBjAFBVV95cUxNLThQX21heWtfOFRRc2JMYU00THdWaWJuQTFTSzVxQWZGR2dVS2hkcktsMGlrZ2FOLWtuUjBwRkN3R1hCU0V1UlZhenk4dEpnX0F1NHloNjk3SUdhUlVrTUFfNzd5OVJnTzh6WGJPT0EtcF9aUW96ZjhZYmdyVUVkbTRsekVyeFJnRC1KVQ?oc=5"
+    },
+    {
+     "nombre": "El Periódico",
+     "url": "https://news.google.com/rss/articles/CBMixwFBVV95cUxQQjM1TUlSaTlnYkdpUGxWYUpQYmxEeGdxOWZTWkREYmc0b1NLYmxNQTE1M1FaZDE3dWV0WnJPRWFTRHFudnlmTGxqRFg1T25jQ2dxc3FBYV9GYkk3ekY4aUtPcG4xa0dBRWVjYmtfanVoeEpycjZCQ0gtTHFoel91V1d3NGVNckdyUGRLbXl3cjFyaE0tc253M0g3Yk55LW9Ic29nZWQ5R242cTZLMWRfUzVPVUxudnNsNXl6XzN6ZjlyQm12QWFR0gHHAUFVX3lxTFBQLXpXR05CVVhVTENYdXdWQjF3cDFfTC00WlF5bklrMU9UU3E2WG1ucnBXckFWZEI0aF9LeFRlSDBPb2VVRzQzMkJ6ZEpaSG13Nnd3UkxYVlFQbkFaSk9DbTFEUzhfV3dKSE9hRnZRZVlra29BZEQ3eGN1OXE5YUs3LWlyRm9oQnQyMjNNdlBCN3RaWmdyZnJXeE82dF9mX3p1RG8yQ3FiRHlsYklDZ01PT3RmdUVsZHBEYjFRdGVQMklKMUJTVFk?oc=5"
+    },
+    {
+     "nombre": "Cadena SER",
+     "url": "https://news.google.com/rss/articles/CBMi6wFBVV95cUxPM0l5di03WV9qY25WTVBFNkozR1AyRjNCOV9GSFNyQllKUGZTYXIxcXZLUUhrdUoydlE3NjR4V2dOUVFXeVhhOHpaTjV3N1Y0NG5JOS1JLXFvamowUWhDS3RZRXNnVjRFVEF5RFhZaDZSamI2OVRTeFY2WjVYNkJDNGQydl9DT3E2REdjM3plZEM2bjJoRURpN0xOWVZVOTQ3U0VYaDQ1RWwwWVJINmZfaGZ5Y0JCYkEyTDhRSWRmeXBkTHE3LTV1RTduVG1KSXhCSTRBdDBVU196OWo0MlZ0SjRqYWxYOXlTZFhN0gH_AUFVX3lxTE9CamJJVDZJRXZPdzlZNHcxb2pLdE45ZGY2ck5vSk5FU0lwNUdWZ2FIQlNTUWswdS1DVzFFNmJnV3BJbk1IakFIN3ZjZDVlcnFJZzBzc2N2YnJjMERXd19ySmk0bld1S3VBMGVDbW9MOG1aRnhtOS01emEtV0FoaGdMczlaMGhkUm5ubW1PTVJoTUJ6enJuMExsZ01MNUNLdm1oOHBlaXFUejNOSkpURjhpSjYyOEdTLUhTWEhKOVVHcy14Y3J6UkVJOEJ4dzdfY3dGMWY2bzVxV1NiWUNCREZ2YzE2Z3lJRmN2OVBLbmVHS25yRnV5RWkzc181ZF9kbw?oc=5"
+    },
+    {
+     "nombre": "El Mundo",
+     "url": "https://news.google.com/rss/articles/CBMifEFVX3lxTE1fVDJ1TkZpSWstMWxEanI4b21sMVVYNENLdzdOZ2NXcDYteHh0Y2FVYndEd3VWLWo4QThTSVNhSnlRUEpTSm1pRUhpMzZicG1BcGhJNUhsX0ptNDkzaFdUVjJXVVVyV3d1VkstNmZqS0hKSWd5dEIzU213ZDLSAXxBVV95cUxNX1QydU5GaUlrLTFsRGpyOG9tbDFVWDRDS3c3TmdjV3A2LXh4dGNhVWJ3RHd1Vi1qOEE4U0lTYUp5UVBKU0ptaUVIaTM2YnBtQXBoSTVIbF9KbTQ5M2hXVFYyV1VVcld3dVZLLTZmaktISklneXRCM1Ntd2Qy?oc=5"
+    },
+    {
+     "nombre": "Diario en Positivo",
+     "url": "https://news.google.com/rss/articles/CBMixgFBVV95cUxPZGFkWUo3RXNpNWZ0VTBHcDAxN2hDNF9tTU05SUVIUFdDNDByZE0tek5DOGRVZlpCSUJtM2FKY01nZ2dHNWhCS18ySFFORldrWkd6X25HVmhSRUREeFNoMUtncmdfbVpRS09LVVNKa3o0bU9lVnBGLTVwY0JFSVNGazl1THlWRnV2XzNCV3RLdUxodENTYzlsZ1MyNlVEOEp0T2VJR0YtN2syRHA0czJyT0hfT0ZLeGhULTJ6T3ZLSHo1VjBtR0HSAcsBQVVfeXFMUHRsZGJac1FhRmlPc0VrQUhQYktpbFdMNkhSSTBGTU9Yb1RIWVRKQ3RXd29UQVRpX25lZFZlVTVQUUtjaTFyNmVPMVF2M0hZalkyT0FMSk0xMnZSTmFEdW02NFZ2OWJDb0pVRWxoWGVOYXZFd21wV1VQZDdjTzFCenduWE1GODJxekhrM2dzU01BX0FzQVdwZFpraVFYNHNvaHJNbS1tSDViUlpzTXdUTUtZTlQ2RTFSVWJoREFTdmpNb1F2LVBleVE4b0E?oc=5"
+    },
+    {
+     "nombre": "EL PAÍS",
+     "url": "https://news.google.com/rss/articles/CBMisgFBVV95cUxOVlR6WExFRXZJUjRDUFFtVXR2bWVCbllhVkI5MU93c1JIeWUzdzdMUVdZNWxFdnlnR3pmeUltUWFGTmFKODhBMlJlNm9EbDNUZEJiVDBoczB1TWtIUkdiQzFPMEtCdl9QalJNMVJnZDVBUnBsTXBPdVlSSlZhdHFRSUxnT25jUjFwcm85eEdvcGdlT28tRFkyMmp0LUZRNC0zeFJSbm1KLUJoX0pfQ1NJbWxn0gHGAUFVX3lxTFBMNDlpenE1Tkhuc2FDTjVCQ0FPQnB4NHVvZkNITHB4cHFVSWdOR2lPYmt6WGN5ejBFTHE1UnJsYmotYTJjcGlGM0ZCSjZjMml3elAzRVBkeHVHSGZQMGl6U1ZNMG96VWhnUXZBdzBvNkxWa2FjbkNPa2JiSXdHMEZTblFiREd5TUI5OGMtYU01OW1rZC04YkNwRzZ1Z3hzaERsUTE0emk1cW1HOFJzZGtoZXhLaG5Sc2NYN1hJWnhKVnNHb1Zzdw?oc=5"
+    },
+    {
+     "nombre": "Segre.com",
+     "url": "https://news.google.com/rss/articles/CBMiwgFBVV95cUxNMndRRHRfdjVwa0E0YlgxSWJNeXJCV19ONWJPakMxZ01rSEJQSHlhVWtEUklITmNPVmY5cWxKa0ZMaVV2d1NfVXkxdWlaSTRkdS1mM2RyWVl0NUdPTENSWFp6ZEdDMTQwbXFZMVBSNHdmSFZpOG9YWEtFVzBNbThJT3RDTkRVMU92alZVS0szUzZiaW02OXlJMTc5Szl4Si1HaEx3THBrVzl2Y1VBTFNlbkR4VjNFNE1qQmNkaTBvTl9tdw?oc=5"
+    }
+   ],
+   "ultimaNovedad": "2026-11-15T07:40:23.887Z"
+  },
+  {
+   "id": "incidencia-zaragoza-2026-11-12",
+   "activo": false,
+   "auto": true,
+   "clase": "incidencia",
+   "operador": "Renfe",
+   "linea": "Alta velocidad Madrid–Zaragoza",
+   "titulo": "Un AVE se pasa la parada de Zaragoza por un fallo humano",
+   "resumen": "Un tren AVE se pasó de largo en la estación de Zaragoza debido a un fallo humano.",
+   "lugar": "Zaragoza (Zaragoza)",
+   "inicio": "2026-11-12T18:30:13.000Z",
+   "tipo": "otro",
+   "servicio": "Alta velocidad",
+   "estado": "provisional",
+   "lat": null,
+   "lon": null,
+   "cifras": {},
+   "circulacion": "El tren tuvo que retroceder varios metros en la estación.",
+   "causas": "Fallo humano",
+   "fuente": "",
+   "historial": [],
+   "enlaces": [
+    {
+     "nombre": "La Vanguardia",
+     "url": "https://news.google.com/rss/articles/CBMipAFBVV95cUxOMllmVVNjY0RjNlpod2paM2NGS3lIaUlQaDk0WHVoV2c0cnp1WmtYWWhFcTVLa3ZiMkVIQXFIMkNCdE13dmJUaWhYN0h4dlZlSkRnQVZYWFBoWXVQd240R3BBaWtOZHhqU0hDcmVCSVpGVThFdVZLM3A5X19iUjVkNjg5dFdJdm5OX0dST0I5Z2h1Vk0zTWFPOHBPWmhLX3RBbm9rcNIBqgFBVV95cUxQYkoyNUM1M0pUWmhoSmx5UUhzbUdqS1V0bDhRNFprbmMxUENSSFZuLXppRnpxWWhtc2h3TndsYm5IcjJVRlRQNXNKSVB0UDRUMlVqeDU3M0JOOWFHQjltTS1tbGE2Tl9GNmYyTXdhRG5lTm4zU1dJQ0RSUG9yNjdWTHlEc21oWE5MdHlCc3I4VkZPeGFHREVtWnRvTkpSWHE2cXkzeFhkcS1kZw?oc=5"
+    },
+    {
+     "nombre": "heraldo.es",
+     "url": "https://news.google.com/rss/articles/CBMizgFBVV95cUxOeU5pbW5LTW94WGp3MkJONVpZbXRrQUE5N010Z1Y4YUxLdVZOaTZXb2U1RXR3SkNIeWVYT1RHalpCY0tfSUktcVh0LVdWcHc5a0VIWFF3RDl6ZzI5UTVqbnZucW11SlBWa3BrTmctWVZSMlY1TjVaZTFIVkRLbWd1QlN0WUlQM3lYWVZVdHF6eWRzWU9KSXNpdVhSSm93TUtHZXFHOE9zQjVqSWJ1ZUQ2N3c3UVR2SDBOQzRfZGFza29mOExzeVJoWkZnaHBaQQ?oc=5"
+    }
+   ],
+   "ultimaNovedad": "2026-11-14T10:30:35.897Z"
+  },
+  {
+   "id": "incidencia-galicia-2026-11-12",
+   "activo": false,
+   "auto": true,
+   "clase": "incidencia",
+   "operador": "Renfe",
+   "linea": "Vigo - Santiago",
+   "titulo": "Una avería en un tren de Galicia siembra el caos entre los viajeros",
+   "resumen": "Viajeros detenidos y obligados a caminar bajo la lluvia.",
+   "lugar": "Galicia ()",
+   "inicio": "2026-11-12T11:21:50.000Z",
+   "tipo": "avería del tren",
+   "servicio": "Media distancia",
+   "estado": "provisional",
+   "lat": null,
+   "lon": null,
+   "cifras": {},
+   "circulacion": "Viajeros detenidos y obligados a caminar bajo la lluvia.",
+   "causas": "Avería en un tren.",
+   "fuente": "",
+   "historial": [],
+   "enlaces": [
+    {
+     "nombre": "Leonoticias",
+     "url": "https://news.google.com/rss/articles/CBMitAFBVV95cUxQSDlVMVZDWkxneDVEdWRQR0ItdkI4Si1UcWpZbXlmZy1COW5fWnBmYkRmbnlZUjBReUNLQWRJbnhSTFUwc3ZDbFdWR0NqanVqdk94Ym5VZmh3Z0tZOFNqaTcxYTFXR1NUMjRVZ1M3dTZ1dWVLR3NmR1htZXl6MHU3MTRMLU1pV0lfcDJRNTVMb1hoWWZEUmRNNWR3cGNqSnlQOXktWU1YNVQ3djJhUWowSzFuU1fSAboBQVVfeXFMUDEzbDZ0Wmx4ZnlnWHo0N3JjalV4M2NZMnltdk5GcVVFRFBaaWxrd2xSaTEtMzMwWFBCNldfbVhDSjUxVFoxdEV5YnBobGFMaC10MVFvb0hTRzZmc1B1NFkzVG5wWWNVX0xPMFRqb1l3OTZOWUFWT21rZ0JjM24xd1FGeFgyVmtfd2FJWEg0dVM2azNjVEhiUXIzRmxwQWpKTnYzQ29MY2dxTng2UUExMU1vZXVRRmN2aGxB?oc=5"
+    },
+    {
+     "nombre": "El Debate",
+     "url": "https://news.google.com/rss/articles/CBMi8AFBVV95cUxNNG9EbHc2OEdWbDFTWm1JRjJqOEpsZ1R0dzd4UjZHa1psWmU4Nk1KVVh3Qm9MTWJwSmU5Mm04dmpOdV9fTVI0VmVDdENtYXdBWWpCcWdsVTZELW8xcnVLMjFGLTNRMkdsRkFmSEtjTXVGaW9TQ1BCYTE0bVNiSUNXaDN0bFJwM3k2Mkx3TEZPclF1WVhSYnJaZkp5bk15ei1rVWxPZlMyMU9ldGhMR3JEbEoteV9zSExnRTl5TGRadVdUN3FBYmczMDIzbVVTeDNvQlQ0WHFFcTh1Mm1FYmU3NHVzajdoM2xCSWpPb3BBazfSAfABQVVfeXFMTTRvRGx3NjhHVmwxU1ptSUYyajhKbGdUdHc3eFI2R2tabFplODZNSlVYd0JvTE1icEplOTJtOHZqTnVfX01SNFZlQ3RDbWF3QVlqQnFnbFU2RC1vMXJ1SzIxRi0zUTJHbEZBZkhLY011RmlvU0NQQmExNG1TYklDV2gzdGxScDN5NjJMd0xGT3JRdVlYUmJyWmZKeW5NeXota1VsT2ZTMjFPZXRoTEdyRGxKLXlfc0hMZ0U5eUxkWnVXVDdxQWJnMzAyM21VU3gzb0JUNFhxRXE4dTJtRWJlNzR1c2o3aDNsQklqT29wQWs3?oc=5"
+    },
+    {
+     "nombre": "La Voz de Galicia",
+     "url": "https://news.google.com/rss/articles/CBMi_AFBVV95cUxQSUxhRUYyeWJ4TThLbkYyZFRndXhlNERNLXZOWExZelhiaUgxN1lLN25BbEMyajRnckRZd0dKNGFTbzRuU3ZianlIU0M5VDZvSlVnQmlHaVlWZkhTM2ppUVdCTmR6M0wxaTdNOFpaV28yM2dzZ1dyWlZEV3IyYnBGeGpRVU16Qy1ITUZxY0M1eEVfeEU1NGdTOGtSWEwzSlNkdFNka3c4R0dxYWE5TTUwQlRSOEpoMEc2Z3prQVJNVDZMS1o4NnZrTXdsSmZ4NDNNeFpvR0hqY3pqZEpNdjhhdTdrMjFIcGFEeWUtZTNVSUR1WjRGbXRMblBfLTfSAZgCQVVfeXFMUHpsajlpUGs4NnhlM2hWMUF0UVZUWHVRN1hVZUlpSm9rSWgyb245WG5xdEg0a3JMeHV2M1hrVDRQWFZPUXFta1FkV0hOZE0yWWNCLTZUSG9tUkkyMi1UZXpwZzVuTkVJdEdQRDRHa0RnZGJhbElocTNhWGdoWnZqU1NEdHl4UFlmVG9ZMFlUS05PMXJ6aGhyUFNES2h4TXVjOFlFYUV2ZHlzR19yT3NFWWdqYWlwVzVTQnBQNUlzVzJCX1YwWEhnT1ZKRTRGS2NVQjVFeWF4bk9tRDRYNm9Sd2JnUkJBRzVHSklwVTF3QnlBYTdjRlJLR3l5V2lrdUkzbWVUUnpyRXYxTDd3Zk1QUFpiTGlDdWZ2Qw?oc=5"
+    }
+   ],
+   "ultimaNovedad": "2026-11-15T07:40:23.887Z"
+  },
+  {
+   "id": "san-martin-del-rey-aurelio-2026-11-10",
+   "activo": false,
+   "auto": true,
+   "clase": "accidente",
+   "operador": "Renfe",
+   "linea": "Gijón-Laviana",
+   "titulo": "Herido el conductor de una furgoneta arrollada por un tren en San Martín del Rey Aurelio",
+   "resumen": "El conductor de una furgoneta resultó herido tras ser arrollado su vehículo por un tren en un paso a nivel sin barreras en San Martín del Rey Aurelio.",
+   "lugar": "San Martín del Rey Aurelio (Asturias)",
+   "inicio": "2026-11-10T16:16:35.000Z",
+   "tipo": "paso a nivel",
+   "servicio": "Media distancia",
+   "estado": "provisional",
+   "lat": null,
+   "lon": null,
+   "cifras": {
+    "heridos": {
+     "valor": 1,
+     "prefijo": "",
+     "fuente": "Servicio de emergencias del Principado de Asturias",
+     "nota": "conductor del vehículo"
+    }
+   },
+   "circulacion": "El maquinista y los viajeros del convoy resultaron ilesos.",
+   "causas": "Arrollamiento en un paso a nivel.",
+   "fuente": "Servicio de emergencias del Principado de Asturias",
+   "historial": [
+    {
+     "cuando": "10 nov, 20:45",
+     "texto": "1 heridos (conductor de la furgoneta)",
+     "fuente": "Servicio de emergencias del Principado de Asturias"
+    },
+    {
+     "cuando": "Último balance",
+     "texto": "1 heridos (conductor del vehículo)",
+     "fuente": "Servicio de emergencias del Principado de Asturias"
+    }
+   ],
+   "enlaces": [
+    {
+     "nombre": "El diario de Asturias",
+     "url": "https://news.google.com/rss/articles/CBMi1AFBVV95cUxOVW9pakhjZ2x2Wmw0ZGpGa3I4aGstVTRpc3hGRDJWN28yMGYyZm9TdlhFbEh1MV85UC1iaEhPQV84Y29aTWY4TFZkRVlpSVNXUGk1ME5UTXgtX202YXdYRGRLWEFaZFJoOXFNUDcxU0FqTnNuUkFRNUJ0bGNUZ0VVNFI5QkZZU0lyU0Q0NVBEZGVGZm96UExVdEVBajlacWtMYzRuai1ja0Z3ai1TVmpLd21uR2FVdjJwZzFuZEdqaWRxWEEzc29qLXZueE9kcjJ4YjQ0LQ?oc=5"
+    },
+    {
+     "nombre": "Radiotelevisión del Principado de Asturias",
+     "url": "https://news.google.com/rss/articles/CBMi_gFBVV95cUxQejlocHZ0elk3YlNueFJUdDkwZ0ZYTERhamU5dWpXQllNdFVMSDJ4YmZZYVNPNVRWY0htNTlHZ0daOWo5ejdYMHN3LVN4M0pZUXRIR2ZxZHFaX1pINWNUOENlUDJLMm5zMnZqRlJKcE92NGxJR2czZnlDQmpNdWlJa0VLYlllVWpvbzd1enRaSEFGeXNKRUdWWmV6Tjd6dndkZnp2VmZQRWJCay1lSXl4MjRzUnltTzlxcmNSMlViQ2hMRW5ROGN6MzZwbkpFNk0yVFBxWU9tVldqTlRUSWxDYzRiSktPUTNsRWlnVi1IOHBNN2EwUUZ0bEpRUExYd9IBgwJBVV95cUxOdnBEaHFCeDJsRGhka0RISkhrTkxxbHpQOVhiOEVJbWFDTEMyTU5LODB4cGpJa081NXNTSlR6czgyakotcnEzREFaSUFLTzFfaUU1NndsTTNUYWdLam5zMDdiQjBmWnNTckFCRWNnYTVvXy1mYVdhQ05oR2ZYZ0IxeWMzRXIwenlsQWdvcWkzQmd4ZVhMckJQYlprTGxudVlsYmZqUTN0OHBjM1FlWUhQUFVXOENYTVVRRzA1a2tzemNid21ZemdoZU1kamxwcVNZM3hJNTI2Ui1hTjR0TTMyVnpWbS1sWm52VXFzbGgzbUhzOEhFVFRQbE9KYTZfZ0hHSHRN?oc=5"
+    },
+    {
+     "nombre": "El Confidencial",
+     "url": "https://news.google.com/rss/articles/CBMisAFBVV95cUxOdDViM2EzejVDOW92dXhES3Rid1BHWUxyM3RUVWl1ZFBNbEZqVS0wcnJraTZlLUNXb1RwLUFDaUNlXzh5V1ZGUFdUbVZmbldjcFJtLUFXRlp2dC1KYmNubXB4cS1nSElycllzb3EwQXRuWTl5bk5GbUtoaGY1NWczVDhCRGtfRXdDOWlZb1hXUEtVTm0za0Qxc0c4SGhpTTN3bjZBWVByRVo3TTR3bWxPQg?oc=5"
+    },
+    {
+     "nombre": "El Búscolu",
+     "url": "https://news.google.com/rss/articles/CBMi3gFBVV95cUxOS29oczlvYmtLQWp5RFpYUXF3eGFta2VxTklxdWF1MkQxV0hsUHVreHJGTGlBSE90bkNTMWRRYmN0Sno0Y2xvbjJtN2lYeDdqUDFmc2x1WWxlR3NPcGpOLWRkSmFjaVpnWWtSTDI4SmFFWVQwR1FDVnhyZEx5cEItYzRUMzNHZmcxWGsydDY0bmV0RXNmMGJ4VUdTeU91SHZ0LTFhajNFcWJob0xKNEJlMjdINXFtb3Z0VDFrc3RQcW1sdUpSZjVjMHJocEQwSVRPNUN2SVJHbkpwcFpIOGc?oc=5"
+    },
+    {
+     "nombre": "El Comercio",
+     "url": "https://news.google.com/rss/articles/CBMi3AFBVV95cUxNcW45WUpnNkN0Ml81SGdkeTRId1k5T0ExYjZ0cEtGRmtDSVZWS1piOGZjUWRoMFkzSWZmbWxvUlVwbTY2STZLZmU2dXlfV2drdTQyQUlGODAxalozZjk3UXRwM2paZW5nMTVSQ2lYZl9KeEg2Mm1DUHRfd2xyOVU2Ul9kWmtlek45TmVpeGpNWndjQXpxZ2xxRmdJcm5ZV3VhOThTYjZRRVVPbEVPNEFlYU1lSDJoLTl2ZUR1YU1qMElYd3JUWmFKSlBvM0x6djRXcGFGQ3JWU1RXTVdO0gHiAUFVX3lxTE4wTm1VX0JESFktMm50NjdDb21jcjV4Q0J6anpCN3JGRENNUXZIWTM0dU9EblF5TXc3Qk9xSHlybUUwSmdlUlBMRU0zVTFwR1hZdUg0TzFnRjdSZWUxbFFCNFhOcURwVU9HZ21OeWZvVGhRZTFSUzdtMmM2a3NaajVDRW9SeUhPY19FZWh6LUZkNGVIRU9DM1pNLWFOb240NkhwbW9IQVd2cUF0Y09XM2NJcmQ3eDdBXzl3blptZDhIbDY4NEs5TnFCbmlxblN6UG9Qd3ctV2VON3ZlNUVBVE5DOUE?oc=5"
+    },
+    {
+     "nombre": "La Noción",
+     "url": "https://news.google.com/rss/articles/CBMiugFBVV95cUxQZXd0S0llMG5FWVc1R1d5bzdXVzRudjgtdVNLa25WZTJfRTBGVGpiLXloM1c3Vm9taUR1N0NiTFhZV3VBeGlXN3I2d3g3MUN4allITWhPNjkzZ1FIUXNZM3U3TEJPMllhLWhQUjV2Q3htV2s4X0lZZVVCd01EZl9SYmladWs2LUJkYmh5OXZCbmtaVldyc0FJUGZRenJfeUVrQno0c2R2bG5QVVJ3cVJVNl9pa2VXQ2IzdEE?oc=5"
+    },
+    {
+     "nombre": "La Voz de Asturias",
+     "url": "https://news.google.com/rss/articles/CBMi5gFBVV95cUxORXNCaHBNbXFKamhsa2NkbjBwLWVzTDNOVEVtdWVzZFlqbFpKLUdlVDN1aUw4QzhwQ2tBU2IydWU4UW41WFJmVnI0ZmtfRTFDczVQZ3R6WlpXUjktYS1GZktEZzZINjNGSjNncXlGMGJLSWc2c2htVl9KMWtQaUh6R0JIeW9rREUydGNVcy1Ba3FHNHdzeTIxM0toTkhmU2luR01ITWlLV0V2TGl6c0dMVExwZUNfaF9qY01nQktzSGNkR09vN2NTWi00WkdrcWlQaGhDZW41eHB2N2NtN05oS2NjUkxmdw?oc=5"
+    }
+   ],
+   "ultimaNovedad": "2026-11-12T22:15:22.584Z"
+  },
+  {
+   "id": "incidencia-sevilla-sevilla-2026-11-10",
+   "activo": false,
+   "auto": true,
+   "clase": "incidencia",
+   "operador": "Renfe",
+   "linea": "Cercanías Sevilla C1",
+   "titulo": "Retrasos en los trenes de la línea C1 de Cercanías de Sevilla por incidencia en la señalización",
+   "resumen": "Una incidencia de señalización entre Lora del Río y Los Rosales causó retrasos en la línea C1 de Cercanías de Sevilla.",
+   "lugar": "Sevilla (Sevilla) (Sevilla)",
+   "inicio": "2026-11-10T07:03:41.000Z",
+   "tipo": "avería de señalización",
+   "servicio": "Cercanías",
+   "estado": "provisional",
+   "lat": null,
+   "lon": null,
+   "cifras": {},
+   "circulacion": "Adif retiró el aviso por la incidencia y la circulación quedó restablecida.",
+   "causas": "Incidencia de señalización entre Lora del Río y Los Rosales.",
+   "fuente": "",
+   "historial": [],
+   "enlaces": [
+    {
+     "nombre": "La Razón",
+     "url": "https://news.google.com/rss/articles/CBMi4gFBVV95cUxPY21iMHpZRDdyaDk5Q1lLOUI3d3Jfcks4aG9QMEZHeWdaWk1rLURWSXd3YnFuQkgwUEE1dTZ1aEs1OVY3YllsMXNiNWRPdWtxSG82ME9XUjJ0Zzd2Y19TcVRDZ09MM25YNVp0dUJkZllBa2hVMUhxcnpIdzJyU0swMEFlM2JxeFh0WG1LRzdadzZVRzlqMjJ3SzBhLUxQY0IzSnpwZ0pOZ0JCZTBEZmg1alVKWVhWaEc0ZWxUbWh6NS1fb0ZKbE51ZHVadDEtbkYtbDNTNDZaU04xTmZUUEptQV9B?oc=5"
+    },
+    {
+     "nombre": "Sevilla Actualidad",
+     "url": "https://news.google.com/rss/articles/CBMizwFBVV95cUxNLVhQOU8xT21NeUc3bDhJQlozcDl1OXV2ZFlEY3lVUmEtVGxQbW54QU5Sb3Fkb3ZzU2NPQXhnNTE2RmxWVDgxV1Q5bndCckU3cGpDUGFmbkdCX0dvLUJBZUVxVG00T2pCQ3ByLURabUQwZ0V5YmluTmtGVnYyLUFQSzdpN0F6aWpvcmtxcE11c1Vqd3ZXWFphX0hpc3E5TVgwb0o1XzhCS0VfVEJ5NXJlVjljZm1UX3RGSk5fbEt1aWkxS0FJdUFiY3dpMTZYS0E?oc=5"
+    },
+    {
+     "nombre": "lavozdelsur.es",
+     "url": "https://news.google.com/rss/articles/CBMi9AFBVV95cUxQYVpER1puek9WNzVEX1NzaWF2dDVadk1LMkNJcXpWM0xrRlVhZFR2NXk2b1A4X19FcjMxQU1JVDNtNlhjOVBHak56YXZIWUliNFJsOXFHME5uUzN1alVXTGcwMHJLSzg5U0QtZmMwVVFBMENkUUJwR0pYQThBSnpIN3d4UXlRQmNMUEk5NzI2QTlRZlYzMmlCTjhGbHhFVFVncnVkc3RFTWFFRkZuQzNOcUlJSjZtblE1RlBzdGlOelliTGdaanMwTFp4b3ZHNE1hbnpubjhBaktaTjhjZy1ZdFdqaHdJY3p2MkVzUW5YNFZ0U3Jh?oc=5"
+    },
+    {
+     "nombre": "ESdiario",
+     "url": "https://news.google.com/rss/articles/CBMiqgFBVV95cUxOcTZwcDNZRjRhSVRHS2FDajJlVzlyMmotWEMwZ2Nyc05fYi1TRkZVZFBJc1ItamRBdk4yRElHcFNONlJqQXk3bG5iMWp4d0dqVWEtYXV0bmw3ZzRVYzl2ZnZJTGppaml6SUl0UHZ6OUpIa1ZfLXp0dkJHdjBiSEp2eGRIcE5SbXNpblRDYm1tQm1uRU5IU3ZSRXp5aTNjMUdiZGpiZW5JRTVrUdIBrwFBVV95cUxQTGZUVmdNc0FnZDNSdWRybzZlb2FPSFhZdFhtM3VuZG1mdXM4LXhreTZUYUR4aUM0NFJrMW8zRkJkWUNCMGxhVHlyQmozQ1JXT2lfTnpuQ3lPYU5kRUEtYno0ekhMbGYzMHBTZF9Fc3pkT0NXWFI2NzZPODJ1YV9vOEtNWXRLakxBOEV5Uk5nQ2JRVFIxcVRlSm5QamJOcWJJWXFRUXRIOTZ3U3JWSngw?oc=5"
+    },
+    {
+     "nombre": "Teleprensa",
+     "url": "https://news.google.com/rss/articles/CBMi4wFBVV95cUxQQXhXVUJMVVNHeXZZUHZhUlBxcjlPZG5kenI0alhHcjIwdGtTUlBsUDR6UnUzdkpSVm1VLXFOTTlINnJrRmFGNEhuaHBaMkNybHoxelJ1ZzNUeEVBRGRibGJVSnhINjZxZzZqWG9DZk16VnlRcmViMFkza3JocnB1RVJtT2FYbW1XM0F0Mkh2NFhQZWZHZ0U4LVQ3TTVwQ05teUVBU1dwT05VT2ZENnoyRHl3Q2ZsVm5XRFM1eFNTNElQaEhKV280Vi1qeFJhc1lCME1jaEo0M1czcTZ3M0RXR3Vmd9IB6AFBVV95cUxOUlRVM1RNZEF1cE9VQmhzakZ4eFpYV1ZzZFZqYm03RkJQMzhwYUxXT3FsSGhqRXpiTUlKcHVzUnEtUjF3RERTemEyS0xqTTYycTRta2pzN3ZEWmlnSHBfZWFGQkZIaUhTOW9yb0NoZHZ0SURMVEE4QXYyRk5vY0xKUjZ5UjRpUGV6aTR1b2YtZFJRRzNyZy1BMUZqTmVaN0tlSjZhbVoySzhfSFo3QkJ5ZkZFZ1lVbzQ3QjU1dzlMUXAyVmpuOTlVT0RKMFdfQVVSSHNfRW1LSTl5b2pMdVk5UXJNVk12Y1Vf?oc=5"
+    },
+    {
+     "nombre": "Ultima Hora",
+     "url": "https://news.google.com/rss/articles/CBMi7gFBVV95cUxNUUwtdFpYa0gzazRfTlBmYUtKQzk5RmxEYTljRnVZc3VEN0cyV1Z3aGZkVjdRRy1VTmlSRHp5c1FhbHVDN1EyNjI1dllucng3dW9MT2xmVkVBVi12RnRpU0NYdVNueGs3OGFtSi10RUkwcFgwWm9hZHd4REdmREJtaDZyRkhuVjZWN25FZTNRUUlHc0tKRmpUa1RjN1J0YVVNSFFPSHg3eEE1ZGI3bWFPQ3FUQ2hHT2pYODNNV29LMU1sbXhhT0EtaHhaQ1JmZTk4VUUzaHY4eFB6cjFJS2hrMktneDFzOFQ1U1ZQUWF3?oc=5"
+    },
+    {
+     "nombre": "Europa Press",
+     "url": "https://news.google.com/rss/articles/CBMi7wFBVV95cUxQY2NEWlhaVG51WFl2VmpIS3FPMGFnSFRaVGFXaVp3a2FfVjJqMjNXT0o1U0RHeGxyLUN4QWdReVJ6WHA2UEZsU0l2OWdVTm9jNWF3MTcyOXQ0cFE1c1UyeHJRM3hNVl9XdnpOQ2RhTGhaSmluV1U2QXdSTXA0T2xNbUhwblE0NUR5aWRjX2k3Z2RPNGZONU1YT0NOblA5Sloxa3VHOXBfMU5EOW5GZ09WbXVJaXpYcVh5emJGUEt2OVBuVGlZYV9IWG9jVy1mMkc1cm5aUjVQcEVKdWlqYlRBS1V1S3hMVzlJank3TUpJaw?oc=5"
+    },
+    {
+     "nombre": "El Correo de Andalucía",
+     "url": "https://news.google.com/rss/articles/CBMiqAFBVV95cUxQUlpReTM4ZDRpMHFSSTBOeElFNGxPbUFmTER0TTVxRVc4WWdwQW1yVU1DckE3LUpfYklqaTgwSHlELVdja2s1NW9iSi1BdVk0VFhpbjNtdEF5bGxUcGdZNFVrYmc0X3dsQU9TczJRYmUwWEFmMzItb3V5WHdwUUdaN05jY0Z2ZlNkMjZKQ0ozblcxNXZ6NFc2aEFKWVFGcFR5VFcxNDVUczHSAa4BQVVfeXFMT3JwaU9iOUZpY0pUYTdyYlhPWHctZEF0SGhFZGVMNWw3XzBGRGRlLUdCbTFBbmI4OEU1YTEwV3Y4SDFqdGJRNTFhYkpFaTFBNURzT2ljOTlKc010MG82MS1kTVZ1NVNpQjFjUTl0VjRSSWVPeDdjSFVzVHJQNlUxdmdoc0xyLXNZMXh6ZXJJYWMwZy1YZmwxem5QYS04bVZ0RDlUOE55Wm02SXNMUTBB?oc=5"
+    }
+   ],
+   "ultimaNovedad": "2026-11-10T20:30:38.533Z"
+  },
+  {
+   "id": "incidencia-cervo-2026-11-09",
+   "activo": false,
+   "auto": true,
+   "clase": "incidencia",
+   "operador": "Renfe",
+   "linea": "Feve",
+   "titulo": "Cortada la circulación de los trenes por la caída de un furgón a la vía en Cervo",
+   "resumen": "La caída de un furgón a la vía férrea obligó a cortar la circulación de trenes en Cervo.",
+   "lugar": "Cervo (Lugo)",
+   "inicio": "2026-11-09T17:59:06.000Z",
+   "tipo": "corte de vía",
+   "servicio": "Media distancia",
+   "estado": "provisional",
+   "lat": null,
+   "lon": null,
+   "cifras": {},
+   "circulacion": "Restablecida la circulación del tren en Cervo.",
+   "causas": "Caída de un vehículo a la vía.",
+   "fuente": "",
+   "historial": [],
+   "enlaces": [
+    {
+     "nombre": "El Progreso de Lugo",
+     "url": "https://news.google.com/rss/articles/CBMijAFBVV95cUxOdmotcUFHbjRYdGRReDRjQnN3VE8wTndOendNc0t0NTNyOXU2ZmpHZGdtUWRxYm9ubnFnNHZoSVpnSkc0ZXRNZlFScVg5LWhqcXY0ZU5LZjY4dWg5ODgxbXNzYzIyQ1F3eFp5bkJzSzk2blBXZThOTFBua1c1aWp5THFFQXpvRU1FemloRNIBkgFBVV95cUxPVlBmeDNiRFpTMGZnT0RLWjRURHBSRnFmZ0hUeDh6Nk1NRnUzMFBXVS1ITnV4SVRqeFVZNEpLeW9qSUVxaEhZcmdOc3NrVV9BU3NJT2JNaFEzMVhESGdCZGQwZW1mWDU4Sjc2aWJLVThQVTV3dG92amdkMDBsNElVRk5tVVpBZVFiU3ZlcWszM0RzQQ?oc=5"
+    },
+    {
+     "nombre": "EDATV News",
+     "url": "https://news.google.com/rss/articles/CBMiwgFBVV95cUxPejFjMUNkR0phOVdzbUdtUjdhUUpZYVpCME51NzlVY3dDd3FRRW1saVNISDhLdWlLQ2tOYURTQUdtTVExd2xoZ2E5eDBGbTdYTEQtMXBfekV6U3R0Z1lidjVDVi1DbFVvRDFaQWFIcmZSbmdndUpleVM3RzBqTVdKTGRzWWtWallNMTdwN2Fia2xyN0lCbEpyQ0dOQUVKX1UyWXBHZ2JnU0NzNEFDTjhxS19rbHI3ck11cDd2VExTb3FSdw?oc=5"
+    },
+    {
+     "nombre": "La Razón",
+     "url": "https://news.google.com/rss/articles/CBMi1AFBVV95cUxPLXN2enZ1bDJfLTdRWi1Yd2JpbDctNzRhYk9QdzRzSGVyR3RXZTc2R2hGRzBrU2s0a0YyYUdMejZUU09RUGVXNFBWRmtLOTc4WXM0YThwaGpWWWNJck1mOEQ0TzlpbmItZUZVSlZpVzNaR25LVnhPYk91TmJKRUhaU1gzSV9fdG1jWHFNdmlSQlJYZWNFQXpCZFRxSnNRbmVMZXZka3hJYWs1TFdkS1pjMjdyUTJ1Q3hDSm8zMWdjQWRyZXA2cWxlY1hQQ1M5dVR4YW5JMtIB6AFBVV95cUxOalBfSUQtQjVpdHBFREF1ODdrSmRhaUp1bXMyUjJwVm9aWXFWNU5CbmxuQ2MxcXNqeWd1VG9kT29UT3doaXdpVlFmNElmVDBWOTdOQW9GQWNEYWJMUkZkQmZnZEcxSFQ0Q2JRUmpLendYQXZQWGF6R3JOZmxKbUU4eThzZll5cHByNTRvc2VPcXY5YWVucUhqTms4V0RtUjE0M2lUSUpvNE95VjFqVm02N3Q3TnJKZTJmSllPa2pWajVDU3dwbUotWTJKdWI3Z1F3d3Npc2tELWNaSWFZUHJWdUtGdFprdzdH?oc=5"
+    },
+    {
+     "nombre": "AQUÍ Diario",
+     "url": "https://news.google.com/rss/articles/CBMi8AFBVV95cUxQeWdUZFR6UlNQWVY4a19LYkwzVGZnN3otQUduRUt6N1AzdHRHYkdwWHRZaGk4UkJudEw3VDktMFB0SUxFNE42blNrVFVRdGhQTEpiZkd2akU1WkpZS0lPUXBKOFpoaXo1ZW9PQ01XcGlROFZTcVhqUEJRWk95VTJOMFlrQmd6WnlnVnNuRXhEWnIwTkVIaXpNSU5sMEM0M0NqcC15TjBWZ0tJb3N1QTZBRmprM05jNDd3ZTJYVlN2N2ZmaGo1czNhaFNzNmp2eElVOUVncUxTY2ZNMk00OHhxXzNlU1hPQ0pFdG05WGM1azPSAfYBQVVfeXFMTV9OVjI1bHJROFFlaVR4M083LVRnQW5ZNXdoY3RINE8wVHFJOEV5RUhLYjc2SFBXY3FxYnBrTnNkUmRLdE15bEYwOFZSXzZLS1pNREtDaTQzQ05mU2s0R3hhYnpMWm4xNHJ5c0VyQTNjQkUwaUltZFdOQWJ3VWdzNjZ3cm1rekM3SHZxTXAyMzlNSGxMRzByanZreFlDNDhSMEp1T0dzaE01d0pCT2JLR0pnMFNINEViRWdfTFV3STF0SWtKb2w5UFlpclpJRko0dWRXemw5VGluSkZPYjJhM0RkT0M3bVVmaDJjM3ZOcEVkbGlfMl9n?oc=5"
+    }
+   ],
+   "ultimaNovedad": "2026-11-10T22:15:21.990Z"
+  },
+  {
+   "id": "incidencia-barcelona-2026-11-08",
+   "activo": false,
+   "auto": true,
+   "clase": "incidencia",
+   "operador": "Renfe",
+   "linea": "Rodalies",
+   "titulo": "Interrumpida la R7 y retrasos en la red de Rodalies por una incidencia operativa",
+   "resumen": "Incidencias operativas en la gestión de maquinistas afectaron a la línea R7 y a la red de Rodalies en Barcelona.",
+   "lugar": "Barcelona (Barcelona)",
+   "inicio": "2026-11-08T14:47:27.000Z",
+   "tipo": "avería de señalización",
+   "servicio": "Cercanías",
+   "estado": "provisional",
+   "lat": null,
+   "lon": null,
+   "cifras": {},
+   "circulacion": "Retrasos generalizados en las líneas de Rodalies y trenes regionales de Cataluña.",
+   "causas": "Incidencias operativas en la gestión de maquinistas.",
+   "fuente": "",
+   "historial": [],
+   "enlaces": [
+    {
+     "nombre": "Tribuna de Valladolid.",
+     "url": "https://news.google.com/rss/articles/CBMi1AFBVV95cUxNSnVjZFR4WFRqRlhFU0VoMExxdk44UVMySW5HSERSa2pDWjlZSkdZcldibkZBc254M2NKZW10N00tLUZpVVEtR3I2S19PVGtXd0FpbmRKYTIyX1g3X09MVW9ndEMzT2hYYjJMMDlfZmFYTXo4QXhzMWwzLU14MF8xMVgzTDB0UThRa2tsU3c1UlBJUlBHSVVrUFItVGZ5NGdRcWU4WU9SU3BuZjFWbDJ2WW14MHROQzYtbGdKcVZQZEJWVGRJRVV4Tlg5b2FXaXRHZlB6cQ?oc=5"
+    },
+    {
+     "nombre": "Estrella Digital",
+     "url": "https://news.google.com/rss/articles/CBMitAFBVV95cUxPVzNXT29iWE5rTGFRdDNicVlTZlZaMWdwWFdQd1JXdmtkYUZ5dGlpYkNtamVfeGxiVGpTQW9DWDZWMklaT3JGN1V1Y29VUlVrLXdQRHBIelBaOGhtYW1CN2RLOWhTQWZ6eXR5V0lQTVNvdnlIRnVUZjlPWjF5OXYzbEVLaHJWVDlfM3JkZDdwcVJJZjVMSjRuWDMwX3lBS2d6WGYybEdoWGZGX01UNWsxYnVDYTfSAboBQVVfeXFMTXdTY2lSRTBSclNjU2VhdmpvT05pOE5RcGp2M3RFUnVNME1tdlZLbmZOTDhfLWZ2eU5SNFVrTnkxaXpHQk5TdVN0TGlYbnFDQXFXem5fRDJUblVpOXFsanFMUk94dVBWMHFPeFFpbjR6bFZfR2FtOFZQclBRQXFMcFlqeFVOZjh3TGhSYy15dDd2bWlaM1k0U2VlVWlnRUI5d0V2UzJRV2lDRjVhbVJ3b1BwdVQtU2V2d1Z3?oc=5"
+    },
+    {
+     "nombre": "Diari de Tarragona",
+     "url": "https://news.google.com/rss/articles/CBMi0gFBVV95cUxQNVRXMTlLUjZUcmVzaDdFamprUE9pSVpxMENpUzBoRmRLQ0RqUGlmOHpNSWdWcWFmMFFyYThpdUNUUko1WTVsLW1XQjVxZXJpc3dMM2NhY2hzTGxTSUM4WXR5MnBjQmJhWHNYS19lSVdlb3F4OHdnNzE3Vm40a01ramhnUzBTQmtkblRYTEJaeXhXX1BIU0FHLWg5bDBsaDRDRTVjWTRLWWVpRXZpR1U1SkNoUzRRRlROWVNJT3JNVWRfazVlRGhYRlRyczY2Z3FyaGfSAdcBQVVfeXFMUGlzU2VKaDh6eGwydjBCRy0tU0xQN1lDMkJRYUw4aERuUFF3NzJ5eXllQzI0c21uc1ZidFA1TVZjLUN3cmJlbFRYS3oxdlprNjVYOGdVUWpwQ2VuTl92TjhOcDdsQVgtZnJzU0I5TWx5NHpWc25zcW5DSjRLUlJZWk9oeDZXZlhNQUdhYkR0OGtkSzZuU0RoNk1aVl9uWTBzcTZaSDFGTFpxUi1VZk9fLUFpUHVadXlnaWVfc3BJRVpVazduQXNjOTcxTk1rLU0tOFkxWUZXM28?oc=5"
+    },
+    {
+     "nombre": "Hispanidad",
+     "url": "https://news.google.com/rss/articles/CBMiiwFBVV95cUxQd09va01XcVB6UkhtUk9MSjlHNWw0OGpXTi1LQjJpVThzbTh1ZGdwX29UYnI5V3BhNkF1dFROSTlHTnBIWnNTNzJUMmNCQ1ZsSTZmWEdTNUpQOXFkN2NSUU9aUHprZ25ETXZBb3kyNUNDb2dwVm5ja1RBRDFZUkVKREFrOUUyc0ZRRF9V?oc=5"
+    },
+    {
+     "nombre": "Europa Press",
+     "url": "https://news.google.com/rss/articles/CBMi0wFBVV95cUxOOWllSVNPeXBGaVVFQXV6SElxSmNGWk9NbF9TajY4dFBNNGk3UmhaNC1VNHdJcWxER3dCMVVoaE5ud1BCOW4zSHBUbVliVnFiODQyZ2VXQnRSS0JDbGI0ZDBvWXVWZldFanZyUDd3V2NJVGZ2MGlQRUk0SmRjSmZaR0o2WGFjU0lMMEtaQWtRYTFOZ2VxQWstLTNLaWRSTG1uWDExNUVFUzZ0TGRvMXhlVkRsUzVzMlZTV1FIMEM5NnBSWV9RcXozZnJIaGdiMUZBZHhz?oc=5"
+    },
+    {
+     "nombre": "LaSexta",
+     "url": "https://news.google.com/rss/articles/CBMi4wFBVV95cUxNZXhPMzk0LVpETmZ3SXlydGZOMmlHVEZWUmNCMnducVF2a3NmeTJnRXBMMjEzM0hOLWYxXzRMeUY3SGIwaXUyTGhjbEVuXzJseFlKWkRIZEhFbW1tZTFmRlZlcmhlZTc1M2p5M0lFb0dITGhUY05adnBfTDUwQ2g3Ry0waUV1cG1uaEo2Mk1UekstdHR2MnZrZ2dBay1GTUdMZlFNYk9KQl96MXZzSXdvOWFDMExxY0lOVk5MSVluRVluWDF4UEFmM0RRbk16Z0FCSnl3THlKakQteDVIaTdLM0lfUdIB4wFBVV95cUxOM3duZlk1TkpDeHoteDVqVTVjLVRrcEV3c2dZMWpTVlNtWkVPQVItS0lnZHhmbWU0X3BXaldEODVHRDVQR3ZiU0wtVUJFWVVvTXFLSHdibEhscjdUS1B3bGhNTEUxUVVXWnhBVF9tc3pkclJ2NmtOVjVZZWZzS0N2VEZkTnJFaGY4ejlFay1YTG92cHpWWVpxaTd3cHBoUWVxckVfWE9faUdrVklwUVZGZXF0dG80NDFqV1hRNi1Bd2t6YlVMekdzZG55VEVJRXhNcVBhU2dwdThralJKZGQyTFVkbw?oc=5"
+    },
+    {
+     "nombre": "El Mundo",
+     "url": "https://news.google.com/rss/articles/CBMifEFVX3lxTE5ZNjFTQnpmcEI2anNUSmdTRVl3RWpLRGFpQkFWS19KYXlJb2xtZkFncXNZODVoTXkwNXpTdmtIRTZ0dEREZkdTYTA0b0JGRVZwUDJxUzVYc1I1YXJPSDM2bUNRWUNoZHIwbHNXU1MwMEloOFJhUkFkdkN3b07SAXxBVV95cUxOWTYxU0J6ZnBCNmpzVEpnU0VZd0VqS0RhaUJBVktfSmF5SW9sbWZBZ3FzWTg1aE15MDV6U3ZrSEU2dHRERGZHU2EwNG9CRkVWcFAycVM1WHNSNWFyT0gzNm1DUVlDaGRyMGxzV1NTMDBJaDhSYVJBZHZDd29O?oc=5"
+    },
+    {
+     "nombre": "El Periódico",
+     "url": "https://news.google.com/rss/articles/CBMiqAFBVV95cUxQUW1EVTU1bWd5d1E2VnEyMTlwRDF5LXplXzhvaGtPWi1PRlZjSFdmUEtGekxFd1Zoblk1eXNpNGNLRThtTnpzWkNvTTE3QzlYVkZwNTFQZDdNdXM3anh4WmE4ZkFBRWtyTmd5OV9HMnVYeUs5aGZ0RFY1cjRVM2x6cUQ1c1JJcWV4RTdnNVJvUDhXVWFkeXVEZ3V4RGZCMEFSSExNaW5Vek7SAagBQVVfeXFMUFFtRFU1NW1neXdRNlZxMjE5cEQxeS16ZV84b2hrT1otT0ZWY0hXZlBLRnpMRXdWaG5ZNXlzaTRjS0U4bU56c1pDb00xN0M5WFZGcDUxUGQ3TXVzN2p4eFphOGZBQUVrck5neTlfRzJ1WHlLOWhmdERWNXI0VTNsenFENXNSSXFleEU3ZzVSb1A4V1VhZHl1RGd1eERmQjBBUkhMTWluVXpO?oc=5"
+    }
+   ],
+   "ultimaNovedad": "2026-11-10T15:25:15.110Z"
+  },
+  {
+   "id": "incidencia-malaga-2026-11-06",
+   "activo": false,
+   "auto": true,
+   "clase": "incidencia",
+   "operador": "Renfe",
+   "linea": "Cercanías Málaga C1 y C2",
+   "titulo": "Un tren averiado causa retrasos y cancelaciones en los Cercanías de Málaga",
+   "resumen": "Incidencias técnicas en el material rodante afectaron a la red de Cercanías malagueña provocando demoras.",
+   "lugar": "Málaga (Málaga)",
+   "inicio": "2026-11-06T15:27:33.000Z",
+   "tipo": "avería del tren",
+   "servicio": "Cercanías",
+   "estado": "provisional",
+   "lat": null,
+   "lon": null,
+   "cifras": {},
+   "circulacion": "Cancelaciones y retrasos acumulados.",
+   "causas": "Averías de material rodante y problemas de gestión.",
+   "fuente": "",
+   "historial": [],
+   "enlaces": [
+    {
+     "nombre": "El Noticiero Digital",
+     "url": "https://news.google.com/rss/articles/CBMi2gFBVV95cUxQaDhCY3M2bzVmYUJZNU00eV9JVVpoX3lqRnhaU05ROUlESTFSdm93T29KOUZKN2IydVFFNURWTXBxem1Cang3V0E1YlJVYnRvMFQ4MHdzYm1HMTNTU0FQbDRocHFGbkZULTNPcWVZYnhYNU1YeURJWGhvQ2VaUVlNVGFtTXNxQ1YyN2tjWi16aTNOTDdZaGc0X1hsbk5WbnFjYTJsdkgxb2Zhb2dzOFBycTZLcTNoZXp4aklDUTU2UGsyUUN4elN0S002b0pKMnhHOERsR0xUU3VFdw?oc=5"
+    },
+    {
+     "nombre": "Málaga Hoy",
+     "url": "https://news.google.com/rss/articles/CBMikwFBVV95cUxPTVZXbTF0SWJyNXRYRlF1YVJoQTFkeFlxV2VrWkJaM3h4bFQ0dC02Zm9RZ2pnbFJub0h6SXlEcXRpNGg2TE5TaTFITkJ3R1RtTjdLOVBSSWs5S3RVWTVCWkNpMXRBLVVHYmRCaV9HY21Hd1dmbGw2aS1ndTlfSXZCbkNMdC1wb1JoRHRoVFlsOEhmRkHSAZgBQVVfeXFMTURDYlFFaEhrb09wX3pMcXY2Q0JJYi0xMENMd0dyNi1HSnBUZThfam9jazV0NjZvWF9ncE4xNkF1aHhlTUZvY3gtbVdlam1RV0JOcEtMQnpUTTZJTExTdlZrYWZEMnlkaGdCM2JocDhwcHY3dVJ3bWVOLVE1V3pNZFV2dlhfTGl3VThCbXVmOXVlYUhJV0tDSHE?oc=5"
+    },
+    {
+     "nombre": "ESdiario",
+     "url": "https://news.google.com/rss/articles/CBMiqgFBVV95cUxOcTZwcDNZRjRhSVRHS2FDajJlVzlyMmotWEMwZ2Nyc05fYi1TRkZVZFBJc1ItamRBdk4yRElHcFNONlJqQXk3bG5iMWp4d0dqVWEtYXV0bmw3ZzRVYzl2ZnZJTGppaml6SUl0UHZ6OUpIa1ZfLXp0dkJHdjBiSEp2eGRIcE5SbXNpblRDYm1tQm1uRU5IU3ZSRXp5aTNjMUdiZGpiZW5JRTVrUdIBrwFBVV95cUxQTGZUVmdNc0FnZDNSdWRybzZlb2FPSFhZdFhtM3VuZG1mdXM4LXhreTZUYUR4aUM0NFJrMW8zRkJkWUNCMGxhVHlyQmozQ1JXT2lfTnpuQ3lPYU5kRUEtYno0ekhMbGYzMHBTZF9Fc3pkT0NXWFI2NzZPODJ1YV9vOEtNWXRLakxBOEV5Uk5nQ2JRVFIxcVRlSm5QamJOcWJJWXFRUXRIOTZ3U3JWSngw?oc=5"
+    },
+    {
+     "nombre": "Malaga Actualidad",
+     "url": "https://news.google.com/rss/articles/CBMi4AFBVV95cUxPUV85dDFLbGI5aDRXaWo4cVBISlV6MVVKSVUwTjVhcWltRGM1ZDlMTGdyeHdIREFGZE0yelNEMmU5V0czNHM3YkdTTi1tX0xfQjdEZUdZVlIyQm1jZ3BIeE9rR1dMaXI2ckJqZ3BkUEc0TUY5YVNCUm4tYUwyRFZ5MEJCN3dYY2FudC1kNF9oLU1xRDExNW4xRkxiaE5MdWdabFBGQTFEYXllU1FUUUlEdXVFc2llczM1WGljYzFmOFc1TUJYTlJwRXVOTjhvQTY3bjFzd3EtX3J3WE1XOW04cQ?oc=5"
+    },
+    {
+     "nombre": "Diario Sur",
+     "url": "https://news.google.com/rss/articles/CBMipAFBVV95cUxOVUVRZFNVUHVvTTRVQWkwWnZHYUdSSm5OVlZ4NnIySTBGVW5YdlFBRF85ODJiS01OSFZ6U2I0V0RCZzJEWnB0bTEyUnBpaFdSTUxMbGk3QWVqc0NTOGxON1VGWkxrODZLTlc0NHVOYWVySGhOR0ItbVN1RG9DUGtpVERTQUJpOEo3bGNuQ2pqYjlnZTRSUG44Z2lWVndoN0dCSFJONtIBqgFBVV95cUxPVHFGajB0N09DT0sySWdfNlJRRkRoa09jOHVIamdhczZNenBiUGpLeVY2ZFNyYlNWOHUxd3FmcERRX0p3TjQ3d1A4Umh5bnVxTHRacTdDWHFBbDVYR3BhOGJ0S3hxQTJZM0xPVTVnR1dSN1RIcV9icjRaMDhYbGhueG5LQUF3bHV6Y05vWnpDMllCR1FTeWQ2cFBNYWpVc2RDbHJ4a09ZS0pTdw?oc=5"
+    },
+    {
+     "nombre": "AZ Costa del Sol",
+     "url": "https://news.google.com/rss/articles/CBMi2gFBVV95cUxNQmxnWHZRVHI0QXdINWNvYXlhV2duVE40ZGZRbE45eXd5MV9kNmNJNEtpOGJvSDBnam1UTjRESWRoUFFRTlFBeDk2NmVHUEFKLTJMRk9SUkVfR1NZRDU5blNid2lpNkQ4WGd4ME9LMkFEWHh1UlNEWjBJSFhJQlVVUE5KakdmR183Ny04aHk2UTFmZFV2UlNtMkkwNDQwWXd2SlB4UmhCbERxdTZkRmh6WmRmN05ib2g5akdMeWowVk8yUjZFNWdLcUE0bVA0Tm1rTzdLVWpkUlAyUQ?oc=5"
+    }
+   ],
+   "ultimaNovedad": "2026-11-11T02:00:46.081Z"
+  },
+  {
+   "id": "incidencia-gelida-barcelona-2026-11-06",
+   "activo": false,
+   "auto": true,
+   "clase": "incidencia",
+   "operador": "Renfe",
+   "linea": "Rodalies R4",
+   "titulo": "Incendio de una locomotora en Gelida y corte en la R4 de Rodalies",
+   "resumen": "Adif retira la incidencia en la R4 de Rodalies tras un incendio en una locomotora de mercancías entre Martorell Central y Sant Sadurní d'Anoia.",
+   "lugar": "Gelida (Barcelona) (Barcelona)",
+   "inicio": "2026-11-06T18:58:37.000Z",
+   "tipo": "incendio junto a la vía",
+   "servicio": "Cercanías",
+   "estado": "provisional",
+   "lat": null,
+   "lon": null,
+   "cifras": {},
+   "circulacion": "Adif retira la incidencia de la R4 de Rodalies entre Martorell Central y Sant Sadurní d'Anoia.",
+   "causas": "Incendio en una locomotora de un tren de mercancías.",
+   "fuente": "",
+   "historial": [],
+   "enlaces": [
+    {
+     "nombre": "El Periódico",
+     "url": "https://news.google.com/rss/articles/CBMizwFBVV95cUxPRUozeE96MkFDYkx4OFlnakUxd2hCTkM0LTBwOWhsaFg0TzMyWE55OGtqaDNjbXVYMG51U0h1c05nVnd6dFZFeTVCWnZNX3J0RUROUEo1ZFd0TlIySXc1TTkwR0tYSFFrS0dkTm15YnROREZBZGNHWkdST0JMLU1DcWpKbks0UFYyMVotb1ZHc3JreHVsWHNlVWpybV9Jd09zZy1wdmg2aDQxSFUxR3VxaXpQUEN2RC1iVjRUZjZhWkZleTEzcVI5Z0JIYXZLY3PSAc8BQVVfeXFMTlBORUZzSUNCZDJmRG9VYnZyY1lub2JGTHRuaGExUmVZSFN5clNKX1l1bXU3X2h2ajBlbjBQM0hxci1sMHEwT0U1QUJ4ckE3VGxGalpDYVQ1UERUNER2bEc5NXI0UjlMQ1VRMHdJaU9YYURXeUJJa3M0LWt6bjJuWTFoQk1mX296MkZaTnBUTGFObXVrMVF0czE2cHlURkxGMlphZ21pRGtZdmotQnRQa2FiMHhYYXlDb2NoRFgwTlJEaWJCb2paRmk0eGdPSmVv?oc=5"
+    },
+    {
+     "nombre": "Libertad Digital",
+     "url": "https://news.google.com/rss/articles/CBMi0wFBVV95cUxPdUplX090blE2eDNwMmw0Q1I5cHpNbzh2a3NwTDd0M09ET1g2amh4Q0JSQ3MtSG1YWDdjckJ4QnRJWDhNYkFIbTh3MGd6UENleXNxME9ReXNCMVB1VEo4NEhCZXF1V1dUTmZmZ3hMOVo3X3dXTHA3ZHIzQXk2WGNxY09xNTNWZHkyQXVuQVBKV3lYUW45bXdoRXlxWlV6a0lnNm9ITnVwaFlRSDJPUHRxa0RnQVM5V3R3WlYyampkNkc1SmVrcDB1cDdJMzl4UVR0dDlF0gHeAUFVX3lxTE1mS3cyX2NWR3Jrc2NrUkdPOENLQmtGUFh0Y2h6eGJZbUJ4QmRYQkRIZUVfQkZHdzJlY3Nyak12THlCR2kzdGYxUWpqRlU3bmVlVW9TTkpwWU83VGhUTmxNTjBiUFpGd2xqTHlmY0RrTFdVamRadERDdks5Q2VMLThNczZuYnN2RHpNSHRMMkU2ZlJzejloNjZQekFRbGwxTG1nMVRMX201ZlJtcVBfc2dtQkF0c2gyTVgxOWlHSWdKdkJ2QkI1OHdBTzQ0Q2JPM1dsTWEtTm9WQllfVGpBUQ?oc=5"
+    },
+    {
+     "nombre": "El Confidencial",
+     "url": "https://news.google.com/rss/articles/CBMiowFBVV95cUxNbldhMC1xZDMydlVqV2tIYVFNa0VBT3VxR0VhbHNnR3RUZ0tyUGd0YXFqYTFjb0JSTHlraG56dkp6ZEN6cUdNYTRlMHVtenJTVGgydDVyWGZsYXNSZWl1Y1lGQU94ejhGOVdsd3ZrSUVkeGNtWkNCRkQ2VTYyWnhxemZIaG5GM2hwR1lLLUxRd3k2a2h3WDNWclRsckZtUjgteDZV?oc=5"
+    },
+    {
+     "nombre": "La Ciutat",
+     "url": "https://news.google.com/rss/articles/CBMi0gFBVV95cUxPM3Q5VXFFbUxNWnpmZFRGa1UxN2pHUGJraFp2UnhoRlgzd1hOR1R0c1dYc0ZhM3hJREZUb0hnN2RTNnVtMkpGcjVlU2c1Uk83ZHlSeFBCcVRxVXN2ckhpVHNocFVURlg5T0lKUk5VdFRGa19JRDlaN0N2VVVQcDhuendzV0tPOHRLTHFjbEJTeUV1VUcwN3cyVm9GRlZ0Nm4ybnRxOS1ueWRfa2R4eDZUeHU1TF9QQUYtYXhBRzRRckxxdDR6a0JDb1Rzd1RZYXpzQ3fSAdcBQVVfeXFMTTdpQVRhNlZnZHJUV2dUdGVIS0hfMG9YOHRLdDlTOFRpMm4zY2tXcE1rOVV3NXRqbnlCdjViclBzSExrdTFmanpteXZmeFUwV2tLblNJMDdIZWVJWkxueTQ1UXdXTWxoZlYzWC1oN1g5RjExa3RSS3pSMm51X01KY0Q0WjJvR0Zva1hvVXBuTW1vazRRci00LUdhRmJJTjA2MU5HSDNHSTBERUlWbFVWYnNvSGY0QW9RSEk1dGMwM2lQRGRsdjNFbGUtazcxcUZoeWN6MUtZSTg?oc=5"
+    },
+    {
+     "nombre": "El Nacional.cat",
+     "url": "https://news.google.com/rss/articles/CBMizAFBVV95cUxOa1Y5VGhaSGpVTXBYVlR2cURXMEUxSG1NSGR2d3dDNnBfZlNqWFF5Y1FuUGtkTU5KSnVZeUxERFVJbm9TQk9NNkRoNmdIMElaMHN3VUFOdVExU0ZhcFpiS25kWWtKckd2UGltV0s0OGFVQ1pGbzhqMHp3SXNZRFY5VExjY2pRYlI3VUQ5WXpYUzdIYXR4Y01kN2VsNzBLZ0k0ZE1kRUdFa2FabkJqVTVhM1dic2kxRlA5WXFkQVJPeE9VazhlV1dxX0ItSEs?oc=5"
+    }
+   ],
+   "ultimaNovedad": "2026-11-08T06:40:22.115Z"
+  },
+  {
+   "id": "incidencia-mostoles-madrid-2026-11-06",
+   "activo": false,
+   "auto": true,
+   "clase": "incidencia",
+   "operador": "Renfe",
+   "linea": "Cercanías Madrid C5",
+   "titulo": "Retrasos en la línea C-5 de Cercanías Madrid por una incidencia en Móstoles-El Soto",
+   "resumen": "Se registraron retrasos y demoras en la línea C-5 de Cercanías de Madrid debido a una avería en la estación de Móstoles-El Soto, ya normalizada.",
+   "lugar": "Móstoles (Madrid) (Madrid)",
+   "inicio": "2026-11-06T08:36:00.000Z",
+   "tipo": "avería de señalización",
+   "servicio": "Cercanías",
+   "estado": "provisional",
+   "lat": null,
+   "lon": null,
+   "cifras": {},
+   "circulacion": "Retrasos y demoras de los trenes en la C-5 ya normalizados.",
+   "causas": "Avería en la estación de Móstoles-El Soto.",
+   "fuente": "",
+   "historial": [],
+   "enlaces": [
+    {
+     "nombre": "El Periódico de España",
+     "url": "https://news.google.com/rss/articles/CBMiwwFBVV95cUxQcURkSzAzclg1UFlsbW5jMl94bnA3eDRRS3o0TWdOYWxzRXlqb0tTQmo2MVl6aUdFbXpiSTR1MVRBbVA5eUI5dGxLRDg2NjdFaWVVTGFzRFVEOUZJaFdiMEJnbFgzTWM3MmRVSkI3NVZsaFpXRlNCMEQ5dXNmZEE2eGIwX3Y0YXdMQmYwWUlrb1FnUF9TTEpmUlh0R3ZHeGtRMXJsR2xpMEZHSnpVU0VlRlZIeG1SYUFCZUY4ekxSaG9zVnPSAcMBQVVfeXFMUHFEZEswM3JYNVBZbG1uYzJfeG5wN3g0UUt6NE1nTmFsc0V5am9LU0JqNjFZemlHRW16Ykk0dTFUQW1QOXlCOXRsS0Q4NjY3RWllVUxhc0RVRDlGSWhXYjBCZ2xYM01jNzJkVUpCNzVWbGhaV0ZTQjBEOXVzZmRBNnhiMF92NGF3TEJmMFlJa29RZ1BfU0xKZlJYdEd2R3hrUTFybEdsaTBGR0p6VVNFZUZWSHhtUmFBQmVGOHpMUmhvc1Zz?oc=5"
+    },
+    {
+     "nombre": "mostoleshoy.com",
+     "url": "https://news.google.com/rss/articles/CBMivAFBVV95cUxNUHk4Sjc5aWd6MjhPNEZTT0FHZi1zOFJXU3BSUFJQZ0F3M1BtRGNXcFNjV2xZSTlQOThjUXNvX3FuYW9Xd1llYlM5ejJ4UVRiTkYteEhONmlseEN1RGlOS1F6Ui1wOTU2VjNfM1g5dEIwWFVBSFdxVzhGN0RuVG9FWGdRYVdlbTZyaTAyLVlyTVd2OWRSV0dGdGNtYllTVXQ5dFhDRjZRWkd0SHZON25sYm5MMlZyMkhGUDN2RQ?oc=5"
+    },
+    {
+     "nombre": "El Confidencial",
+     "url": "https://news.google.com/rss/articles/CBMipgFBVV95cUxNNF9Mdmttd3JoOHNwTGpWQXlac2ZsODJyNjdqbmJjT215TU1LbVh4ZmJJODM4RkJjdTZ0dzVoLVZiNlpMcmlkQmwzdC1HYlYyamFDY1JOQVd5VGhZUUV2QjV6WS1KWVkwMndyYnFRRV8wRFpqeURBQ0p4SS1RLTIzMGNNTEJoLVMzUWR5WmFFSGZReUVfbHp1Wm5nZ2hLWGxVWjNTLWFB?oc=5"
+    },
+    {
+     "nombre": "El Diario de Madrid",
+     "url": "https://news.google.com/rss/articles/CBMi0gFBVV95cUxNM3g5LUV3bHo2VVFuTTBjTndzOTJLbEtsUWdiTVhDb1ZfTXE3SGZHRkFMU2RoUWZOSnZFdFotb1M2UTJxSkxOTnNpQ0U3eTVDQTlocTNqOC1neVVidzdkUERfdmxMNUtTMWRkZHdjRGgxSHI1QmdGLWhRSWExMEtmbXhZTlZDU0RlbGdUU1Q4d3pyZUxFVXY2c1FOM0tyb21mWUppU3JNTEczYXh5NkxyV0ZQb2VWem03MFFPOVQ2ZW5RQ2VCNnRkdnVkNEdaNUVhWFHSAdcBQVVfeXFMT0F1MzVSODJmNVc2RXVhVVlWR1hiclczZUhSSTlTZTZtbUw5RnIxOGV1U0loVjgxUXpBZHNkLUhGdHNQV2Y4cDBIUC13MExqTmRWVGkzVm1IekxLQVFYdjFtOFdWRGgzZGt2NVhSVjNzUUVlTmF4c0pSbDBDclV4Nm1IdWpkTnJwQzNuNTg0SXZfaGRGMTlfcHJmbi0waXZzWUVXdU1qaC1OUlI5UzVleWd2dTFUc3pVYklxMFVBbjJLSmhSWFFSdlM1VWJPVHlFV1RVWGw1Y0E?oc=5"
+    }
+   ],
+   "ultimaNovedad": "2026-11-07T00:40:21.814Z"
+  },
+  {
+   "id": "incidencia-cerca-de-villarrubia-2026-11-06",
+   "activo": false,
+   "auto": true,
+   "clase": "incidencia",
+   "operador": "Renfe",
+   "linea": "Córdoba - Sevilla",
+   "titulo": "Interrumpida la circulación de trenes entre Córdoba y Sevilla por la presencia de una persona en las vías",
+   "resumen": "El tráfico ferroviario entre Córdoba y Sevilla quedó interrumpido temporalmente debido a la presencia de una persona en las vías.",
+   "lugar": "Cerca de Villarrubia (Córdoba)",
+   "inicio": "2026-11-06T08:29:27.000Z",
+   "tipo": "corte de vía",
+   "servicio": "Media distancia",
+   "estado": "provisional",
+   "lat": null,
+   "lon": null,
+   "cifras": {},
+   "circulacion": "Interrumpido el tráfico de tren casi dos horas y restablecido posteriormente.",
+   "causas": "Presencia de una persona en las vías.",
+   "fuente": "",
+   "historial": [],
+   "enlaces": [
+    {
+     "nombre": "Cordoba Hoy",
+     "url": "https://news.google.com/rss/articles/CBMi9wFBVV95cUxPVEpCQUVMdHotMGdyUWhWMEZzRkVuOUN4b2w3bWpCNExDUVRtTnItMTVNZU9iNXBiTFgyeEt0Z21sVkthaGttTGs5SEpLbDNzeTB1bDYwT2M5UTNXdTJoZ1RzNFZmemhCbEN6MHJkd2tGVmhHQUNYSnhVZl9GNU1MT2xIUDlzQTRkNG5jWVMtLURjdGw2dktyY2JDaGFfMzNaRnpFX25kUFJFLWhvcVFFTzdQdWNfOXAwQ0FkYVRqY2JLdzBOQzJqaVM2U3VCWk5IUEhYdi10YXBTSmI1dzJGYUMwRFBzYWZfX2lPQ0U3cWNycE42blN30gH8AUFVX3lxTE5tczRPM2lfU0ZIZDRlX2FkVUl1SWhaSkdKN1k0bjROLWFnamNZdllUTExqeGc0VEUybHlPX011YzA3OER4c0lhdjhJTnpxLWpoSy16Q0UwMGZDTkdyNGktNnk4alZIOGU4RG13VkcyRGdPUzdjdkdiUThSLU03TWZXNGRDNkc2MFpFdUFLazdvdUJpSTJpR1hLMDFPMFNlc1BnVVJFeWdoRTFITUJ6dmIwRFpMWFRLc3RreVltSzFUYUpPMjhlVGNGZlRDMHMyekdkcGlzWkpMbGpWblJ6ZXFQaXBUd1V6X0syY0VMZHNQcG1SdExvbjRlN1l2Vw?oc=5"
+    },
+    {
+     "nombre": "El Debate",
+     "url": "https://news.google.com/rss/articles/CBMi7AFBVV95cUxOSmp2andFcXVYQXU3WHBZVU9OTmYzMUNoYkQxNTNvVEtXbWlQY2V6MVNoUm0yVkpRQ2VYTVVWTXdWUy1JQi11UkRkbkJXWWJLemppbWhJWi1SWlo1OUNmTHo0UkRnVE40R3duT0djZWRvaF9WSjZucEdEVXdHT25mbjFUZXdHOEVSM2d6QkQ1QWZySl91aXdDbVNFamFEQjVQRUNLaml4eU9PVXJIbVlKTjUtcm1XcGJBN2ZwRVdkOU1BdnJ0Znk5SVktYjVucnZHTHdBZzFWQnlTanZFa2dFcUtUTmN1Wlo0ODFObtIB8gFBVV95cUxOOE5rdnAySnNFdnRsNFY5Q3BzMmlwVGtTVEpDNEJMUWFxRTRKZVBKbl9CZm5ydkNXTU4ybWh1bXMyMlM0QURPRktXR2RyY0hlWGdwUktscUgtODZuSG15M2lNVFZEUWlGRUxfdDdkRlhXVVdzMlg4Y25HZWFXUUQ3dXhHd1g0MUJxenE2bFRWNWhXcURQZDBsSkNzNW9Qd2x5N1Z5bXlLX194U1BWaVlIdV9MVi1EeThKZUs1NkxLUXlxZ3RydmUwVE1ObGotMVl4TExmcGRZdE5XcWNsXzNzaHNtSGE3M0NDTjZtczdYUEJVUQ?oc=5"
+    },
+    {
+     "nombre": "Europa Press",
+     "url": "https://news.google.com/rss/articles/CBMi5gFBVV95cUxQVkh0MDFPSFFPdXpyU01OUmNLS1QxUS0yU01CcTNvUEM1MkxTZ3N5WVozQTI3TXg4OWxFd2RoSjVIMGpoWlRINXRoekxFTnpqaGdjVmlUdndoV0hVZHJ5SFkzcG9lN0ZMc2pUMFBDWmpMZ01BeXRXTTB0Q2FEY2dVX1BWanMtMExNNEFaeEVZd2k4bi03TXdVcG0xU0Jxcko5bkJmazNta0NuUEY1eEdhTkRKM3pKS1RjMUpfVFBCczh6SUotdThsdWNLd1pSNm1SV3ZzZTBoYW9lSkdUVTZnSHhNWUU0UQ?oc=5"
+    },
+    {
+     "nombre": "Diario Córdoba",
+     "url": "https://news.google.com/rss/articles/CBMiugFBVV95cUxOcjBLZmN5RUNnS2RQOGMzQ3hzWUxjbElIZHZmVk0wMk51UHFBRmxtek5fY2dfalk3YW93M1lncHNnR05EREt4TnVSOXdQNnVJNFhxNHM5cDItVk9sZVcwRzV3U3dwZFpRN05WV0RyX2lxcDVKeDJNTkNPME15ejFYQkZnZ0cxV09iV3BDRmpEdnNvdWFVd01WTDF2ZFVoVGpicl91X0lZT1NxU3FuUDZOYXdjUGd4Sy1FOHfSAb8BQVVfeXFMTWo0Qm5GT1BlWVpUNUlVUXp0LWJtS1hOUEV0RFRNbEVCWjF5cEJmNUpNbm1kT1NXa1IwM3dzWC1PUVdQNmMyUElVZG1obklFaTZhblRrTk1Yc2NxMnRJUVY5bExuT1VzNmFmS3NDdkZzSTI1Yzc3bUdUUEtVTmwtZllVSmRfamt5aWRBTXp6d0t3eDFaTjZhVjh2NW1xRnM3ZjFwVWJfQ2REU3NsczNSUjYzcUl3bGJxMUoteVB4b1U?oc=5"
+    },
+    {
+     "nombre": "El Pespunte",
+     "url": "https://news.google.com/rss/articles/CBMi0gFBVV95cUxOcDlWWWpKenkzUGs0eTJrcWVxWXQzZWNTOTA3Uk54aFRHOWF1SW40OXV1YkRYbnFqOThxUDhwR28zUGlqRUtNcE9VSExyOEduZWRxaV9RUnNnczZRSnd1ckxSZUtVaE5oQy1wQWVqZWZvVFBSSzd5Z1paYVZXSlEyV1UzZkRwaVZGRmdCeEZESHEycnlTSzdRRGdKSDdxOG1FZFhSQ1Jna1VpdlpXZmMxUnF6ZDR3eGtpNG5kSlhMREFIdi1lVWRGTFVJT2NkSTB0WVE?oc=5"
+    },
+    {
+     "nombre": "Sevilla Actualidad",
+     "url": "https://news.google.com/rss/articles/CBMi3AFBVV95cUxNa2haUHdCeFZCeUFmNXI0dTBRVnNELVNScTRpaTlFdjExb1AzV3paT3BsMDVpTzJ5cjhZYzR1VHdEVG40Yk5IWlpSaXR6a25jQlQ2TDNDS1JtUG80SzVlV21PUzk0Y3p6ZHFqelVFTHpnWGNlSzlwOHpMNV9RRnJnenpNQ3JPOXJCMFNLVW94SDRfOXlNUkdrQmFyMkxVSWtnbnRpVU9kaEpKU19rajhrTllnX0w3ZUhxOFhTc2NHNkJjYXk2aWcxVVJSUjJ3SEhRck5qXzczblRpUUVU?oc=5"
+    },
+    {
+     "nombre": "Córdoba Buenas Noticias",
+     "url": "https://news.google.com/rss/articles/CBMi6gFBVV95cUxQN2szcS1oaW95eGpFTkdFZkM5eGdYVFVQRjBPY0NMVFVTS1FDZDlDbGtBSFd6V0s0NFhTSmplVFhiYXgtR2JtWElBX1FHVG9rZWN4SDdHWXVNQnRRTExUckcyclRFWDlBT24xMXZlZEllZTBVdlRvNVhXcmJRclZmMWdxWTNUV3lUSkk5SWJ4Rm9PUWoxT1FOUWtXaERmeUNpLWh6SDNMQldwSzUtQXo5UVAtSEFOWmlzdlppbzVZVlc0WFdndDFQYnJhNjNUVUdyN2QtZXpyNnZteTVRdXZnZzVnVnVyZXl3WkHSAe8BQVVfeXFMUFQ2OS0wRWQ4eEdtTVo1RGZfaENOTTZmTXM0MXBCbU5sczhyQlpqYV9lUklyTzB5OWd6eDA2NXA0bHRKRWEtNkE4UHd3WTVKNVRKbXRfZXlKa3N4M1B1NE02aUJ1RHNVdUZwWnpnUnFmU3QtZ2Rob3p2bGxnUno2ZWxITXE3SHM0ZEdqYUlucEtXWnZPX2UxdlVqTDJvWTNjMUJwUG5QYjIyYmYzUGNSS1NnaVlOYlVDMDVYYTRCNEFWdVpxdFdjTDh6VUE4OUFyZWROeVlkd1F2dVQ2T1drT2ZmeGMxSlRHWVU4SHl4Nk0?oc=5"
+    },
+    {
+     "nombre": "Teleprensa",
+     "url": "https://news.google.com/rss/articles/CBMi7AFBVV95cUxNX2t6aldsT05VZ0lGbUFfaEtoc25xV3BwUkxrLUxzMjJ6NFZYbUhwbU9CSXJiU0N5bVRxbG9Iak5JMGxHME9fRzBKSUM4MjcxOGtjc3ppa3N5b2J3djI0X1JCZTltU1N2VzRzYm9ZZzh1djREQm5aeWQ1UGJRYVdRTTFJNHFOLTVVT2pmcG5FMGVzT3JxNnNaZnJZY3NzeC1sWV95eVNwb2FFWG5RZnJTQXZNUDBfcFJhWXVSNWRMQ0NGRXAwRGtjVjNoWFFfWTdFOTZCRTc0M0VLcGVfeXRIOGFJWGZKX2IzbzAyQdIB8gFBVV95cUxQZ3JUdXVsVXZyQld2S2RWa2h2cEhyOEYxLTZDZGlmUnlQaGRnNFU3bmEzOFhNT2ZOeXJoSFdLdUdaNEVMeHkyX0ZvM0ZOZk1aRS10OWpObTQ2V1lVY3hOYWs3Umw5aEF6VXZxbFdEVjR6Yi1vQ3E3eFc2d2RRMlpBeExTVVZYU3I4SFhPb0YtZUlFT1V4Vmp4NGdfMi1xTThOaG5rUTRVaGJla0czOHZBZHFFU192U09DeXpQNGwyVUJQR0hyRHdOcFF5SlNORXFrWk1XeFlkZWVKbUtMbV9pSHJvbkx6dXd6ZjQ2U0hycTVRZw?oc=5"
+    }
+   ],
+   "ultimaNovedad": "2026-11-07T13:20:21.451Z"
+  },
+  {
+   "id": "urda-2026-10-28",
+   "activo": false,
+   "pagina": "/accidente-tren-toledo",
+   "accidenteId": "urda",
+   "titulo": "Accidente de tren en Urda (Toledo): choque entre un AVE y un Iryo",
+   "resumen": "Un AVE de Renfe alcanzó por detrás a un tren de Iryo entre Los Yébenes y Urda, en la línea de alta velocidad Madrid–Andalucía. La CIAF y la Guardia Civil investigan las causas.",
+   "lugar": "Entre Los Yébenes y Urda (Toledo)",
+   "inicio": "2026-10-28T08:54:00+01:00",
+   "tipo": "Colisión por alcance",
+   "servicio": "Alta velocidad",
+   "estado": "provisional",
+   "cifras": {
+    "fallecidos": {
+     "valor": 69,
+     "prefijo": "",
+     "fuente": "Gobierno de Castilla-La Mancha"
+    },
+    "heridos": {
+     "valor": 10,
+     "prefijo": "",
+     "fuente": "Gobierno de Castilla-La Mancha",
+     "nota": "permanecen en hospitales de Castilla-La Mancha, ninguno en UCI"
+    },
+    "aBordo": {
+     "valor": 543,
+     "nota": "según medios"
+    }
+   },
+   "circulacion": "Sin conexiones ferroviarias directas entre Madrid y el sur tras el accidente.",
+   "causas": "La caja negra del Iryo revela que la maquinista intentó reportar a Atocha en varias ocasiones sin contestación antes del choque.",
+   "telefonos": [
+    {
+     "nombre": "Renfe · familiares y afectados",
+     "numero": "900 10 10 20"
+    },
+    {
+     "nombre": "Emergencias Castilla-La Mancha (desde fuera de la región)",
+     "numero": "900 122 112"
+    }
+   ],
+   "atencion": "Adif ha abierto puntos de atención en las estaciones de Madrid-Puerta de Atocha, Sevilla-Santa Justa y Córdoba Julio Anguita. Iryo ha activado su propia línea de atención: consulta su web oficial.",
+   "billetes": "Renfe permite cambiar o anular sin coste los billetes afectados. Iryo y Ouigo informan a sus viajeros de las cancelaciones y alternativas por sus canales oficiales.",
+   "fuente": "Gobierno de Castilla-La Mancha",
+   "historial": [
+    {
+     "cuando": "28 oct, mañana",
+     "texto": "Primer balance: 30 fallecidos",
+     "fuente": "Junta de Castilla-La Mancha"
+    },
+    {
+     "cuando": "28 oct, tarde",
+     "texto": "Se eleva a 64 fallecidos y unos 80 heridos",
+     "fuente": "Gobierno de Castilla-La Mancha"
+    },
+    {
+     "cuando": "28 oct, noche",
+     "texto": "68 fallecidos y 53 heridos graves (15 muy graves)",
+     "fuente": "Emergencias de Castilla-La Mancha"
+    },
+    {
+     "cuando": "29 oct, 11:45",
+     "texto": "al menos 69 fallecidos",
+     "fuente": "Gobierno de Castilla-La Mancha"
+    },
+    {
+     "cuando": "29 oct, 18:15",
+     "texto": "74 fallecidos",
+     "fuente": "CIAF",
+     "oculto": true
+    },
+    {
+     "cuando": "29 oct, 19:00",
+     "texto": "69 fallecidos",
+     "fuente": "CIAF"
+    },
+    {
+     "cuando": "31 oct, 11:30",
+     "texto": "34 heridos (15 de ellos en la UCI)",
+     "fuente": "Gobierno de Castilla-La Mancha"
+    },
+    {
+     "cuando": "1 nov, 11:30",
+     "texto": "31 heridos (13 de ellos en la UCI)",
+     "fuente": "Gobierno de Castilla-La Mancha"
+    },
+    {
+     "cuando": "2 nov, 12:15",
+     "texto": "29 heridos",
+     "fuente": "Gobierno de Castilla-La Mancha"
+    },
+    {
+     "cuando": "2 nov, 16:30",
+     "texto": "39 heridos",
+     "fuente": "Gobierno de Castilla-La Mancha",
+     "oculto": true
+    },
+    {
+     "cuando": "2 nov, 16:45",
+     "texto": "29 heridos",
+     "fuente": "Gobierno de Castilla-La Mancha"
+    },
+    {
+     "cuando": "3 nov, 13:30",
+     "texto": "26 heridos",
+     "fuente": "Gobierno de Castilla-La Mancha"
+    },
+    {
+     "cuando": "4 nov, 14:00",
+     "texto": "22 heridos (cuatro de ellas en la UCI)",
+     "fuente": "Gobierno de Castilla-La Mancha"
+    },
+    {
+     "cuando": "5 nov, 20:45",
+     "texto": "20 heridos (cuatro de ellas en la UCI)",
+     "fuente": "Gobierno de Castilla-La Mancha"
+    },
+    {
+     "cuando": "6 nov, 10:00",
+     "texto": "15 heridos",
+     "fuente": "Gobierno de Castilla-La Mancha"
+    },
+    {
+     "cuando": "6 nov, 23:10",
+     "texto": "33 heridos (cuatro de ellos en Cuidados Intensivos)",
+     "fuente": "Iryo",
+     "oculto": true
+    },
+    {
+     "cuando": "7 nov, 18:00",
+     "texto": "11 heridos (hospitalizados tras altas y traslados)",
+     "fuente": "Gobierno de Castilla-La Mancha"
+    },
+    {
+     "cuando": "8 nov, 13:15",
+     "texto": "10 heridos (dos de ellos en la UCI)",
+     "fuente": "Gobierno de Castilla-La Mancha"
+    },
+    {
+     "cuando": "Último balance",
+     "texto": "10 heridos (permanecen en hospitales de Castilla-La Mancha, ninguno en UCI)",
+     "fuente": "Gobierno de Castilla-La Mancha"
+    }
+   ],
+   "enlaces": [
+    {
+     "nombre": "Ministerio de Transportes y Movilidad Sostenible",
+     "url": "https://news.google.com/rss/articles/CBMijAFBVV95cUxNeDczNnVoc3drckRydDB3RE1IcE1ZLXNyV1lwbmMyclE4NF9kWFJJeV9UOW1qV2tTc1k5ZlNlbkZvVG5UVmJFQjdXdlRmX0hBYllVZFBpS1Z0bjFxRkd5TlpIWmJKRDFQM1JHeXlfVEFYVWlsWmFnaDBhZDltZkVXUW9fZVl3NVFRcTVhaA?oc=5"
+    },
+    {
+     "nombre": "EFE - Agencia de noticias",
+     "url": "https://news.google.com/rss/articles/CBMihAFBVV95cUxQSmtnaVM2LU9ua2dTdEVnN3lIeEM0TGZqRnNTVVVLRHJjZUFKV0FFUTRkYXhIeUVnVzBWSWRVR0drYjcxQlE5WFNBZHRyUWdsclVMYUtiMk9FMWI2MTB3aDNwTnluY3lDRGpxR3hmU0JlWDZVdkRfMncySWpQUWNiaFV4dzM?oc=5"
+    },
+    {
+     "nombre": "20 Minutos",
+     "url": "https://news.google.com/rss/articles/CBMi3wFBVV95cUxNNXBOY1JYLV9EM1BHYjk3Qi1VTEVYTWhSaHp3aWlIdm9rNFUxSWdaZ0ROb01BWkpJbXJwVm1xRXQyY2d3Ry0yTFhxR29OZTk5bDNIOVdnMDVmZjNPVF9wU3BzYXZObkFjTU4zZFd6dkZWQ2p0c2ZiTUZnMGxISnFFTGxiWGdBSW8xY2JSUzRocjY4S1RQV3dLUHcwNWdTXzN5NEJrNFZSN3lQbTVid21RX2pZUnQ2Njh1SjZoMG9ub3drWGlnQnh4Y19YZ1dNb2lReEhoTlVZcFNrWjVUb1FJ?oc=5"
+    },
+    {
+     "nombre": "elDiario.es",
+     "url": "https://news.google.com/rss/articles/CBMi6wFBVV95cUxOQzFwaVlRZDZPUk5VSVVlR2NuZVdMZnJJT1B2ZjJUZU5QTENld1BjYnRkMm5aN05WWDhTN245R3V6N2wxNEZmdXlyNW1obUlfcEE2dk5WQXVuSDNwWXMyTmo4cEk5Z1lZMWV1MzdfU21oUjJ2WjA1aFhTS3pkX0haOFdXMkZtamNVQUxOeTJLeHZXVTVKNEowd25WcF9XQjRQTnI1QjEtTVNrMHNKU3lWWUJIUHN1VFNwcTl4c3ZNTklWdnM5TDE4LThWV3RqWHpuc25odTVFcGtqLUxTQ0NremRBdi1YN0xRdFU40gHwAUFVX3lxTE1UQWp2b1VnMG1YQTRjWXVRVjNSVmdjYm5YTTlPZF8wclpzSDBXQUpWTVFDMWNDY28zWlF6ODNKM3JuS3BMb0ZGVkpTR0FSNzJWdkZfYTVDRXVOMk1ISF9ZWDBJYk95NnFOODNXMEU1d21qY0x6aF9OeENnZXlsLThWb0oxd05veWF0cGp4LUhXTWhZTTlELW1fUkZSSGF4NmlOVnp3MVRndmVidnNEZVpNQ25tUmdMQURWNC1CNkh4RFNHNG9mUjA5cXBsSDRoRHhUTTBUVkVDRUJkRExrLXV5QXpmZ0FhSVgtQnhrSnR3aA?oc=5"
+    },
+    {
+     "nombre": "El Correo",
+     "url": "https://news.google.com/rss/articles/CBMiuwFBVV95cUxOMkxsOUJGcTJWUnNwWUNCeWg0WGtQU0w3LUdfR1B4TjA3bUFwTC13VXJUSkRTc1BabFM0WWxZYkxUWVJ6WU1lZUNPTjBuemptaFBGcGxfOEFqUWN5Ym9ERVhYSi1ORUVaTlg5QllOcXVRbG9hYXpSa2djeG0za3N0NnN2UUZCdkJuZ1BTMjktWXJrWXNCZ2VXeXFwelJRQk9IaU5fM2hjWUdQcGE1QUVtQ3lxaExOSWRRRGJB0gHAAUFVX3lxTE5YRUNxZ1VMYmxVQ0RLWm9QN0hwUDJkZEtqTGt0Y1ZMRjdJUDFGYUszQ0ZGeU9HZkNFWlF5RzdKbHFhSWxtc3c3ZEdLRmFzNkFwcjVKallWNUVQRGR1QmFYXzhhcExQd2l3bjh5ekhfd0tlUUZ3cGlzMDVqWHJuWUROY0QxSnhoM3pBQmxWQldWZzZmZ1FfTjVPeG9HeFU2RjVJQ1FBMVFaOHJ6Y2ZMX09zY1h0dm93VXlQVXBLczMzdg?oc=5"
+    },
+    {
+     "nombre": "Diari ARA",
+     "url": "https://news.google.com/rss/articles/CBMipwFBVV95cUxQOTR5UlZPM2pmVTB0bThpaVJzU2lXZFdGc2lNQ1pxcEs0NDJ4VmNWdmlUWl9mbkIwU2lkZm03cWFZcEVSWXRBQ2pUTFJkdHV6WkJ5UC1DTVc3ZGxfeFRTTVVoLU1HV2NLdUd5UUtDYmZrWTUyV052YUc2MXlRYmNyS3JxdEozVmpZUjQyYklqVGJmX1lFQjlqRGpKOHk1bkFTcjRIcTJjTQ?oc=5"
+    },
+    {
+     "nombre": "Telecinco",
+     "url": "https://news.google.com/rss/articles/CBMiuwFBVV95cUxOUzNIb1d0THc0VExrNjJ1VkZnOFRBN080NWQwUHVBVWY4ZGo2cTdETDEwSlVvWnpib2VNV0YzTVlxQWNQNDVLOV80SEhYejZVSGEtV3RGTW1IQjlUaTlWVGlWX1hNSXZqXzNkVklHX1plNjN3VkFfeDRPVGUzWVhaa0ZwY3lPdXpramt6ZHNiTHVtVVRQaU9VNS14SGlDVDB0QWlORENTTFdweTdMQzFDckFjeWJEcnpfS2Fz?oc=5"
+    },
+    {
+     "nombre": "cmmedia.es",
+     "url": "https://news.google.com/rss/articles/CBMitwFBVV95cUxQX1EtVTVDTjktSkktQmNUUlQwSGhTS01ZYWFXZ2ZLZnBBejBnNGxpdEprVWF0LVljUklIUUo4SUYtVVhhUGRoZ3kyQzlZSmdhNFZQV3g5NnQzN2tIaWlqOW1XU3BSRnFJTEZHQWFWQ2xvUFJQYUVPLW1TT2g2cHZrdnNPWkw4Q1pJUU9xVEZMeGI4ZkhYZlBOSEZiMDZRTUNMZ1dqZ3FMVy1LVEVWa2hzREhQblFkbjg?oc=5"
+    }
+   ],
+   "seo": {
+    "title": "Accidente de tren en Toledo (Urda): última hora, fallecidos, heridos y trenes afectados",
+    "description": "Última hora del accidente de tren entre Los Yébenes y Urda (Toledo): cifras de fallecidos y heridos, teléfonos para familiares, trenes cancelados y qué se sabe de las causas."
+   },
+   "preguntas": [
+    {
+     "p": "¿Qué ha pasado en el accidente de tren de Toledo?",
+     "r": "El 28 de octubre de 2026, hacia las 8:54, un AVE de Renfe alcanzó por detrás a un tren de Iryo entre Los Yébenes y Urda (Toledo), en la línea de alta velocidad Madrid–Andalucía."
+    },
+    {
+     "p": "¿Cuántos fallecidos y heridos hay?",
+     "r": "Según el último balance de Emergencias de Castilla-La Mancha, al menos 68 personas han fallecido y 53 están heridas graves, 15 de ellas muy graves. Las cifras son provisionales."
+    },
+    {
+     "p": "¿Qué teléfono pueden llamar los familiares?",
+     "r": "Renfe atiende a familiares y afectados en el 900 10 10 20. Desde fuera de Castilla-La Mancha, Emergencias atiende en el 900 122 112. Iryo tiene su propia línea, publicada en su web oficial."
+    },
+    {
+     "p": "¿Funcionan los trenes entre Madrid y Andalucía?",
+     "r": "No. La alta velocidad Madrid–Ciudad Real–Andalucía está cortada hasta nuevo aviso. Renfe ofrece lanzaderas hasta Ciudad Real y Puertollano."
+    },
+    {
+     "p": "¿Qué pasa con mi billete?",
+     "r": "Renfe permite cambiar o anular sin coste los billetes afectados. Iryo y Ouigo informan de cancelaciones y alternativas por sus canales oficiales."
+    },
+    {
+     "p": "¿Cuál ha sido la causa del accidente?",
+     "r": "Está en investigación. Según el Ministerio de Transportes, el centro de control de Adif autorizó al tren de Renfe a reanudar la marcha con otro tren por delante. La CIAF y la Guardia Civil investigan lo ocurrido."
+    }
+   ],
+   "ultimaNovedad": "2026-11-19T00:15:22.889Z",
+   "linea": "Alta velocidad Madrid–Ciudad Real–Andalucía",
+   "operador": "Renfe / Iryo"
+  }
+ ]
 }
