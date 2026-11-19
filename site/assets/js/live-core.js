@@ -168,9 +168,15 @@
     };
   }
   // Hora de Madrid entre las 00:30 y las 05:00: casi no hay servicio
+  function isNight() {
+    const h = Number(new Date().toLocaleString("en-GB", { timeZone: "Europe/Madrid", hour: "2-digit", minute: "2-digit", hour12: false }).replace(":", "."));
+    return h >= 0.3 && h < 5;
+  }
   function nightNote(s) {
     const h = Number(new Date().toLocaleString("en-GB", { timeZone: "Europe/Madrid", hour: "2-digit", minute: "2-digit", hour12: false }).replace(":", "."));
     const night = h >= 0.3 && h < 5;
+    // De día, una red sin ningún tren casi siempre es un fallo de los datos de Renfe, no de servicio
+    if (!night && S.scope && s.trains === 0) return "Renfe no está enviando ahora las posiciones de los trenes de esta red. No quiere decir que no circulen: los avisos de abajo sí están al día.";
     if (!s.few && !night) return null;
     return night
       ? "Fuera de horario: de madrugada casi no circulan trenes de Cercanías. El servicio vuelve entre las 5:00 y las 6:00, según la línea."
@@ -410,8 +416,9 @@
         if (!(code === qCode || code === qBase || (qCode.length > code.length && full.startsWith(qCode)) || (qCode.length >= 2 && code.startsWith(qCode) && /\d/.test(qCode)))) continue;
         const o = live.get(key);
         const redRank = Math.max(0, S.redes.length - S.redes.findIndex((x) => x.slug === l.red)) / 100; // Madrid, Rodalies... primero
-        lineHits.push({ score: (code === qCode ? 2 : 0) + (S.scope === l.red ? 4 : 0) + (o ? 1 : 0) + redRank, r: { href: lineUrl(key), badge: l.code, title: `Línea ${l.code} · ${r?.corto || ""}`,
-          sub: o ? `${o.trains.length} ${o.trains.length === 1 ? "tren" : "trenes"} · ${lineStatus(o).text}` : "Sin trenes circulando ahora · ver recorrido y avisos", group: "Líneas" } });
+        // Orden: código exacto, red de la página, red más usada (Madrid, Rodalies...), y si tiene trenes
+        lineHits.push({ score: (code === qCode ? 1000 : 0) + (S.scope === l.red ? 500 : 0) + redRank * 1000 + (o ? 1 : 0), r: { href: lineUrl(key), badge: l.code, title: `Línea ${l.code} · ${r?.corto || ""}`,
+          sub: o ? `${o.trains.length} ${o.trains.length === 1 ? "tren" : "trenes"} · ${lineStatus(o).text}` : (isNight() ? "Sin trenes circulando ahora" : "Sin datos en directo ahora") + " · ver recorrido y avisos", group: "Líneas" } });
       }
       lineHits.sort((a, b) => b.score - a.score).forEach((x) => out.push(x.r));
       // 2. Estaciones (y sinónimos como "aeropuerto")
@@ -436,7 +443,7 @@
       if (!ldWord) for (const a of alerts()) if (starts(`${a.header} ${a.desc}`) || a.routes.some((x) => norm(x).includes(q))) out.push({ href: `/avisos#aviso-${a.id}`, badge: "!", title: cleanAlert(a.header) || cleanAlert(a.desc), sub: alertLines(a).map((k) => lineName(k, true)).slice(0, 3).join(", ") || "Aviso de Renfe", group: "Avisos" });
       for (const d of S.acc) if (starts(`${d.place} ${d.prov}`)) out.push({ href: `/accidentes#${d.id}`, badge: "⚑", title: `${d.place} (${d.prov})`, sub: `${d.type} · ${window.Anden.fmtDate(d.date)}`, group: "Accidentes" });
       // Orden de los grupos: lo más probable primero (la ciudad antes que sus estaciones)
-      const ORDER = ldWord ? ["Alta velocidad, larga y media distancia", "Líneas", "Redes de Cercanías", "Estaciones", "Trenes", "Avisos", "Accidentes"]
+      const ORDER = syn ? ["Estaciones", "Líneas", "Redes de Cercanías", "Trenes", "Alta velocidad, larga y media distancia", "Avisos", "Accidentes"] : ldWord ? ["Alta velocidad, larga y media distancia", "Líneas", "Redes de Cercanías", "Estaciones", "Trenes", "Avisos", "Accidentes"]
         : ["Líneas", "Redes de Cercanías", "Estaciones", "Trenes", "Alta velocidad, larga y media distancia", "Avisos", "Accidentes"];
       const per = {};
       return out.filter((r) => (per[r.group] = (per[r.group] || 0) + 1) <= 6)
@@ -509,7 +516,7 @@
 
   window.AndenLive = {
     S, start, onUpdate: (f) => S.subs.push(f), attachSearch,
-    trains, ldTrains, nightNote, alerts, alertsOfLine, alertLines, alertRedes, stations, cleanAlert, lines, lineStatus, summary, redBySlug,
+    trains, ldTrains, nightNote, isNight, alerts, alertsOfLine, alertLines, alertRedes, stations, cleanAlert, lines, lineStatus, summary, redBySlug,
     delayInfo, lineName, lineCode, lineUrl, trainUrl, lineKey, trainTitle, GRUPOS, GRUPO_COLOR, REFRESH_MS,
     fmtMin, fmtPct, lineBadge, trainRow, alertCard, kpi, trainLayer, Vias,
   };

@@ -33,7 +33,7 @@
       if (map && !mapWrap?.hidden) layer.update(list);
       if (listEl && !listWrap?.hidden) {
         const rows = [...list].sort((a, b) => (b.delayMin ?? -99) - (a.delayMin ?? -99));
-        if (!rows.length) { listEl.replaceChildren(h("div", { class: "empty" }, A.S.live ? "No hay trenes que mostrar ahora mismo." : "Cargando trenes…")); return; }
+        if (!rows.length) { listEl.replaceChildren(h("div", { class: "empty" }, A.S.live ? (A.isNight() ? "No hay trenes circulando ahora mismo (de madrugada casi no hay servicio)." : "Renfe no está enviando ahora posiciones de trenes aquí.") : "Cargando trenes…")); return; }
         const items = rows.slice(0, limit).map(A.trainRow);
         if (rows.length > limit) items.push(h("button", { class: "btn ghost", type: "button", onclick: () => { limit += 40; draw(); } }, `Mostrar más (${rows.length - limit})`));
         listEl.replaceChildren(...items);
@@ -48,7 +48,7 @@
 
   function linesTable(el, list, { compact = false } = {}) {
     if (!el) return;
-    if (!list.length) { el.replaceChildren(h("div", { class: "empty" }, A.S.live ? "No hay líneas con trenes circulando ahora mismo." : "Cargando líneas…")); return; }
+    if (!list.length) { el.replaceChildren(h("div", { class: "empty" }, A.S.live ? (A.isNight() ? "No hay líneas con trenes circulando ahora mismo." : "Renfe no está enviando ahora datos en directo de estas líneas.") : "Cargando líneas…")); return; }
     const rows = [...list].sort((a, b) => (b.pctLate ?? -1) - (a.pctLate ?? -1) || b.trains.length - a.trains.length);
     // En la portada solo salen las líneas que de verdad llevan retraso
     if (compact && !rows.some((o) => o.late)) { el.replaceChildren(h("div", { class: "empty" }, rows.length ? "Todas las líneas con trenes circulando van con normalidad ahora mismo." : "Ahora mismo no hay trenes de Cercanías circulando.")); return; }
@@ -188,7 +188,7 @@
         }
         const o = A.lines(null).find((x) => x.key === key);
         const s = A.lineStatus(o);
-        $("status").replaceChildren(h("span", { class: `tag ${s.cls}`, style: "font-size:1rem;padding:5px 12px" }, o ? s.text : "No hay trenes de esta línea circulando ahora"));
+        $("status").replaceChildren(h("span", { class: `tag ${s.cls}`, style: "font-size:1rem;padding:5px 12px" }, o ? s.text : (A.isNight() ? "No hay trenes de esta línea circulando ahora" : "Sin datos en directo de Renfe ahora")));
         $("kpis").replaceChildren(
           A.kpi(o ? o.trains.length : 0, o?.trains.length === 1 ? "tren circulando" : "trenes circulando"),
           A.kpi(o ? o.late : 0, "con 3 min o más de retraso"),
