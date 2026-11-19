@@ -60,27 +60,49 @@
         actualizado ? h("p", { class: "small muted" }, `Actualizado: ${stamp(actualizado)}`) : ""));
   }
 
+  // Mismas reglas que scripts/seo-pages.js (balanceTexto, causasTexto), para que la ficha,
+  // las preguntas frecuentes y lo que lee Google digan siempre lo mismo
+  const cifraTxt = (c) => (c && c.valor !== null && c.valor !== undefined ? `${c.prefijo === "≥" ? "al menos " : ""}${c.valor}` : null);
+  function balanceTexto(s) {
+    const f = cifraTxt(s.cifras?.fallecidos), hh = cifraTxt(s.cifras?.heridos);
+    if (!f && !hh) return null;
+    const fuentes = [...new Set([s.cifras?.fallecidos?.fuente, s.cifras?.heridos?.fuente].filter(Boolean))].join(" y ");
+    const her = hh && `${hh} heridos${s.cifras.heridos.nota ? ` (${s.cifras.heridos.nota})` : ""}`;
+    return `Según el último balance${fuentes ? ` (${fuentes})` : ""}, hay ${[f && `${f} fallecidos`, her].filter(Boolean).join(" y ")}. Las cifras son provisionales.`;
+  }
+  const causasTexto = (s) => `Está en investigación por la CIAF (Comisión de Investigación de Accidentes Ferroviarios) y la Guardia Civil.${s.causas ? ` Lo último publicado, pendiente de la investigación oficial: ${s.causas}` : ""}`;
+  function syncFaq(s) {
+    const set = (id, txt) => { const el = document.querySelector(`[data-faq="${id}"]`); if (el && txt) el.textContent = txt; };
+    set("balance", balanceTexto(s));
+    set("circulacion", s.circulacion);
+    if (!isInc(s)) set("causas", causasTexto(s));
+  }
+
   function completo(s, actualizado) {
     const sec = (titulo, ...children) => h("section", { class: "card pad", style: "display:grid;gap:10px" }, h("h2", {}, titulo), ...children);
+    const historial = (s.historial || []).filter((e) => !e.oculto);
     return h("div", { style: "display:grid;gap:16px" },
       h("article", { class: "incident", id: s.id }, head(s),
         h("div", { class: "incident-body" },
           h("p", { style: "font-size:1.1rem" }, s.resumen),
+          // Lo primero que necesita una familia: los teléfonos
+          s.telefonos?.length ? h("div", { class: "phones" }, h("strong", {}, "Teléfonos para familiares y afectados"),
+            h("div", { class: "phone-list" }, s.telefonos.map((t) => h("a", { class: "phone", href: `tel:${t.numero.replace(/\s/g, "")}` },
+              h("b", {}, t.numero), h("span", {}, t.nombre))))) : "",
           h("div", { class: "figures" }, fig(s.cifras?.fallecidos, "fallecidos", true), fig(s.cifras?.heridos, "heridos"), fig(s.cifras?.aBordo, "personas a bordo")),
           s.circulacion && isInc(s) ? h("p", {}, h("strong", {}, "Circulación: "), s.circulacion) : "",
           h("p", { class: "small muted" }, actualizado ? `Actualizado: ${stamp(actualizado)}. ` : "", isInc(s) ? "Información según los medios citados abajo." : "Las cifras son provisionales y pueden cambiar.")),
       ),
-      s.telefonos?.length ? sec("Teléfonos para familiares y afectados",
-        h("div", { class: "kpis" }, s.telefonos.map((t) => h("div", { class: "card kpi" },
-          h("b", {}, h("a", { href: `tel:${t.numero.replace(/\s/g, "")}`, style: "color:inherit;text-decoration:none" }, t.numero)), h("span", {}, t.nombre)))),
-        s.atencion ? h("p", {}, s.atencion) : "") : "",
+      s.atencion ? sec("Atención a familias", h("p", {}, s.atencion)) : "",
       (s.circulacion && !isInc(s)) || s.billetes ? sec("Trenes afectados y billetes",
         s.circulacion ? h("p", {}, s.circulacion) : "", s.billetes ? h("p", {}, s.billetes) : "") : "",
-      s.causas ? sec("Qué se sabe de las causas", h("p", {}, s.causas)) : "",
-      s.historial?.length ? sec("Evolución de las cifras",
-        h("ol", { class: "timeline" }, s.historial.map((e) => h("li", {}, h("span", {}, h("strong", {}, `${e.cuando}: `), e.texto, e.fuente ? h("span", { class: "muted" }, ` (${e.fuente})`) : ""))))) : "",
-      s.enlaces?.length ? sec("Fuentes", h("ul", { class: "sources", style: "list-style:none;padding:0;margin:0" },
-        s.enlaces.map(link).map((e) => h("li", {}, h("a", { href: e.url, target: "_blank", rel: "noopener" }, e.nombre))))) : "");
+      !isInc(s) ? sec("Qué se sabe de las causas", h("p", {}, causasTexto(s))) : "",
+      historial.length ? h("details", { class: "card pad" },
+        h("summary", {}, h("strong", {}, "Evolución de las cifras")),
+        h("p", { class: "small muted", style: "margin:8px 0" }, "Balances publicados, del más antiguo al más reciente. Las cifras de heridos bajan a medida que reciben el alta; cada cifra indica quién la dio."),
+        h("ol", { class: "timeline" }, historial.map((e) => h("li", {}, h("span", {}, h("strong", {}, `${e.cuando}: `), e.texto, e.fuente ? h("span", { class: "muted" }, ` (${e.fuente})`) : ""))))) : "",
+      s.enlaces?.length ? sec("Fuentes", h("ul", { style: "list-style:none;padding:0;margin:0;display:grid;gap:8px" },
+        s.enlaces.map(link).map((e) => h("li", {}, h("a", { href: e.url, target: "_blank", rel: "noopener" }, e.nombre), e.titulo ? h("span", { class: "muted" }, `: ${e.titulo}`) : "")))) : "");
   }
 
   // Gravedad: primero los accidentes con víctimas (más fallecidos y heridos, más arriba),
@@ -95,7 +117,7 @@
     const incs = everything.filter(isInc);
     if (modo === "completo") {
       const s = everything.find((x) => x.id === box.dataset.id);
-      if (s) box.replaceChildren(completo(s, data.actualizado));
+      if (s) { box.replaceChildren(completo(s, data.actualizado)); syncFaq(s); }
       return;
     }
     if (modo === "lista") {
@@ -103,7 +125,7 @@
       const recientes = all.filter((s) => !s.activo && Date.now() - new Date(s.inicio) < 30 * 86400_000);
       box.replaceChildren(
         activos.length ? h("div", { style: "display:grid;gap:16px" }, activos.map((s) => resumen(s, data.actualizado)))
-          : h("div", { class: "empty" }, "Ahora mismo no hay ningún accidente ferroviario grave en curso en España."),
+          : h("div", { class: "empty" }, recientes.length ? "No hay ningún accidente ferroviario grave en curso ahora mismo. Debajo, los más recientes." : "Ahora mismo no hay ningún accidente ferroviario grave en curso en España."),
         recientes.length ? h("h2", { style: "margin-top:24px" }, "Últimos 30 días") : "",
         ...recientes.map((s) => resumen(s, null)));
       return;

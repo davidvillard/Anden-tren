@@ -15,6 +15,8 @@ const TZ = { timeZone: "Europe/Madrid" };
 const fecha = (iso) => new Date(iso).toLocaleDateString("es-ES", { ...TZ, day: "numeric", month: "long", year: "numeric" });
 const hora = (iso) => new Date(iso).toLocaleTimeString("es-ES", { ...TZ, hour: "2-digit", minute: "2-digit" });
 const cifra = (c) => c && c.valor !== null && c.valor !== undefined ? `${c.prefijo === "≥" ? "al menos " : ""}${c.valor}` : null;
+// Texto de un aviso de Renfe sin las etiquetas internas del principio (#MadC5)
+const limpio = (x) => String(x || "").replace(/^(\s*#\w+)+\s*/, "").trim();
 const isInc = (s) => s.clase === "incidencia";
 // Más grave primero: más fallecidos, luego más heridos, luego más reciente
 const val = (c) => (c && c.valor > 0 ? c.valor : 0);
@@ -59,26 +61,39 @@ const faqLd = (qs) => ({
 });
 const faqHtml = (qs) => `<section class="section" aria-labelledby="faq"><div class="container">
   <h2 id="faq">Preguntas frecuentes</h2>
-  <div class="prose">${qs.map((q) => `<details class="card pad"><summary><strong>${esc(q.p)}</strong></summary><p style="margin-top:8px">${esc(q.r)}</p></details>`).join("\n")}</div>
+  <div class="prose">${qs.map((q) => `<details class="card pad"><summary><strong>${esc(q.p)}</strong></summary><p style="margin-top:8px"${q.id ? ` data-faq="${q.id}"` : ""}>${esc(q.r)}</p></details>`).join("\n")}</div>
 </div></section>`;
 
 /* ---------- Sucesos ---------- */
 
-function preguntasSuceso(s) {
+// Respuestas que dependen del último dato: se escriben aquí y sucesos.js las actualiza
+// en el navegador con la misma regla (data-faq), para que nunca difieran de la ficha.
+export function balanceTexto(s) {
   const f = cifra(s.cifras?.fallecidos), hh = cifra(s.cifras?.heridos);
-  const balance = (f || hh) ? {
-    p: "¿Cuántos fallecidos y heridos hay?",
-    r: `Según el último balance${s.fuente ? ` (${s.fuente})` : ""}, hay ${[f && `${f} fallecidos`, hh && `${hh} heridos${s.cifras.heridos.nota ? ` (${s.cifras.heridos.nota})` : ""}`].filter(Boolean).join(" y ")}. Las cifras son provisionales.`,
-  } : null;
+  if (!f && !hh) return null;
+  const fuentes = [...new Set([s.cifras?.fallecidos?.fuente, s.cifras?.heridos?.fuente].filter(Boolean))].join(" y ");
+  const her = hh && `${hh} heridos${s.cifras.heridos.nota ? ` (${s.cifras.heridos.nota})` : ""}`;
+  return `Según el último balance${fuentes ? ` (${fuentes})` : ""}, hay ${[f && `${f} fallecidos`, her].filter(Boolean).join(" y ")}. Las cifras son provisionales.`;
+}
+export function causasTexto(s) {
+  return `Está en investigación por la CIAF (Comisión de Investigación de Accidentes Ferroviarios) y la Guardia Civil.${s.causas ? ` Lo último publicado, pendiente de la investigación oficial: ${s.causas}` : ""}`;
+}
+function preguntasSuceso(s) {
+  const balanceR = balanceTexto(s);
+  const balance = balanceR ? { p: "¿Cuántos fallecidos y heridos hay?", r: balanceR, id: "balance" } : null;
   if (s.preguntas?.length) {
-    const rest = s.preguntas.filter((q) => !/cu[aá]nt[oa]s (fallecidos|muertos|heridos)/i.test(q.p));
+    const rest = s.preguntas.filter((q) => !/cu[aá]nt[oa]s (fallecidos|muertos|heridos)/i.test(q.p)).map((q) => {
+      if (s.circulacion && /funcionan los trenes|circulaci[oó]n/i.test(q.p)) return { ...q, r: s.circulacion, id: "circulacion" };
+      if (/causa/i.test(q.p)) return { ...q, r: causasTexto(s), id: "causas" };
+      return q;
+    });
     return [rest[0], balance, ...rest.slice(1)].filter(Boolean);
   }
   return [
     { p: "¿Qué ha pasado?", r: `${s.resumen} Ocurrió el ${fecha(s.inicio)} hacia las ${hora(s.inicio)}.` },
     balance,
-    s.circulacion && { p: "¿Cómo está la circulación de trenes?", r: s.circulacion },
-    s.causas && { p: "¿Cuál ha sido la causa?", r: s.causas },
+    s.circulacion && { p: "¿Cómo está la circulación de trenes?", r: s.circulacion, id: "circulacion" },
+    !isInc(s) && { p: "¿Cuál ha sido la causa?", r: causasTexto(s), id: "causas" },
   ].filter(Boolean);
 }
 
@@ -113,10 +128,11 @@ function sucesoPage(s, actualizado) {
   <section class="section"><div class="container" id="suceso" data-modo="completo" data-id="${esc(s.id)}">
     <article class="incident"><div class="incident-body">
       <p style="font-size:1.1rem">${esc(s.resumen)}</p>
+      ${s.telefonos?.length ? `<h2>Teléfonos para familiares</h2><ul>${s.telefonos.map((t) => `<li><a href="tel:${esc(t.numero.replace(/\s/g, ""))}"><strong>${esc(t.numero)}</strong></a>: ${esc(t.nombre)}</li>`).join("")}</ul>` : ""}
       <div class="figures">${fig(s.cifras?.fallecidos, "fallecidos", true)}${fig(s.cifras?.heridos, "heridos")}${fig(s.cifras?.aBordo, "personas a bordo")}</div>
-      ${s.telefonos?.length ? `<h2>Teléfonos para familiares</h2><ul>${s.telefonos.map((t) => `<li><strong>${esc(t.numero)}</strong>: ${esc(t.nombre)}</li>`).join("")}</ul>` : ""}
+      ${actualizado ? `<p class="small muted">Actualizado: ${fecha(actualizado)}, ${hora(actualizado)}. Las cifras son provisionales.</p>` : ""}
       ${s.circulacion ? `<h2>Trenes afectados</h2><p>${esc(s.circulacion)}</p>` : ""}
-      ${s.causas ? `<h2>Causas</h2><p>${esc(s.causas)}</p>` : ""}
+      ${!inc ? `<h2>Causas</h2><p>${esc(causasTexto(s))}</p>` : ""}
       ${fuentes.length ? `<h2>Fuentes</h2><ul>${fuentes.map((e) => `<li><a href="${esc(e.url)}" rel="noopener" target="_blank">${esc(e.nombre)}</a></li>`).join("")}</ul>` : ""}
     </div></article>
   </div></section>
@@ -152,7 +168,7 @@ function hoyPage(data) {
     <p>Última hora de los accidentes ferroviarios en España: cifras oficiales, teléfonos para familiares y trenes afectados. Se actualiza automáticamente.</p>
   </div></section>
   <section class="section"><div class="container" id="suceso" data-modo="lista">
-    ${activos.length ? activos.map((s) => `<article class="incident"><div class="incident-body"><h2><a href="${sucesoPath(s)}">${esc(s.titulo)}</a></h2><p>${esc(s.resumen)}</p></div></article>`).join("") : '<div class="empty">Ahora mismo no hay ningún accidente ferroviario grave en curso en España.</div>'}
+    ${activos.length ? activos.map((s) => `<article class="incident"><div class="incident-body"><h2><a href="${sucesoPath(s)}">${esc(s.titulo)}</a></h2><p>${esc(s.resumen)}</p></div></article>`).join("") : '<div class="empty">No hay ningún accidente ferroviario grave en curso ahora mismo. Debajo, los más recientes.</div>'}
   </div></section>
   ${faqHtml(qs)}
   <section class="section"><div class="container"><div class="card pad promo">
@@ -299,7 +315,7 @@ function temaPage(tema, live) {
   // Lo que había al publicar la página: Google lo lee sin JS y el script lo sustituye por el directo
   const foto = !ahora ? '<div class="empty">Cargando avisos de Renfe…</div>'
     : !ahora.length ? `<div class="empty">${esc(tema.vacio)}</div>`
-    : ahora.slice(0, 30).map((a) => `<article class="card alert-item"><h3>${esc(a.header || a.desc)}</h3>${a.desc && a.desc !== a.header ? `<p>${esc(a.desc.slice(0, 400))}</p>` : ""}${periodo(a) ? `<p class="small muted">${esc(periodo(a))}</p>` : ""}</article>`).join("");
+    : ahora.slice(0, 30).map((a) => { const hd = limpio(a.header), ds = limpio(a.desc); return `<article class="card alert-item">${hd ? `<h3>${esc(hd)}</h3>` : ""}${ds && ds !== hd ? `<p${hd ? "" : ' class="alert-text"'}>${esc(ds.slice(0, 400))}</p>` : ""}${periodo(a) ? `<p class="small muted">${esc(periodo(a))}</p>` : ""}</article>`; }).join("");
   const body = `
   <section class="page-head band"><div class="container">
     <p class="crumbs"><a href="/">Inicio</a> › <a href="/avisos">Avisos</a> › ${esc(tema.h1)}</p>

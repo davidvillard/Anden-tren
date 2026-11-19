@@ -5,7 +5,7 @@
   const { h, norm, css, fmtTime, ago } = window.Anden;
   const LIVE_URL = "/api/live";
   const REFRESH_MS = 15000;
-  const S = { live: null, redes: [], acc: [], subs: [], scope: window.ANDEN_RED || null };
+  const S = { live: null, redes: [], lineas: [], acc: [], subs: [], scope: window.ANDEN_RED || null };
 
   /* ---------- Trenes y líneas ---------- */
   const LINE_RE = /\b(RT\d|RG\d|RL\d|R\d{1,2}[NS]?|C-?\d{1,2}[a-z]?|S\d{1,2}|T\d)\b/i;
@@ -53,13 +53,83 @@
   const routeRed = (r) => { const m = /^(\d{2})T/.exec(r || ""); return m ? S.redes.find((x) => (x.codigos || []).includes(m[1])) || null : null; };
   const routeLine = (r) => { const m = /T\d+([A-Za-z]+\d+[a-zA-Z]?)$/.exec(r || ""); return m ? m[1].toUpperCase().replace(/([A-Z]+\d+)[A-Z]$/, "$1") : null; };
   const alertText = (a) => norm(`${a.header} ${a.desc} ${a.routes.join(" ")}`);
-  const alertRedes = (a) => [...new Set(a.routes.map((x) => routeRed(x)?.slug).filter(Boolean))];
-  const alertLines = (a) => [...new Set(a.routes.map((x) => { const r = routeRed(x), l = routeLine(x); return l ? lineKey(l, r?.slug) : null; }).filter(Boolean))];
+  // Texto con solo letras y números separados por un espacio: para buscar palabras
+  // enteras ("vic" no debe encontrarse dentro de "servicio").
+  const words = (x) => ` ${norm(x).replace(/[^a-z0-9ñç]+/g, " ").trim()} `;
+  const hasWord = (text, w) => { const k = words(w); return k.trim().length > 1 && text.includes(k); };
+
+  /* Índice de estaciones (de /data/lineas.json): nombre → líneas que paran allí.
+     Sirve para colocar en su línea los avisos que Renfe publica sin línea
+     (ascensores, estaciones cerradas...) y para buscar por estación. */
+  const CIUDADES = new Set(["madrid", "barcelona", "sevilla", "valencia", "malaga", "cadiz", "bilbao", "zaragoza", "murcia", "alicante", "oviedo", "gijon", "santander"]);
+  let stationIdx = null;
+  function stations() {
+    if (stationIdx || !S.lineas.length) return stationIdx || [];
+    const map = new Map();
+    const add = (name, label, key, short = false) => {
+      const w = words(name).trim();
+      if (w.length < 3) return;
+      if (!map.has(w)) map.set(w, { w, label, keys: new Set() });
+      const st = map.get(w);
+      st.keys.add(key);
+      if (short) st.short = true; else (st.full ||= new Set()).add(key);
+    };
+    for (const l of S.lineas) {
+      const key = lineKey(l.code, l.red);
+      for (const rec of l.recorridos || []) for (const p of rec.paradas || []) {
+        add(p, p, key);
+        // "Asamblea de Madrid-Entrevías" también se nombra "Entrevías"; "Madrid-Atocha", "Atocha"
+        const parts = p.split(/\s*[-/]\s*/).map((x) => x.trim()).filter(Boolean);
+        if (parts.length > 1) for (const x of parts) if (x.length >= 4 && !CIUDADES.has(words(x).trim())) add(x, p, key);
+        // "Villalba de Guadarrama" también se nombra "Villalba"
+        const m = /^(.{5,}?) de [A-ZÁÉÍÓÚ]/.exec(p);
+        if (m && !/[-/]/.test(m[1]) && !CIUDADES.has(words(m[1]).trim())) add(m[1], p, key, true);
+      }
+    }
+    // Un nombre corto ("Villalba") solo vale si no es a la vez el nombre completo de otra estación
+    for (const [w, st] of map) if (st.short && st.full) st.keys = st.full;
+    // Los nombres largos primero, para que "Alcalá de Henares-Universidad" gane a "Alcalá de Henares"
+    stationIdx = [...map.values()].sort((a, b) => b.w.length - a.w.length);
+    return stationIdx;
+  }
+  // Líneas de un aviso sin línea, deducidas de las estaciones que nombra
+  const inferred = new Map();
+  function inferLines(a) {
+    if (inferred.has(a.id)) return inferred.get(a.id);
+    const scan = (raw) => {
+      let text = words(raw);
+      const keys = new Set();
+      for (const st of stations()) if (text.includes(` ${st.w} `)) { st.keys.forEach((k) => keys.add(k)); text = text.split(` ${st.w} `).join(" · "); }
+      return keys;
+    };
+    // Primero la estación de la que habla el aviso ("ascensor de la estación de Sol..."),
+    // sin contar los destinos que nombra después ("sentido Príncipe Pío-Chamartín")
+    const full = `${a.header} ${a.desc}`;
+    const lead = /(?:estaci[oó]n(?:es)?(?: de)?|ascensor(?:es)?(?: de)?|plataforma de)\s+([^,.;:(]+)/i.exec(full) || /^\s*([A-ZÁÉÍÓÚÑ][A-ZÁÉÍÓÚÑ -]{2,})[.:]/.exec(full);
+    let keys = lead ? scan(lead[1].split(/\s+(?:con|que|sentido|desde|en)\s/i)[0]) : new Set();
+    if (!keys.size) keys = scan(full);
+    // Si las estaciones caen en varias redes, se queda la red con más coincidencias
+    const per = {};
+    for (const k of keys) { const r = k.split("|")[1]; per[r] = (per[r] || 0) + 1; }
+    const best = Math.max(0, ...Object.values(per));
+    const out = [...keys].filter((k) => per[k.split("|")[1]] === best);
+    if (S.lineas.length) inferred.set(a.id, out);
+    return out;
+  }
+  const routedLines = (a) => [...new Set(a.routes.map((x) => { const r = routeRed(x), l = routeLine(x); return l ? lineKey(l, r?.slug) : null; }).filter(Boolean))];
+  const alertLines = (a) => (a.routes.length ? routedLines(a) : inferLines(a));
+  function alertRedes(a) {
+    const fromLines = [...new Set(alertLines(a).map((k) => k.split("|")[1]).filter((x) => x && x !== "otras"))];
+    if (a.routes.length) return [...new Set([...a.routes.map((x) => routeRed(x)?.slug).filter(Boolean), ...fromLines])];
+    if (fromLines.length) return fromLines;
+    // Último recurso: el nombre de la ciudad o de una estación conocida, como palabra entera
+    const text = words(`${a.header} ${a.desc}`);
+    const hits = S.redes.filter((r) => r.claves.some((k) => hasWord(text, k)));
+    return hits.length === 1 ? [hits[0].slug] : [];
+  }
   function alerts(scope = S.scope) {
     const all = S.live?.cercanias?.alerts || [];
-    if (!scope) return all;
-    const r = redBySlug(scope);
-    return all.filter((a) => alertRedes(a).includes(scope) || (!a.routes.length && r && r.claves.some((k) => alertText(a).includes(norm(k)))));
+    return scope ? all.filter((a) => alertRedes(a).includes(scope)) : all;
   }
   const alertsOfLine = (key) => (S.live?.cercanias?.alerts || []).filter((a) => alertLines(a).includes(key));
 
@@ -77,7 +147,8 @@
   }
   function lineStatus(o) {
     if (!o || !o.known) return { cls: "none", text: "Sin datos de retraso" };
-    if (o.pctLate > 0.3) return { cls: "crit", text: "Muchos retrasos" };
+    // "Muchos retrasos" solo con al menos 3 trenes con dato: un tren suelto no define una línea
+    if (o.pctLate > 0.3 && o.known >= 3) return { cls: "crit", text: "Muchos retrasos" };
     if (o.late) return { cls: "warn", text: "Algunos retrasos" };
     return { cls: "ok", text: "Funciona con normalidad" };
   }
@@ -86,13 +157,24 @@
     const known = all.filter((t) => t.delayMin !== null && t.delayMin !== undefined);
     const late = known.filter((t) => t.delayMin >= 3);
     const ld = S.live?.largaDistancia?.trips || [];
+    // Con menos de 5 trenes con dato (de madrugada) un porcentaje engaña: no se calcula
+    const few = known.length < 5;
     return {
-      trains: all.length, known: known.length, late: late.length,
-      pctLate: known.length ? late.length / known.length : null,
-      avg: known.length ? known.reduce((s, t) => s + Math.max(0, t.delayMin), 0) / known.length : null,
+      trains: all.length, known: known.length, late: late.length, few,
+      pctLate: known.length && !few ? late.length / known.length : null,
+      avg: known.length && !few ? known.reduce((s, t) => s + Math.max(0, t.delayMin), 0) / known.length : null,
       alerts: alerts(scope).length,
       ldCancelled: ld.filter((t) => t.cancelled).length, ld: ld.length,
     };
+  }
+  // Hora de Madrid entre las 00:30 y las 05:00: casi no hay servicio
+  function nightNote(s) {
+    const h = Number(new Date().toLocaleString("en-GB", { timeZone: "Europe/Madrid", hour: "2-digit", minute: "2-digit", hour12: false }).replace(":", "."));
+    const night = h >= 0.3 && h < 5;
+    if (!s.few && !night) return null;
+    return night
+      ? "Fuera de horario: de madrugada casi no circulan trenes de Cercanías. El servicio vuelve entre las 5:00 y las 6:00, según la línea."
+      : "Ahora mismo hay muy pocos trenes con datos de retraso; por eso no se calculan porcentajes.";
   }
   const fmtMin = (v) => (v === null ? "—" : `${v.toFixed(1).replace(".", ",")} min`);
   const fmtPct = (v) => (v === null ? "—" : `${Math.round(v * 100)} %`);
@@ -108,11 +190,23 @@
       h("span", { class: "grow" }, h("strong", {}, trainTitle(t)), h("span", {}, sub.filter(Boolean).join(" · "))),
       h("span", { class: `tag ${d.cls}` }, d.short));
   };
-  const alertCard = (a) => h("article", { class: "card alert-item", id: `aviso-${a.id}` },
-    h("h3", {}, a.header || a.desc),
-    a.desc && a.desc !== a.header ? h("p", {}, a.desc) : "",
+  // Texto del aviso para mostrar: sin las etiquetas internas de Renfe (#MadC5) al principio
+  const cleanAlert = (x) => String(x || "").replace(/^(\s*#\w+)+\s*/, "").trim();
+  // Los teléfonos que vienen dentro del aviso se pueden pulsar para llamar
+  function withPhones(text) {
+    const parts = String(text).split(/(\b(?:\+34\s?)?[6-9]\d{2}(?:[\s.]?\d{2,3}){3}\b)/);
+    return parts.map((p, i) => (i % 2 ? h("a", { href: `tel:${p.replace(/[^\d+]/g, "")}` }, p) : p));
+  }
+  // Renfe suele mandar el título vacío y todo en la descripción: entonces se muestra una sola vez
+  function alertCard(a) {
+    const head = cleanAlert(a.header), body = cleanAlert(a.desc);
+    const title = head || body, rest = head && body && body !== head ? body : "";
+    return h("article", { class: "card alert-item", id: `aviso-${a.id}` },
+    h(rest ? "h3" : "p", { class: rest ? "" : "alert-text" }, ...withPhones(title)),
+    rest ? h("p", {}, ...withPhones(rest)) : "",
     alertLines(a).length ? h("div", { class: "lines" }, alertLines(a).slice(0, 8).map((k) => h("a", { class: "tag info", href: lineUrl(k) }, lineName(k, true)))) : "",
     a.start || a.end ? h("p", { class: "small muted" }, [a.start ? `Desde el ${new Date(a.start * 1000).toLocaleString("es-ES", { timeZone: "Europe/Madrid", dateStyle: "medium", timeStyle: "short" })}` : "", a.end ? `hasta el ${new Date(a.end * 1000).toLocaleString("es-ES", { timeZone: "Europe/Madrid", dateStyle: "medium", timeStyle: "short" })}` : ""].filter(Boolean).join(" ")) : "");
+  }
   const kpi = (val, label, href) => h(href ? "a" : "div", { class: "card kpi tile", href }, h("b", {}, val), h("span", {}, label), href ? h("span", { class: "more" }, "Ver") : "");
 
   /* ---------- Vías: los trenes avanzan siguiendo la vía ---------- */
@@ -296,23 +390,62 @@
     if (!form) return;
     const input = form.querySelector("input"), list = form.querySelector(".suggest");
     let results = [], active = -1;
+    // Sinónimos: lo que escribe la gente → lo que aparece en los nombres de estación
+    const SYN = [[/^(airport|aeropuerto|aeroport|el prat|prat)$/, "aeropuerto aeroport"]];
+    const LD_WORDS = /^(ave|avlo|alvia|avant|euromed|alta velocidad|larga distancia|media distancia|ouigo|iryo|intercity)\b/;
     function search(qRaw) {
-      const q = norm(qRaw); if (!q) return [];
+      const q = norm(qRaw).trim(); if (!q) return [];
+      const qw = words(q).trim();
+      const starts = (text) => words(text).includes(` ${qw}`); // palabra que empieza por lo escrito
       const out = [];
-      for (const o of lines()) if (norm(o.code).startsWith(q.replace(/\s|-/g, "")) || norm("linea " + lineName(o.key, true)).includes(q))
-        out.push({ href: lineUrl(o.key), badge: o.code, title: `Línea ${lineName(o.key, true)}`, sub: `${o.trains.length} ${o.trains.length === 1 ? "tren" : "trenes"} · ${lineStatus(o).text}`, group: "Líneas" });
-      for (const r of S.redes) if (norm(`${r.nombre} ${r.claves.join(" ")}`).includes(q)) out.push({ href: `/cercanias/${r.slug}`, badge: "C", title: r.nombre, sub: "Retrasos e incidencias de la red", group: "Redes de Cercanías" });
+      // 1. Líneas: todas las del catálogo, tengan o no trenes ahora. "c3", "c-3", "c3 madrid", "linea c3"
+      const live = new Map(lines(null).map((o) => [o.key, o]));
+      const qCode = q.replace(/^linea\s+/, "").replace(/[\s-]/g, "");
+      const lineHits = [];
+      for (const l of S.lineas) {
+        const key = lineKey(l.code, l.red), r = redBySlug(l.red);
+        const code = norm(l.code).replace("-", "");
+        const full = `${code}${norm(r?.corto || "").replace(/\s/g, "")}`;
+        const qBase = qCode.replace(/(nord|sud|norte|sur)$/, "");
+        if (!(code === qCode || code === qBase || (qCode.length > code.length && full.startsWith(qCode)) || (qCode.length >= 2 && code.startsWith(qCode) && /\d/.test(qCode)))) continue;
+        const o = live.get(key);
+        const redRank = Math.max(0, S.redes.length - S.redes.findIndex((x) => x.slug === l.red)) / 100; // Madrid, Rodalies... primero
+        lineHits.push({ score: (code === qCode ? 2 : 0) + (S.scope === l.red ? 4 : 0) + (o ? 1 : 0) + redRank, r: { href: lineUrl(key), badge: l.code, title: `Línea ${l.code} · ${r?.corto || ""}`,
+          sub: o ? `${o.trains.length} ${o.trains.length === 1 ? "tren" : "trenes"} · ${lineStatus(o).text}` : "Sin trenes circulando ahora · ver recorrido y avisos", group: "Líneas" } });
+      }
+      lineHits.sort((a, b) => b.score - a.score).forEach((x) => out.push(x.r));
+      // 2. Estaciones (y sinónimos como "aeropuerto")
+      const ldWord = LD_WORDS.test(q);
+      const syn = SYN.find(([re]) => re.test(q));
+      const stTerms = syn ? syn[1].split(" ") : [qw];
+      const seenSt = new Set();
+      if (qw.length >= 3 && !ldWord) for (const st of stations()) {
+        if (!stTerms.some((t) => ` ${st.w} `.includes(` ${t}`)) || seenSt.has(st.label)) continue;
+        seenSt.add(st.label);
+        const keys = [...(st.full || st.keys)];
+        out.push({ href: lineUrl(keys[0]), badge: "●", title: st.label, sub: `Estación · ${keys.map((k) => lineName(k, true)).slice(0, 4).join(", ")}`, group: "Estaciones" });
+      }
+      // 3. Redes (ciudades)
+      for (const r of S.redes) if ([r.nombre, r.corto, ...r.claves].some(starts)) out.push({ href: `/cercanias/${r.slug}`, badge: "C", title: r.nombre, sub: "Retrasos e incidencias de la red", group: "Redes de Cercanías" });
+      // 4. Trenes por número
       for (const t of trains()) if ([t.num, t.label, t.tripId, t.id].some((v) => v && norm(v).includes(q))) out.push({ href: trainUrl(t), badge: t.code || "—", title: `Tren ${t.num}${t.line ? " · " + lineName(t.line) : ""}`, sub: delayInfo(t.delayMin).text, group: "Trenes" });
-      if (!S.scope) for (const t of ldTrains()) if ([t.num, `${t.tipo} ${t.num}`, t.origen, t.destino].some((v) => v && norm(v).includes(q))) out.push({ href: trainUrl(t), badge: t.code, title: trainTitle(t), sub: `${t.origen ? `${t.origen} → ${t.destino} · ` : ""}${delayInfo(t.delayMin).text}`, group: "Alta velocidad, larga y media distancia" });
-      for (const a of alerts()) if (alertText(a).includes(q)) out.push({ href: `/avisos#aviso-${a.id}`, badge: "!", title: a.header || a.desc, sub: alertLines(a).map((k) => lineName(k, true)).slice(0, 3).join(", ") || "Aviso de Renfe", group: "Avisos" });
-      for (const d of S.acc) if (norm(`${d.place} ${d.prov}`).includes(q)) out.push({ href: `/accidentes#${d.id}`, badge: "⚑", title: `${d.place} (${d.prov})`, sub: `${d.type} · ${window.Anden.fmtDate(d.date)}`, group: "Accidentes" });
+      if (!S.scope) for (const t of ldTrains()) if ([t.num, `${t.tipo} ${t.num}`, t.origen, t.destino].some((v) => v && (norm(v).includes(q) || starts(v)))) out.push({ href: trainUrl(t), badge: t.code, title: trainTitle(t), sub: `${t.origen ? `${t.origen} → ${t.destino} · ` : ""}${delayInfo(t.delayMin).text}`, group: "Alta velocidad, larga y media distancia" });
+      if (LD_WORDS.test(q)) out.push({ href: "/retrasos#larga-distancia", badge: "AV", title: "Alta velocidad y larga distancia", sub: "Retrasos y trenes cancelados de Renfe ahora", group: "Alta velocidad, larga y media distancia" });
+      if (/^\d{4,6}$/.test(q) && !out.some((r) => r.group === "Trenes" || r.group.startsWith("Alta"))) out.push({ href: "/retrasos#larga-distancia", badge: "?", title: `El tren ${q} no está circulando ahora`, sub: "Solo se ven los trenes en marcha. Mira los cancelados de alta velocidad y larga distancia", group: "Trenes" });
+      // 5. Avisos y accidentes (palabras enteras)
+      if (!ldWord) for (const a of alerts()) if (starts(`${a.header} ${a.desc}`) || a.routes.some((x) => norm(x).includes(q))) out.push({ href: `/avisos#aviso-${a.id}`, badge: "!", title: cleanAlert(a.header) || cleanAlert(a.desc), sub: alertLines(a).map((k) => lineName(k, true)).slice(0, 3).join(", ") || "Aviso de Renfe", group: "Avisos" });
+      for (const d of S.acc) if (starts(`${d.place} ${d.prov}`)) out.push({ href: `/accidentes#${d.id}`, badge: "⚑", title: `${d.place} (${d.prov})`, sub: `${d.type} · ${window.Anden.fmtDate(d.date)}`, group: "Accidentes" });
+      // Orden de los grupos: lo más probable primero (la ciudad antes que sus estaciones)
+      const ORDER = ldWord ? ["Alta velocidad, larga y media distancia", "Líneas", "Redes de Cercanías", "Estaciones", "Trenes", "Avisos", "Accidentes"]
+        : ["Líneas", "Redes de Cercanías", "Estaciones", "Trenes", "Alta velocidad, larga y media distancia", "Avisos", "Accidentes"];
       const per = {};
-      return out.filter((r) => (per[r.group] = (per[r.group] || 0) + 1) <= 6);
+      return out.filter((r) => (per[r.group] = (per[r.group] || 0) + 1) <= 6)
+        .map((r, i) => [r, i]).sort((a, b) => ORDER.indexOf(a[0].group) - ORDER.indexOf(b[0].group) || a[1] - b[1]).map(([r]) => r);
     }
     function render() {
       list.replaceChildren();
       if (!input.value.trim()) return close();
-      if (!results.length) list.append(h("li", { class: "empty-opt", role: "presentation" }, S.live ? "Sin resultados. Prueba con el número del tren, la línea (C1, R2…) o una ciudad." : "Cargando datos de Renfe…"));
+      if (!results.length) list.append(h("li", { class: "empty-opt", role: "presentation" }, S.live ? "Sin resultados. Prueba con tu línea (C3, R2…), tu estación o tu ciudad." : "Cargando datos de Renfe…"));
       let group = null;
       results.forEach((r, i) => {
         if (r.group !== group) { group = r.group; list.append(h("li", { class: "grp", role: "presentation" }, group)); }
@@ -334,7 +467,15 @@
     // Búsqueda que llega por la URL (?q=...), por ejemplo desde Google
     const q0 = new URLSearchParams(location.search).get("q");
     if (q0) { input.value = q0; let done = false; S.subs.push(() => { if (done || !S.live) return; done = true; results = search(q0); active = results.length ? 0 : -1; render(); input.focus(); }); }
-    form.addEventListener("submit", (e) => { e.preventDefault(); results = search(input.value); if (results.length) location.href = results[Math.max(0, active)].href; else render(); });
+    let pendingSubmit = false;
+    form.addEventListener("submit", (e) => {
+      e.preventDefault();
+      results = search(input.value);
+      if (results.length) location.href = results[Math.max(0, active)].href;
+      else { pendingSubmit = !S.live; render(); }
+    });
+    // Si se pulsó Enter antes de que llegaran los datos, se busca en cuanto llegan
+    S.subs.push(() => { if (document.activeElement === input && input.value.trim()) { results = search(input.value); active = results.length ? 0 : -1; render(); if (pendingSubmit && results.length) location.href = results[0].href; pendingSubmit = false; } });
     // Sugerencias rápidas: líneas con más trenes
     const hints = form.parentElement.querySelector(".hints");
     S.subs.push(() => {
@@ -349,10 +490,17 @@
     try { const r = await fetch(LIVE_URL, { cache: "no-store" }); if (r.ok) S.live = await r.json(); } catch (e) {}
     paintPill();
     for (const f of S.subs) try { f(); } catch (e) { console.error(e); }
+    // Enlaces con #ancla (p. ej. /retrasos#larga-distancia): el contenido llega después de cargar,
+    // así que se vuelve a saltar al ancla cuando ya está pintado
+    if (!S.jumped && location.hash.length > 1) {
+      S.jumped = true;
+      try { document.getElementById(decodeURIComponent(location.hash.slice(1)))?.scrollIntoView({ block: "start" }); } catch (e) {}
+    }
   }
   async function start() {
     try { S.redes = (await (await fetch("/data/redes.json")).json()).redes; } catch (e) {}
     try { S.acc = (await (await fetch("/data/accidentes.json")).json()).accidentes; } catch (e) {}
+    try { S.lineas = (await (await fetch("/data/lineas.json")).json()).lineas || []; } catch (e) {}
     await load();
     setInterval(() => { if (!document.hidden) load(); }, REFRESH_MS);
     setInterval(paintPill, 5000);
@@ -361,7 +509,7 @@
 
   window.AndenLive = {
     S, start, onUpdate: (f) => S.subs.push(f), attachSearch,
-    trains, ldTrains, alerts, alertsOfLine, alertLines, alertRedes, lines, lineStatus, summary, redBySlug,
+    trains, ldTrains, nightNote, alerts, alertsOfLine, alertLines, alertRedes, stations, cleanAlert, lines, lineStatus, summary, redBySlug,
     delayInfo, lineName, lineCode, lineUrl, trainUrl, lineKey, trainTitle, GRUPOS, GRUPO_COLOR, REFRESH_MS,
     fmtMin, fmtPct, lineBadge, trainRow, alertCard, kpi, trainLayer, Vias,
   };

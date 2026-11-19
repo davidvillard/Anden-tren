@@ -50,9 +50,13 @@
     const href = a.getAttribute("href");
     const match = href === "/" ? path === "/" : path === href || path.startsWith(href + "/") ||
       (href === "/accidente-tren-hoy" && /^\/(accidentes|accidente-tren)/.test(path)) ||
-      (href === "/mapa-trenes" && /^\/(tren|cercanias)/.test(path)) || (href === "/retrasos" && path === "/linea") || (href === "/incidencias" && path.startsWith("/incidencia/"));
-    if (match) a.setAttribute("aria-current", "page");
+      (href === "/mapa-trenes" && /^\/tren(\/|$)/.test(path)) || (href === "/retrasos" && (path === "/linea" || /^\/cercanias(\/|$)/.test(path))) || (href === "/incidencias" && path.startsWith("/incidencia/"));
+    if (match) { a.setAttribute("aria-current", "page"); a.scrollIntoView?.({ block: "nearest", inline: "center" }); }
   });
+  // En el móvil el menú se desliza de lado: se marca con un degradado si hay más a la derecha
+  const nav = document.querySelector(".nav");
+  const edge = () => nav && nav.classList.toggle("more-right", nav.scrollLeft + nav.clientWidth < nav.scrollWidth - 4);
+  nav?.addEventListener("scroll", edge, { passive: true }); addEventListener("resize", edge); edge();
 })();
 
 // ---- Google Tag Manager / Analytics: solo con consentimiento ----

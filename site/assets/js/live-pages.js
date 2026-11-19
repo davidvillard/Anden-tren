@@ -50,7 +50,9 @@
     if (!el) return;
     if (!list.length) { el.replaceChildren(h("div", { class: "empty" }, A.S.live ? "No hay líneas con trenes circulando ahora mismo." : "Cargando líneas…")); return; }
     const rows = [...list].sort((a, b) => (b.pctLate ?? -1) - (a.pctLate ?? -1) || b.trains.length - a.trains.length);
-    if (compact) { el.replaceChildren(...rows.slice(0, 5).map((o) => { const s = A.lineStatus(o); return h("a", { class: "row", href: A.lineUrl(o.key) }, A.lineBadge(o.code), h("span", { class: "grow" }, h("strong", {}, `Línea ${A.lineName(o.key)}`), h("span", {}, `${o.trains.length} ${o.trains.length === 1 ? "tren" : "trenes"} · retraso medio ${A.fmtMin(o.avg)}`)), h("span", { class: `tag ${s.cls}` }, s.text)); })); return; }
+    // En la portada solo salen las líneas que de verdad llevan retraso
+    if (compact && !rows.some((o) => o.late)) { el.replaceChildren(h("div", { class: "empty" }, rows.length ? "Todas las líneas con trenes circulando van con normalidad ahora mismo." : "Ahora mismo no hay trenes de Cercanías circulando.")); return; }
+    if (compact) { el.replaceChildren(...rows.filter((o) => o.late).slice(0, 5).map((o) => { const s = A.lineStatus(o); return h("a", { class: "row", href: A.lineUrl(o.key) }, A.lineBadge(o.code), h("span", { class: "grow" }, h("strong", {}, `Línea ${A.lineName(o.key)}`), h("span", {}, `${o.trains.length} ${o.trains.length === 1 ? "tren" : "trenes"} · retraso medio ${A.fmtMin(o.avg)}`)), h("span", { class: `tag ${s.cls}` }, s.text)); })); return; }
     el.replaceChildren(h("div", { class: "table-wrap" }, h("table", {},
       h("thead", {}, h("tr", {}, ["Línea", "Trenes", "Con retraso", "Retraso medio", "Avisos", "Estado"].map((t) => h("th", { scope: "col" }, t)))),
       h("tbody", {}, rows.map((o) => { const s = A.lineStatus(o); return h("tr", {},
@@ -77,7 +79,12 @@
       A.kpi(A.fmtPct(s.pctLate), "van con 3 min o más de retraso", links && "/retrasos"),
       A.kpi(A.fmtMin(s.avg), "de retraso medio", links && "/retrasos"),
       A.kpi(s.alerts.toLocaleString("es-ES"), "avisos de Renfe", links && "/avisos"),
-      ...(s.ldCancelled && !A.S.scope ? [A.kpi(s.ldCancelled.toLocaleString("es-ES"), "trenes de alta velocidad y larga distancia cancelados", links && "/retrasos#larga-distancia")] : []));
+      ...(s.ldCancelled && !A.S.scope ? [A.kpi(s.ldCancelled.toLocaleString("es-ES"), s.ldCancelled === 1 ? "tren de alta velocidad o larga distancia cancelado" : "trenes de alta velocidad y larga distancia cancelados", links && "/retrasos#larga-distancia")] : []));
+    // Aviso de madrugada o de muestra pequeña, justo debajo de las cifras
+    const note = A.nightNote(s);
+    let p = el.nextElementSibling?.classList.contains("night-note") ? el.nextElementSibling : null;
+    if (note) { if (!p) { p = h("p", { class: "night-note" }); el.after(p); } p.textContent = note; }
+    else if (p) p.remove();
   }
 
   const redesChips = (el) => el && el.replaceChildren(...A.S.redes.map((r) => h("a", { class: "chip", href: `/cercanias/${r.slug}` }, r.corto)));
@@ -136,7 +143,7 @@
         const media = conDato.length ? conDato.reduce((a, t) => a + Math.max(0, t.delayMin), 0) / conDato.length : null;
         $("ld").replaceChildren(
           h("p", {}, ld.length
-            ? `Ahora circulan ${ld.length} trenes de alta velocidad, larga y media distancia: ${tarde.length} van con 5 minutos o más de retraso y el retraso medio es de ${A.fmtMin(media)}.`
+            ? `${ld.length === 1 ? "Ahora circula 1 tren" : `Ahora circulan ${ld.length} trenes`} de alta velocidad, larga y media distancia: ${tarde.length === 1 ? "1 va" : `${tarde.length} van`} con 5 minutos o más de retraso y el retraso medio es de ${A.fmtMin(media)}.`
             : A.S.live ? "Renfe no da ahora mismo la posición de los trenes de alta velocidad, larga y media distancia." : "Cargando…"),
           h("p", {}, s.ld
             ? `Renfe informa de ${s.ldCancelled.toLocaleString("es-ES")} ${s.ldCancelled === 1 ? "tren cancelado" : "trenes cancelados"} en este momento.`

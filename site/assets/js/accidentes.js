@@ -66,7 +66,8 @@
           h("dt", {}, "Qué pasó"), h("dd", {}, d.summary),
           h("dt", {}, "Causa e investigación"), h("dd", {}, d.cause),
           h("dt", {}, "Fuentes"), h("dd", { class: "sources" }, d.src.map(([n, u]) => h("a", { href: u, target: "_blank", rel: "noopener" }, n)))),
-        h("p", { class: "small", style: "color:var(--accent);font-weight:600" }, st.sel === d.id ? "Ocultar detalles" : "Ver detalles"));
+        d.pagina ? h("p", {}, h("a", { class: "btn ghost", href: d.pagina }, "Última hora de este accidente")) : "",
+        h("button", { class: "link-btn more-btn", type: "button", "aria-expanded": st.sel === d.id ? "true" : "false" }, st.sel === d.id ? "Ocultar detalles" : "Ver detalles"));
       el.addEventListener("click", (e) => { if (!e.target.closest("a")) select(d.id, false); });
       el.addEventListener("keydown", (e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); select(d.id, false); } });
       return el;
@@ -88,7 +89,18 @@
 
   window.addEventListener("anden:prefs", paintMarkers);
   chips();
-  fetch("/data/accidentes.json").then((r) => r.json()).then((j) => {
+  // Los accidentes que siguen abiertos toman los fallecidos del último balance oficial
+  // (el mismo dato que su página de última hora) y enlazan a esa página.
+  const sucesos = () => fetch("/api/sucesos", { cache: "no-store" }).then((r) => (r.ok ? r.json() : Promise.reject()))
+    .catch(() => fetch("/data/sucesos.json").then((r) => r.json())).catch(() => ({ sucesos: [] }));
+  Promise.all([fetch("/data/accidentes.json").then((r) => r.json()), sucesos()]).then(([j, live]) => {
+    for (const d of j.accidentes) {
+      const s = (live.sucesos || []).find((x) => x.accidenteId === d.id);
+      if (!s) continue;
+      d.pagina = s.pagina || `/accidente-tren/${s.id}`;
+      const f = s.cifras?.fallecidos;
+      if (f && f.valor > 0) { d.fat = f.valor; d.fatTxt = `${f.prefijo === "≥" ? "≥ " : ""}${f.valor}`; }
+    }
     st.data = j.accidentes;
     drawMarkers();
     const hash = location.hash.slice(1);
