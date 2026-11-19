@@ -6,6 +6,7 @@
 // 2. Si hay titulares nuevos, pide a Gemini (plan gratuito) las cifras y quién las da.
 // 3. Aplica las reglas de lib/merge.js y guarda el resultado en Redis.
 import { createHash } from "node:crypto";
+import { waitUntil } from "@vercel/functions";
 import { fetchNews } from "../../lib/news.js";
 import { extract, QuotaError } from "../../lib/extract.js";
 import { merge } from "../../lib/merge.js";
@@ -40,6 +41,11 @@ async function setIfChanged(key, value, before) {
 
 export const config = { maxDuration: 120 };
 
+const KEY_LAST_RUN = "sucesos:ultima-ejecucion";
+
+// cron-job.org corta a los 30 s y, tras varios cortes seguidos, desactiva la tarea. Consultar a
+// Gemini puede tardar más, así que se contesta enseguida y el trabajo sigue en segundo plano
+// (waitUntil). La respuesta lleva el resumen de la ejecución anterior.
 export default async function handler(req, res) {
   const secret = process.env.CRON_SECRET;
   const auth = req.headers.authorization || "";
@@ -47,7 +53,16 @@ export default async function handler(req, res) {
   if (!storeEnabled()) return res.status(500).json({ error: "Falta conectar Upstash Redis en Vercel" });
   if (!process.env.GEMINI_API_KEY) return res.status(500).json({ error: "Falta la variable GEMINI_API_KEY" });
 
-  const now = new Date();
+  let anterior = null;
+  try { anterior = await getJSON(KEY_LAST_RUN); } catch (e) { return res.status(500).json({ error: `Redis no responde: ${e.message}` }); }
+  const inicio = new Date();
+  waitUntil(run(inicio)
+    .then((r) => setJSON(KEY_LAST_RUN, { ...r, inicio: inicio.toISOString(), segundos: Math.round((Date.now() - inicio) / 1000) }))
+    .catch((e) => setJSON(KEY_LAST_RUN, { error: String(e.message || e), inicio: inicio.toISOString() }).catch(() => {})));
+  res.status(200).json({ ok: true, enMarcha: true, ultimaEjecucion: anterior });
+}
+
+async function run(now) {
   const state = await loadState();
   const seenRaw = (await getJSON(KEY_SEEN)) || {};
   // Formato antiguo (dirección completa → fecha ISO) se convierte al nuevo sobre la marcha
@@ -149,5 +164,5 @@ export default async function handler(req, res) {
       summary.redeploy = "pendiente";
     }
   }
-  res.status(200).json({ ok: true, ...summary, cambios: changes });
+  return { ok: true, ...summary, cambios: changes };
 }
