@@ -107,12 +107,6 @@
     if (!b) { b = h("button", { class: "btn ghost fav-btn", id: "fav-btn", type: "button" }); statusEl.after(b); b.onclick = () => { A.setMyLine(A.myLine() === key ? null : key); paint(); }; }
     const paint = () => { const mine = A.myLine() === key; b.textContent = mine ? "★ Es tu línea · quitar" : "☆ Guardar como mi línea"; b.setAttribute("aria-pressed", String(mine)); };
     paint();
-    // Alertas por Telegram (solo si el bot está configurado)
-    const bot = window.ANDEN_TG;
-    if (bot && !/^__/.test(bot) && !document.getElementById("tg-btn")) {
-      const [code, red] = key.split("|");
-      b.after(h("a", { class: "btn ghost tg-btn", id: "tg-btn", href: `https://t.me/${bot}?start=${encodeURIComponent(`${code}_${red}`)}`, target: "_blank", rel: "noopener" }, "🔔 Avísame por Telegram"));
-    }
   }
 
   // Trenes de alta velocidad y larga distancia que Renfe da como cancelados hoy

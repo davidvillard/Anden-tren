@@ -390,4 +390,3 @@ html[data-contrast="high"] .segmented{background:#fff;border:2px solid #000}
 .chart .bar-row:focus .lbl,.chart .bar-row:hover .lbl{fill:var(--ink)}
 .chart-tip{position:absolute;z-index:3000;pointer-events:none;background:var(--ink);color:#fff;font-size:.84rem;line-height:1.45;padding:8px 10px;border-radius:var(--r);box-shadow:var(--shadow-lg);max-width:240px}
 .select{font:inherit;min-height:40px;padding:0 12px;border:1px solid var(--line-2);border-radius:var(--r);background:var(--surface);color:var(--ink)}
-.tg-btn{display:inline-flex;align-items:center;gap:8px}
