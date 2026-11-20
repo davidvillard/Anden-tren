@@ -32,7 +32,7 @@
   function drawMarkers() {
     for (const d of [...st.data].sort((a, b) => b.fat - a.fat)) {
       markers[d.id] = L.circleMarker([d.lat, d.lon], { radius: radius(d.fat), weight: 2, fillOpacity: 0.85 })
-        .bindTooltip(`${d.place} · ${fmtDate(d.date)} · ${d.fatTxt} fallecidos`)
+        .bindTooltip(`${d.place} · ${fmtDate(d.date)} · ${window.Anden.t("{n} fallecidos", { n: d.fatTxt })}`)
         .on("click", () => select(d.id, true))
         .addTo(map);
     }
@@ -48,7 +48,7 @@
   function render() {
     const rows = st.data.filter(visible).sort((a, b) => (st.sort === "date" ? b.date.localeCompare(a.date) : b.fat - a.fat));
     const tot = rows.reduce((s, d) => s + d.fat, 0);
-    document.getElementById("summary").textContent = `${rows.length} accidentes · ${rows.some((d) => d.provisional) ? "al menos " : ""}${tot} fallecidos`;
+    document.getElementById("summary").textContent = window.Anden.t(`${rows.length} accidentes · ${rows.some((d) => d.provisional) ? "al menos " : ""}${tot} fallecidos`);
     const list = document.getElementById("list");
     if (!rows.length) { list.replaceChildren(h("div", { class: "empty" }, "Ningún accidente coincide. Quita algún filtro para ver más.")); paintMarkers(); return; }
     list.replaceChildren(...rows.map((d) => {
@@ -57,7 +57,7 @@
         h("div", { class: "acc-top" },
           h("div", {}, h("h3", {}, d.place), h("p", { class: "small muted" }, `${d.prov} · ${fmtDate(d.date)}${d.time ? " · " + d.time : ""}`)),
           h("span", { class: `tag ${d.provisional ? "crit" : s.tag}` }, d.provisional ? "Provisional" : s.t)),
-        h("p", { class: "small" }, `${d.type} · ${d.service}`),
+        h("p", { class: "small" }, `${window.Anden.t(d.type)} · ${window.Anden.t(d.service)}`),
         h("div", { class: "acc-nums" },
           h("div", {}, h("b", { class: "crit" }, d.fatTxt), "fallecidos"),
           h("div", {}, h("b", {}, d.inj), `heridos${d.injNote ? " · " + d.injNote : ""}`)),

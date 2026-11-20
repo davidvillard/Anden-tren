@@ -1,5 +1,22 @@
 "use strict";
-// Modo accesible, enlace activo del menú, cookies (Google Tag Manager) y utilidades.
+// Modo accesible, enlace activo del menú, idioma, cookies (Google Tag Manager) y utilidades.
+
+// ---- Idioma: la web se escribe en español; /en/ y /ca/ cargan antes su diccionario (window.ANDEN_T) ----
+window.ANDEN_LANG = window.ANDEN_T?.lang || "es";
+window.ANDEN_LOCALE = window.ANDEN_T?.locale || "es-ES";
+(function () {
+  const lang = window.ANDEN_LANG;
+  // Rutas que solo existen en español: las páginas legales y la ficha de cada suceso
+  const SOLO_ES = /^\/(api|data|assets|vendor|og|aviso-legal|privacidad|cookies|accesibilidad|fuentes|contacto|huelga-renfe|obras-cercanias|accidente-tren\/|accidente-tren-toledo|incidencia\/|favicon|manifest|sitemap|robots)/;
+  window.ANDEN_URL = (p) => (lang === "es" || typeof p !== "string" || !p.startsWith("/") || p.startsWith("//") || SOLO_ES.test(p) || /^\/(en|ca)(\/|$)/.test(p) ? p : `/${lang}${p === "/" ? "" : p}`);
+  // Selector de idioma: misma página en el otro idioma
+  const base = location.pathname.replace(/^\/(en|ca)(?=\/|$)/, "") || "/";
+  document.querySelectorAll("[data-lang-link]").forEach((a) => {
+    const l = a.dataset.langLink;
+    a.href = (l === "es" ? base : `/${l}${base === "/" ? "" : base}`) + location.search + location.hash;
+    if (l === lang) a.setAttribute("aria-current", "true");
+  });
+})();
 
 (function () {
   const root = document.documentElement;
@@ -45,9 +62,10 @@
   paint();
 
   // ---- Enlace activo ----
-  const path = location.pathname.replace(/\.html$/, "").replace(/\/$/, "") || "/";
+  const sinIdioma = (p) => p.replace(/^\/(en|ca)(?=\/|$)/, "") || "/";
+  const path = sinIdioma(location.pathname.replace(/\.html$/, "").replace(/\/$/, "")) || "/";
   document.querySelectorAll(".nav a").forEach((a) => {
-    const href = a.getAttribute("href");
+    const href = sinIdioma(a.getAttribute("href"));
     const match = href === "/" ? path === "/" : path === href || path.startsWith(href + "/") ||
       (href === "/accidente-tren-hoy" && /^\/(accidentes|accidente-tren)/.test(path)) ||
       (href === "/mapa-trenes" && /^\/tren(\/|$)/.test(path)) || (href === "/retrasos" && (path === "/linea" || /^\/cercanias(\/|$)/.test(path))) || (href === "/incidencias" && path.startsWith("/incidencia/"));
@@ -82,7 +100,8 @@
     if (document.getElementById("consent")) return;
     const el = document.createElement("div");
     el.className = "consent"; el.id = "consent"; el.setAttribute("role", "dialog"); el.setAttribute("aria-label", "Cookies");
-    el.innerHTML = '<div class="consent-in"><p>Usamos cookies de Google Analytics para contar visitas de forma anónima y mejorar Andén. Solo se activan si las aceptas. <a href="/cookies">Más información</a></p><div class="row-btns"><button type="button" class="btn ghost" data-v="no">Rechazar</button><button type="button" class="btn" data-v="si">Aceptar</button></div></div>';
+    const t = window.ANDEN_T || ((x) => x);
+    el.innerHTML = `<div class="consent-in"><p>${t("Usamos cookies de Google Analytics para contar visitas de forma anónima y mejorar Andén. Solo se activan si las aceptas.")} <a href="/cookies">${t("Más información")}</a></p><div class="row-btns"><button type="button" class="btn ghost" data-v="no">${t("Rechazar")}</button><button type="button" class="btn" data-v="si">${t("Aceptar")}</button></div></div>`;
     el.addEventListener("click", (e) => {
       const v = e.target.closest("button")?.dataset.v; if (!v) return;
       set(v); el.remove();
@@ -96,25 +115,32 @@
 
 // ---- Utilidades compartidas ----
 window.Anden = {
+  // Crea un elemento. En inglés y catalán traduce sola cada texto con el diccionario y lleva los
+  // enlaces internos a la versión del idioma, así el resto del código se escribe una sola vez.
   h(tag, attrs = {}, ...children) {
     const el = document.createElement(tag);
+    const T = window.ANDEN_T;
     for (const [k, v] of Object.entries(attrs)) {
       if (v === null || v === undefined || v === false) continue;
       if (k === "class") el.className = v;
       else if (k.startsWith("on") && typeof v === "function") el.addEventListener(k.slice(2), v);
-      else el.setAttribute(k, v === true ? "" : v);
+      else if (k === "href") el.setAttribute(k, window.ANDEN_URL(v));
+      else el.setAttribute(k, v === true ? "" : T && /^(title|aria-label|placeholder|alt)$/.test(k) ? T(v) : v);
     }
-    for (const c of children.flat()) if (c !== null && c !== undefined && c !== false && c !== "") el.append(c instanceof Node ? c : String(c));
+    for (const c of children.flat()) if (c !== null && c !== undefined && c !== false && c !== "") el.append(c instanceof Node ? c : T ? T(String(c)) : String(c));
     return el;
   },
+  t: (s, vars) => (window.ANDEN_T ? window.ANDEN_T(s, vars) : vars ? String(s).replace(/\{(\w+)\}/g, (_, n) => vars[n] ?? `{${n}}`) : s),
+  url: (p) => window.ANDEN_URL(p),
   norm: (s) => String(s || "").normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase().trim(),
   css: (name) => getComputedStyle(document.documentElement).getPropertyValue(name).trim(),
   fmtDate(iso) {
-    const MESES = ["ene", "feb", "mar", "abr", "may", "jun", "jul", "ago", "sep", "oct", "nov", "dic"];
     const [y, m, d] = iso.slice(0, 10).split("-");
+    if (window.ANDEN_LANG !== "es") return new Date(Date.UTC(+y, +m - 1, +d, 12)).toLocaleDateString(window.ANDEN_LOCALE, { timeZone: "UTC", day: "numeric", month: "short", year: "numeric" });
+    const MESES = ["ene", "feb", "mar", "abr", "may", "jun", "jul", "ago", "sep", "oct", "nov", "dic"];
     return `${+d} ${MESES[+m - 1]} ${y}`;
   },
-  fmtTime: (unix) => new Date(unix * 1000).toLocaleTimeString("es-ES", { timeZone: "Europe/Madrid", hour: "2-digit", minute: "2-digit" }),
+  fmtTime: (unix) => new Date(unix * 1000).toLocaleTimeString(window.ANDEN_LOCALE || "es-ES", { timeZone: "Europe/Madrid", hour: "2-digit", minute: "2-digit" }),
   ago(unix) {
     const s = Math.max(0, Math.round(Date.now() / 1000 - unix));
     if (s < 60) return `hace ${s} s`;
@@ -131,7 +157,7 @@ window.Anden = {
     });
     L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
       maxZoom: 19,
-      attribution: '© <a href="https://www.openstreetmap.org/copyright">colaboradores de OpenStreetMap</a>',
+      attribution: `© <a href="https://www.openstreetmap.org/copyright">${window.Anden.t("colaboradores de OpenStreetMap")}</a>`,
     }).addTo(map);
     map.fitBounds(bounds || [[35.9, -9.4], [43.8, 3.4]]);
     return map;

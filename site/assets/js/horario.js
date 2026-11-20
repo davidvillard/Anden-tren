@@ -10,7 +10,7 @@
   const madridHoy = () => new Date().toLocaleDateString("sv-SE", { timeZone: "Europe/Madrid" });
   const ahoraMin = () => { const [hh, mm] = new Date().toLocaleTimeString("en-GB", { timeZone: "Europe/Madrid", hour: "2-digit", minute: "2-digit", hour12: false }).split(":"); return Number(hh) * 60 + Number(mm); };
   const min = (t) => { const [hh, mm] = t.split(":"); return Number(hh) * 60 + Number(mm); };
-  const dia = (iso) => new Date(`${iso}T12:00:00`).toLocaleDateString("es-ES", { weekday: "long", day: "numeric", month: "long" });
+  const dia = (iso) => new Date(`${iso}T12:00:00`).toLocaleDateString((window.ANDEN_LOCALE || "es-ES"), { weekday: "long", day: "numeric", month: "long" });
 
   function paint() {
     const parts = [h("h2", {}, "Hoy")];
@@ -26,7 +26,7 @@
     } else if (vivo) {
       const d = A.delayInfo(vivo.delayMin);
       parts.push(h("p", {}, h("span", { class: `tag ${d.cls}`, style: "font-size:1rem" }, `En marcha · ${d.text}`)),
-        h("p", {}, vivo.siguiente ? `Próxima parada: ${vivo.siguiente}. ` : "", vivo.llegada ? `Llegada prevista a ${vivo.destino || "destino"}: ${new Date(vivo.llegada).toLocaleTimeString("es-ES", { hour: "2-digit", minute: "2-digit" })}.` : ""),
+        h("p", {}, vivo.siguiente ? `Próxima parada: ${vivo.siguiente}. ` : "", vivo.llegada ? `Llegada prevista a ${vivo.destino || "destino"}: ${new Date(vivo.llegada).toLocaleTimeString((window.ANDEN_LOCALE || "es-ES"), { hour: "2-digit", minute: "2-digit" })}.` : ""),
         h("p", {}, h("a", { class: "btn ghost", href: A.trainUrl(vivo) }, "Ver en el mapa")));
     } else if (hoy) {
       const sale = hoy.p[0][2], llega = hoy.p[hoy.p.length - 1][1], now = ahoraMin();

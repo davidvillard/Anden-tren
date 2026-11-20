@@ -75,15 +75,15 @@
   function kpis(el, s, links = true) {
     if (!el) return;
     el.replaceChildren(
-      A.kpi(s.trains.toLocaleString("es-ES"), s.trains === 1 ? "tren circulando" : "trenes circulando", links && "/mapa-trenes"),
+      A.kpi(s.trains.toLocaleString((window.ANDEN_LOCALE || "es-ES")), s.trains === 1 ? "tren circulando" : "trenes circulando", links && "/mapa-trenes"),
       A.kpi(A.fmtPct(s.pctLate), "van con 3 min o más de retraso", links && "/retrasos"),
       A.kpi(A.fmtMin(s.avg), "de retraso medio", links && "/retrasos"),
-      A.kpi(s.alerts.toLocaleString("es-ES"), "avisos de Renfe", links && "/avisos"),
-      ...(s.ldCancelled && !A.S.scope ? [A.kpi(s.ldCancelled.toLocaleString("es-ES"), s.ldCancelled === 1 ? "tren de alta velocidad o larga distancia cancelado" : "trenes de alta velocidad y larga distancia cancelados", links && "/retrasos#larga-distancia")] : []));
+      A.kpi(s.alerts.toLocaleString((window.ANDEN_LOCALE || "es-ES")), "avisos de Renfe", links && "/avisos"),
+      ...(s.ldCancelled && !A.S.scope ? [A.kpi(s.ldCancelled.toLocaleString((window.ANDEN_LOCALE || "es-ES")), s.ldCancelled === 1 ? "tren de alta velocidad o larga distancia cancelado" : "trenes de alta velocidad y larga distancia cancelados", links && "/retrasos#larga-distancia")] : []));
     // Aviso de madrugada o de muestra pequeña, justo debajo de las cifras
     const note = A.nightNote(s);
     let p = el.nextElementSibling?.classList.contains("night-note") ? el.nextElementSibling : null;
-    if (note) { if (!p) { p = h("p", { class: "night-note" }); el.after(p); } p.textContent = note; }
+    if (note) { if (!p) { p = h("p", { class: "night-note" }); el.after(p); } p.textContent = window.Anden.t(note); }
     else if (p) p.remove();
   }
 
@@ -105,7 +105,7 @@
     if (!statusEl) return;
     let b = document.getElementById("fav-btn");
     if (!b) { b = h("button", { class: "btn ghost fav-btn", id: "fav-btn", type: "button" }); statusEl.after(b); b.onclick = () => { A.setMyLine(A.myLine() === key ? null : key); paint(); }; }
-    const paint = () => { const mine = A.myLine() === key; b.textContent = mine ? "★ Es tu línea · quitar" : "☆ Guardar como mi línea"; b.setAttribute("aria-pressed", String(mine)); };
+    const paint = () => { const mine = A.myLine() === key; b.textContent = window.Anden.t(mine ? "★ Es tu línea · quitar" : "☆ Guardar como mi línea"); b.setAttribute("aria-pressed", String(mine)); };
     paint();
   }
 
@@ -113,7 +113,7 @@
   function cancelados() {
     const list = A.ldCancelled();
     if (!list.length) return "";
-    const dia = (f) => new Date(f + "T12:00").toLocaleDateString("es-ES", { day: "numeric", month: "long" });
+    const dia = (f) => new Date(f + "T12:00").toLocaleDateString((window.ANDEN_LOCALE || "es-ES"), { day: "numeric", month: "long" });
     return h("div", { id: "cancelados", class: "card pad", style: "display:grid;gap:10px;margin-top:8px" },
       h("h3", {}, `Trenes cancelados (${list.length})`),
       h("p", { class: "small muted" }, "Número de tren según Renfe. Renfe no publica el trayecto de los trenes cancelados: si tu número está aquí, consulta tu billete en la web o la app de Renfe. Puede que te correspondan cambio o devolución: ", h("a", { href: "/indemnizaciones" }, "tus derechos"), "."),
@@ -156,7 +156,7 @@
       const contar = () => {
         const r = A.redBySlug(sel.value), n = { cerc: A.trains(sel.value || null).length };
         for (const t of A.ldTrains()) if (enRed(t, r)) n[t.grupo] = (n[t.grupo] || 0) + 1;
-        for (const b of chips) b.lastChild.textContent = `${A.GRUPOS[b.dataset.grupo]} (${n[b.dataset.grupo] || 0})`;
+        for (const b of chips) b.lastChild.textContent = `${window.Anden.t(A.GRUPOS[b.dataset.grupo])} (${n[b.dataset.grupo] || 0})`;
       };
       sel.addEventListener("change", () => { ml.fit(bbox(A.redBySlug(sel.value)) || [[35.9, -9.4], [43.8, 3.4]]); contar(); ml.draw(); history.replaceState(null, "", sel.value ? `?red=${sel.value}` : location.pathname); });
       let filled = false;
@@ -180,7 +180,7 @@
             ? `${ld.length === 1 ? "Ahora circula 1 tren" : `Ahora circulan ${ld.length} trenes`} de alta velocidad, larga y media distancia: ${tarde.length === 1 ? "1 va" : `${tarde.length} van`} con 5 minutos o más de retraso y el retraso medio es de ${A.fmtMin(media)}.`
             : A.S.live ? "Renfe no da ahora mismo la posición de los trenes de alta velocidad, larga y media distancia." : "Cargando…"),
           h("p", {}, s.ld
-            ? `Renfe informa de ${s.ldCancelled.toLocaleString("es-ES")} ${s.ldCancelled === 1 ? "tren cancelado" : "trenes cancelados"} en este momento.`
+            ? `Renfe informa de ${s.ldCancelled.toLocaleString((window.ANDEN_LOCALE || "es-ES"))} ${s.ldCancelled === 1 ? "tren cancelado" : "trenes cancelados"} en este momento.`
             : "Renfe no informa ahora mismo de cancelaciones."),
           cancelados(),
           ...(tarde.length ? [h("div", { class: "rows" }, tarde.sort((a, b) => b.delayMin - a.delayMin).slice(0, 10).map(A.trainRow))] : []),
@@ -196,7 +196,7 @@
         if (l && sel.value) list = list.filter((a) => A.alertLines(a).includes(A.lineKey(l, sel.value)));
         const t = window.Anden.norm(q.value);
         if (t) list = list.filter((a) => window.Anden.norm(`${a.header} ${a.desc}`).includes(t));
-        $("count").textContent = A.S.live ? `${list.length} ${list.length === 1 ? "aviso" : "avisos"}` : "";
+        $("count").textContent = A.S.live ? window.Anden.t(`${list.length} ${list.length === 1 ? "aviso" : "avisos"}`) : "";
         alertsList($("alerts"), list);
         if (location.hash && !draw.jumped) { const el = document.querySelector(location.hash); if (el) { el.scrollIntoView({ block: "center" }); el.setAttribute("tabindex", "-1"); el.focus({ preventScroll: true }); draw.jumped = true; } }
       };
@@ -217,8 +217,8 @@
         if (!fixed) {
           if (r?.lineas?.includes(code)) { location.replace(A.lineUrl(key) + location.hash); return; }
           const name = r ? `${code} · ${r.nombre}` : code;
-          document.title = `Línea ${name}: retrasos y avisos en directo · Andén`;
-          $("title").textContent = `Línea ${name}`;
+          document.title = window.Anden.t(`Línea ${name}: retrasos y avisos en directo · Andén`);
+          $("title").textContent = window.Anden.t(`Línea ${name}`);
           $("crumb-red").replaceChildren(r ? h("a", { href: `/cercanias/${r.slug}` }, r.nombre) : "Cercanías");
         }
         const o = A.lines(null).find((x) => x.key === key);
@@ -242,8 +242,8 @@
         const t = A.trains(null).find((x) => String(x.id) === id) || A.ldTrains().find((x) => x.id === id);
         if (!t) { $("card").replaceChildren(h("p", {}, A.S.live ? "Este tren ya no aparece en los datos de Renfe. Puede que haya terminado su recorrido." : "Cargando…"), h("a", { class: "more", href: "/mapa-trenes" }, "Ver todos los trenes")); return; }
         const d = A.delayInfo(t.delayMin);
-        document.title = `${A.trainTitle(t)}${!t.ld && t.code ? " · " + t.code : ""}: retraso en directo · Andén`;
-        $("title").textContent = A.trainTitle(t);
+        document.title = window.Anden.t(`${A.trainTitle(t)}${!t.ld && t.code ? " · " + t.code : ""}: retraso en directo · Andén`);
+        $("title").textContent = window.Anden.t(A.trainTitle(t));
         const la = t.line ? A.alertsOfLine(t.line) : [];
         const hora = (iso) => iso.slice(11, 16);
         $("card").replaceChildren(
@@ -279,13 +279,13 @@
       A.onUpdate(() => {
         if (!A.S.live) return; // se queda la lista escrita al publicar la página
         const list = A.alerts(null).filter((a) => re.test(window.Anden.norm(`${a.header} ${a.desc}`)));
-        $("count").textContent = `${list.length} ${list.length === 1 ? "aviso" : "avisos"} ahora`;
+        $("count").textContent = window.Anden.t(`${list.length} ${list.length === 1 ? "aviso" : "avisos"} ahora`);
         if (list.length) alertsList($("alerts"), list); else $("alerts").replaceChildren(h("div", { class: "empty" }, vacio));
         if (ld) {
           const s = A.summary(null);
           $("kpis").replaceChildren(
-            A.kpi(s.ldCancelled.toLocaleString("es-ES"), "trenes de alta velocidad y larga distancia cancelados", "/retrasos#larga-distancia"),
-            A.kpi(list.length.toLocaleString("es-ES"), "avisos de huelga de Renfe"),
+            A.kpi(s.ldCancelled.toLocaleString((window.ANDEN_LOCALE || "es-ES")), "trenes de alta velocidad y larga distancia cancelados", "/retrasos#larga-distancia"),
+            A.kpi(list.length.toLocaleString((window.ANDEN_LOCALE || "es-ES")), "avisos de huelga de Renfe"),
             A.kpi(A.fmtPct(s.pctLate), "de los Cercanías van con retraso", "/retrasos"));
         }
       });

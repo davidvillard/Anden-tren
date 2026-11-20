@@ -19,6 +19,7 @@ import { ogImage } from "./og.js";
 import { loadState } from "../lib/sucesos-state.js";
 import { buildLive } from "../lib/renfe.js";
 import { descargarYGenerar } from "./horarios.js";
+import { traducirSitio } from "./i18n-build.js";
 
 const ROOT = fileURLToPath(new URL("..", import.meta.url));
 const SRC = join(ROOT, "site");
@@ -124,6 +125,10 @@ for (const p of seoPages({ sucesos, redes, lineas, live: avisos, horarios })) {
   await writePage(p.path, p.html, p.og);
   sitemap.push({ path: p.path, priority: p.priority, freq: p.freq });
 }
+
+// Versiones en inglés y catalán (/en/, /ca/) de todas las páginas traducibles
+const traducidas = await traducirSitio({ OUT, ROOT, SITE_URL, sitemap });
+console.log(`Traducciones: ${traducidas} páginas en inglés y catalán`);
 
 const today = new Date().toISOString().slice(0, 10);
 await writeFile(join(OUT, "sitemap.xml"), `<?xml version="1.0" encoding="UTF-8"?>

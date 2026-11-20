@@ -7,13 +7,13 @@
   const SVG = "http://www.w3.org/2000/svg";
   const s = (tag, attrs = {}, ...kids) => { const el = document.createElementNS(SVG, tag); for (const [k, v] of Object.entries(attrs)) el.setAttribute(k, v); kids.forEach((k) => el.append(k)); return el; };
   const css = (v) => getComputedStyle(document.documentElement).getPropertyValue(v).trim();
-  const num = (v, d = 1) => (v === null || v === undefined ? "—" : Number(v).toLocaleString("es-ES", { maximumFractionDigits: d, minimumFractionDigits: d }));
+  const num = (v, d = 1) => (v === null || v === undefined ? "—" : Number(v).toLocaleString((window.ANDEN_LOCALE || "es-ES"), { maximumFractionDigits: d, minimumFractionDigits: d }));
   let redes = [], filas = [], dias = 7;
 
   // Tooltip compartido
   const tip = h("div", { class: "chart-tip", role: "status", hidden: true });
   document.body.append(tip);
-  const showTip = (e, html) => { tip.innerHTML = html; tip.hidden = false; const r = tip.getBoundingClientRect(); tip.style.left = `${Math.min(innerWidth - r.width - 8, Math.max(8, e.clientX - r.width / 2))}px`; tip.style.top = `${e.clientY - r.height - 14 + scrollY}px`; };
+  const showTip = (e, html) => { tip.innerHTML = html.split("<br>").map((x) => x.replace(/^(<b>[^<]*<\/b>)?(.*)$/, (m, b, r) => (b || "") + window.Anden.t(r))).join("<br>"); tip.hidden = false; const r = tip.getBoundingClientRect(); tip.style.left = `${Math.min(innerWidth - r.width - 8, Math.max(8, e.clientX - r.width / 2))}px`; tip.style.top = `${e.clientY - r.height - 14 + scrollY}px`; };
   const hideTip = () => { tip.hidden = true; };
 
   const redNombre = (slug) => (slug === "larga-distancia" ? "Larga distancia" : redes.find((r) => r.slug === slug)?.corto || slug);
@@ -63,7 +63,7 @@
       svg.append(g);
     });
     box.replaceChildren(svg);
-    $("rk-sub").textContent = red === "larga-distancia" ? "% de trenes con 5 minutos o más de retraso en el periodo." : "% de trenes con 3 minutos o más de retraso en el periodo.";
+    $("rk-sub").textContent = window.Anden.t(red === "larga-distancia" ? "% de trenes con 5 minutos o más de retraso en el periodo." : "% de trenes con 3 minutos o más de retraso en el periodo.");
     return items;
   }
 
@@ -73,14 +73,14 @@
     for (const f of filas) { if (red ? f.red !== red : f.red === "larga-distancia") continue; (porDia.get(f.dia) || porDia.set(f.dia, []).get(f.dia)).push(f); }
     const pts = [...porDia.entries()].sort((a, b) => a[0].localeCompare(b[0])).map(([dia, rows]) => ({ dia, ...agrega(rows) })).filter((p) => p.ret !== null);
     const box = $("evolucion");
-    $("ev-sub").textContent = `Retraso medio de los trenes${red ? ` de ${redNombre(red)}` : " de Cercanías"}, en minutos.`;
+    $("ev-sub").textContent = window.Anden.t(`Retraso medio de los trenes${red ? ` de ${redNombre(red)}` : " de Cercanías"}, en minutos.`);
     if (pts.length < 2) { box.replaceChildren(h("div", { class: "empty" }, "Hacen falta al menos dos días de datos para ver la evolución.")); return pts; }
     const W = Math.max(300, box.clientWidth), H = 220, L = 40, R = 12, T = 12, B = 28;
     const maxY = Math.max(1, Math.ceil(Math.max(...pts.map((p) => p.ret)) * 1.15));
     const x = (i) => L + ((W - L - R) * i) / (pts.length - 1), y = (v) => T + (H - T - B) * (1 - v / maxY);
     const svg = s("svg", { viewBox: `0 0 ${W} ${H}`, width: "100%", height: H });
     for (let k = 0; k <= 3; k++) { const v = (maxY * k) / 3; svg.append(s("line", { x1: L, x2: W - R, y1: y(v), y2: y(v), class: "grid" }), s("text", { x: L - 6, y: y(v) + 4, "text-anchor": "end", class: "axis" }, num(v, 0))); }
-    const fecha = (d) => new Date(`${d}T12:00:00`).toLocaleDateString("es-ES", { day: "numeric", month: "short" });
+    const fecha = (d) => new Date(`${d}T12:00:00`).toLocaleDateString((window.ANDEN_LOCALE || "es-ES"), { day: "numeric", month: "short" });
     [0, Math.floor((pts.length - 1) / 2), pts.length - 1].forEach((i) => svg.append(s("text", { x: x(i), y: H - 8, "text-anchor": i === 0 ? "start" : i === pts.length - 1 ? "end" : "middle", class: "axis" }, fecha(pts[i].dia))));
     svg.append(s("path", { d: pts.map((p, i) => `${i ? "L" : "M"}${x(i)},${y(p.ret)}`).join(""), fill: "none", stroke: css("--accent"), "stroke-width": 2, "stroke-linejoin": "round" }));
     const cross = s("line", { y1: T, y2: H - B, class: "cross", visibility: "hidden" });
@@ -110,7 +110,7 @@
   const pintar = () => { const it = ranking(), pts = evolucion(); tabla(it, pts); };
 
   async function cargar() {
-    $("estado").textContent = "Cargando…";
+    $("estado").textContent = window.Anden.t("Cargando…");
     const red = $("red").value;
     $("dl-csv").href = `/api/historico?formato=csv&dias=${dias}${red ? `&red=${red}` : ""}`;
     $("dl-json").href = `/api/historico?dias=${dias}${red ? `&red=${red}` : ""}`;
@@ -120,7 +120,7 @@
       if (!r.ok) throw new Error(j.error || r.status);
       filas = j.filas || [];
       const d = new Set(filas.map((f) => f.dia)).size;
-      $("estado").textContent = d ? `${d} ${d === 1 ? "día" : "días"} con datos.` : "";
+      $("estado").textContent = d ? window.Anden.t(`${d} ${d === 1 ? "día" : "días"} con datos.`) : "";
       pintar();
     } catch (e) {
       $("estado").textContent = "";

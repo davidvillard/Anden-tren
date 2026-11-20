@@ -209,8 +209,8 @@
   const lineBadge = (code) => h("span", { class: "line-badge" }, code || "—");
   const trainRow = (t) => {
     const d = delayInfo(t.delayMin);
-    const sub = t.ld ? [t.origen && t.destino ? `${t.origen} → ${t.destino}` : "", t.ts ? `posición de las ${fmtTime(t.ts)}` : ""]
-      : [t.red && !S.scope ? t.red.corto : "", t.ts ? `posición de las ${fmtTime(t.ts)}` : ""];
+    const sub = t.ld ? [t.origen && t.destino ? `${t.origen} → ${t.destino}` : "", t.ts ? window.Anden.t("posición de las {h}", { h: fmtTime(t.ts) }) : ""]
+      : [t.red && !S.scope ? t.red.corto : "", t.ts ? window.Anden.t("posición de las {h}", { h: fmtTime(t.ts) }) : ""];
     return h("a", { class: "row", href: trainUrl(t) },
       lineBadge(t.code),
       h("span", { class: "grow" }, h("strong", {}, trainTitle(t)), h("span", {}, sub.filter(Boolean).join(" · "))),
@@ -231,7 +231,7 @@
     h(rest ? "h3" : "p", { class: rest ? "" : "alert-text" }, ...withPhones(title)),
     rest ? h("p", {}, ...withPhones(rest)) : "",
     alertLines(a).length ? h("div", { class: "lines" }, alertLines(a).slice(0, 8).map((k) => h("a", { class: "tag info", href: lineUrl(k) }, lineName(k, true)))) : "",
-    a.start || a.end ? h("p", { class: "small muted" }, [a.start ? `Desde el ${new Date(a.start * 1000).toLocaleString("es-ES", { timeZone: "Europe/Madrid", dateStyle: "medium", timeStyle: "short" })}` : "", a.end ? `hasta el ${new Date(a.end * 1000).toLocaleString("es-ES", { timeZone: "Europe/Madrid", dateStyle: "medium", timeStyle: "short" })}` : ""].filter(Boolean).join(" ")) : "");
+    a.start || a.end ? h("p", { class: "small muted" }, [a.start ? `Desde el ${new Date(a.start * 1000).toLocaleString((window.ANDEN_LOCALE || "es-ES"), { timeZone: "Europe/Madrid", dateStyle: "medium", timeStyle: "short" })}` : "", a.end ? `hasta el ${new Date(a.end * 1000).toLocaleString((window.ANDEN_LOCALE || "es-ES"), { timeZone: "Europe/Madrid", dateStyle: "medium", timeStyle: "short" })}` : ""].filter(Boolean).join(" ")) : "");
   }
   const kpi = (val, label, href) => h(href ? "a" : "div", { class: "card kpi tile", href }, h("b", {}, val), h("span", {}, label), href ? h("span", { class: "more" }, "Ver") : "");
 
@@ -405,10 +405,10 @@
     const pill = document.getElementById("live-pill"); if (!pill) return;
     const dot = pill.querySelector(".pulse"), txt = pill.querySelector("[data-text]") || pill.lastElementChild;
     const d = S.live, ok = d && Object.values(d.sources || {}).some((s) => s.ok);
-    if (!d || !ok) { dot.className = "pulse off"; txt.textContent = d ? "Renfe no responde ahora mismo. Reintentando…" : "Conectando con Renfe…"; return; }
+    if (!d || !ok) { dot.className = "pulse off"; txt.textContent = window.Anden.t(d ? "Renfe no responde ahora mismo. Reintentando…" : "Conectando con Renfe…"); return; }
     const age = Date.now() / 1000 - d.generatedAt;
     dot.className = age > 300 ? "pulse stale" : "pulse";
-    txt.textContent = age > 300 ? `Sin conexión con Renfe. Últimos datos ${ago(d.generatedAt)}` : `En directo · actualizado ${ago(d.generatedAt)}`;
+    txt.textContent = window.Anden.t(age > 300 ? `Sin conexión con Renfe. Últimos datos ${ago(d.generatedAt)}` : `En directo · actualizado ${ago(d.generatedAt)}`);
   }
 
   /* ---------- Buscador ---------- */
@@ -471,7 +471,7 @@
         }
       }
       const canc = /^\d{3,6}$/.test(q) ? ldCancelled().find((c) => c.num === String(Number(q))) : null;
-      if (canc) out.unshift({ href: "/retrasos#cancelados", badge: "✕", title: `El tren ${canc.num} está cancelado`, sub: `Renfe lo da como cancelado (${new Date(canc.fecha + "T12:00").toLocaleDateString("es-ES", { day: "numeric", month: "long" })}). Consulta tu billete con la compañía`, group: "Alta velocidad, larga y media distancia" });
+      if (canc) out.unshift({ href: "/retrasos#cancelados", badge: "✕", title: `El tren ${canc.num} está cancelado`, sub: `Renfe lo da como cancelado (${new Date(canc.fecha + "T12:00").toLocaleDateString((window.ANDEN_LOCALE || "es-ES"), { day: "numeric", month: "long" })}). Consulta tu billete con la compañía`, group: "Alta velocidad, larga y media distancia" });
       else if (/^\d{4,6}$/.test(q) && S.horarios && !out.some((r) => r.group === "Trenes" || r.group === "Horarios" || r.group.startsWith("Alta"))) out.push({ href: "/retrasos#larga-distancia", badge: "?", title: `El tren ${q} no está circulando ahora`, sub: "Solo se ven los trenes en marcha. Mira los cancelados de alta velocidad y larga distancia", group: "Trenes" });
       // 5. Avisos y accidentes (palabras enteras)
       if (!ldWord) for (const a of alerts()) if (starts(`${a.header} ${a.desc}`) || a.routes.some((x) => norm(x).includes(q))) out.push({ href: `/avisos#aviso-${a.id}`, badge: "!", title: cleanAlert(a.header) || cleanAlert(a.desc), sub: alertLines(a).map((k) => lineName(k, true)).slice(0, 3).join(", ") || "Aviso de Renfe", group: "Avisos" });

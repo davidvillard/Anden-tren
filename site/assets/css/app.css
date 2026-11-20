@@ -85,7 +85,11 @@ b,strong{font-weight:650}
 }
 
 /* Botón de accesibilidad: pequeño, solo icono, abre un panel flotante */
-.a11y{position:relative;flex:none;margin-left:auto}
+.a11y{position:relative;flex:none}
+.lang-switch{display:flex;gap:2px;margin-left:auto;flex:none}
+.lang-switch a{font-size:.8rem;font-weight:650;color:var(--faint);padding:6px 6px;border-radius:var(--r);text-decoration:none!important;min-width:32px;text-align:center}
+.lang-switch a:hover{color:var(--ink);background:var(--soft)}
+.lang-switch a[aria-current]{color:var(--ink);background:var(--soft)}
 .a11y-btn{font:inherit;display:inline-grid;place-items:center;width:38px;height:38px;padding:0;border:1px solid var(--line);border-radius:50%;background:var(--surface);color:var(--muted);cursor:pointer;transition:color .15s,border-color .15s,background .15s;position:relative}
 .a11y-btn:hover,.a11y-btn[aria-expanded="true"]{color:var(--ink);border-color:var(--line-2)}
 .a11y-btn svg{width:18px;height:18px}

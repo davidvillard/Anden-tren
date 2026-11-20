@@ -16,12 +16,12 @@
   const TZ = { timeZone: "Europe/Madrid" };
 
   const link = (e) => Array.isArray(e) ? { nombre: e[0], url: e[1] } : e;
-  const num = (c) => `${c.prefijo ? c.prefijo + " " : ""}${Number(c.valor).toLocaleString("es-ES")}`;
+  const num = (c) => `${c.prefijo ? c.prefijo + " " : ""}${Number(c.valor).toLocaleString((window.ANDEN_LOCALE || "es-ES"))}`;
   const fig = (c, label, crit) => c && c.valor !== null && c.valor !== undefined ? h("div", { class: `figure${crit ? " crit" : ""}` },
     h("b", {}, num(c)), h("span", {}, label + (c.nota ? `, ${c.nota}` : "")),
     c.fuente ? h("span", { class: "small", style: "display:block;margin-top:4px" }, `Fuente: ${c.fuente}`) : "") : "";
-  const hora = (iso) => new Date(iso).toLocaleTimeString("es-ES", { ...TZ, hour: "2-digit", minute: "2-digit" });
-  const stamp = (iso) => new Date(iso).toLocaleString("es-ES", { ...TZ, day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" });
+  const hora = (iso) => new Date(iso).toLocaleTimeString((window.ANDEN_LOCALE || "es-ES"), { ...TZ, hour: "2-digit", minute: "2-digit" });
+  const stamp = (iso) => new Date(iso).toLocaleString((window.ANDEN_LOCALE || "es-ES"), { ...TZ, day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" });
 
   const isInc = (s) => s.clase === "incidencia";
   const pathOf = (s) => s.pagina || (isInc(s) ? `/incidencia/${s.id}` : `/accidente-tren/${s.id}`);
@@ -72,7 +72,7 @@
   }
   const causasTexto = (s) => `Está en investigación por la CIAF (Comisión de Investigación de Accidentes Ferroviarios) y la Guardia Civil.${s.causas ? ` Lo último publicado, pendiente de la investigación oficial: ${s.causas}` : ""}`;
   function syncFaq(s) {
-    const set = (id, txt) => { const el = document.querySelector(`[data-faq="${id}"]`); if (el && txt) el.textContent = txt; };
+    const set = (id, txt) => { const el = document.querySelector(`[data-faq="${id}"]`); if (el && txt) el.textContent = window.Anden.t(txt); };
     set("balance", balanceTexto(s));
     set("circulacion", s.circulacion);
     if (!isInc(s)) set("causas", causasTexto(s));
