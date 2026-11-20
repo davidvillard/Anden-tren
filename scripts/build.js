@@ -29,6 +29,8 @@ const env = process.env;
 const SITE_URL = (env.SITE_URL || "https://andentren.es").replace(/\/$/, "");
 // Google Tag Manager (Analytics) y Search Console: valores del proyecto, con opción de cambiarlos por variable
 const GTM = /^GTM-[A-Z0-9]+$/.test(env.GTM_ID || "") ? env.GTM_ID : "GTM-NRM83968";
+// Bot de Telegram para las alertas (sin @); si no está, la web no muestra el botón
+const TG_BOT = (env.TELEGRAM_BOT_USERNAME || "").replace(/^@/, "").replace(/[^A-Za-z0-9_]/g, "");
 const GSC = (env.GSC_VERIFICATION || "gFf5Yx-WKMqeVB9tL1ZoBHpDn84roE32XKY4qD2je2A").replace(/[^A-Za-z0-9_-]/g, "");
 const cfg = {
   ga: Boolean(GTM),
@@ -59,6 +61,7 @@ const fill = (html, og = "/assets/img/og.png") => versioned(html
   .replace("<!--#search-->", parts.search)
   .replaceAll("__GSC__", GSC)
   .replaceAll("__GTM_ID__", GTM)
+  .replaceAll("__TG_BOT__", TG_BOT)
   .replaceAll("__SITE_URL__", SITE_URL));
 
 async function walk(dir) {

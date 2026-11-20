@@ -376,3 +376,18 @@ html[data-contrast="high"] .segmented{background:#fff;border:2px solid #000}
 .train-index{list-style:none;padding:0;margin:12px 0 0;display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:4px 16px}
 .train-index li{padding:3px 0}
 .train-index a{font-weight:650;display:inline-block;min-width:3.5em}
+
+/* Histórico: gráficas */
+.chart-card{display:grid;gap:6px}
+.chart{min-height:120px}
+.chart svg{display:block;overflow:visible}
+.chart .lbl{font-size:13px;fill:var(--ink-2);font-weight:550}
+.chart .val{font-size:12px;fill:var(--muted);font-variant-numeric:tabular-nums}
+.chart .axis{font-size:11px;fill:var(--faint)}
+.chart .grid{stroke:var(--line);stroke-width:1}
+.chart .cross{stroke:var(--line-2);stroke-width:1}
+.chart .bar-row:focus{outline:none}
+.chart .bar-row:focus .lbl,.chart .bar-row:hover .lbl{fill:var(--ink)}
+.chart-tip{position:absolute;z-index:3000;pointer-events:none;background:var(--ink);color:#fff;font-size:.84rem;line-height:1.45;padding:8px 10px;border-radius:var(--r);box-shadow:var(--shadow-lg);max-width:240px}
+.select{font:inherit;min-height:40px;padding:0 12px;border:1px solid var(--line-2);border-radius:var(--r);background:var(--surface);color:var(--ink)}
+.tg-btn{display:inline-flex;align-items:center;gap:8px}

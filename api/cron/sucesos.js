@@ -12,7 +12,11 @@ import { extract, QuotaError } from "../../lib/extract.js";
 import { merge } from "../../lib/merge.js";
 import { getJSON, setJSON, storeEnabled } from "../../lib/store.js";
 import { loadState, KEY_STATE, KEY_SEEN, KEY_LAST_CALL } from "../../lib/sucesos-state.js";
-import { fetchAlerts } from "../../lib/renfe.js";
+import { fetchAlerts, buildLive } from "../../lib/renfe.js";
+import { guardarSiToca } from "../../lib/historico.js";
+import { enviarAlertas } from "../../lib/alertas.js";
+import { sbEnabled } from "../../lib/supabase.js";
+import { tgEnabled, tg, TG_SECRET } from "../../lib/telegram.js";
 import { TEMAS, avisosDe } from "../../lib/temas.js";
 import { publish, socialEnabled } from "../../lib/social.js";
 
@@ -126,6 +130,34 @@ async function run(now) {
       for (const a of lista) if (!previos.has(a.id)) avisosNuevos.push({ tema: t, aviso: a });
     }
     await setIfChanged(KEY_TEMAS, ahora, antes);
+  }
+
+  // Bot de Telegram: se registra su webhook una sola vez (se guarda en Redis que ya está hecho)
+  if (tgEnabled() && TG_SECRET && sbEnabled()) {
+    const hook = `${SITE}/api/telegram`;
+    if ((await getJSON("tg:webhook")) !== hook) {
+      try {
+        await tg("setWebhook", { url: hook, secret_token: TG_SECRET, allowed_updates: ["message"] });
+        await tg("setMyCommands", { commands: [
+          { command: "seguir", description: "Seguir una línea, p. ej. /seguir C3 Madrid" },
+          { command: "horario", description: "Avisar solo a ciertas horas, p. ej. /horario 6-9 lv" },
+          { command: "mis", description: "Tus líneas" },
+          { command: "dejar", description: "Dejar de seguir una línea" },
+          { command: "ayuda", description: "Cómo funciona" },
+        ] });
+        await setJSON("tg:webhook", hook);
+        summary.telegram = "webhook registrado";
+      } catch (e) { summary.telegram = `error: ${e.message}`; }
+    }
+  }
+
+  // Histórico de retrasos (cada 15 min) y alertas por Telegram: solo con Supabase conectado
+  if (sbEnabled()) {
+    try {
+      const live = await buildLive();
+      summary.historico = await guardarSiToca(live, now).catch((e) => `error: ${e.message}`);
+      summary.alertas = await enviarAlertas(live, now).catch((e) => `error: ${e.message}`);
+    } catch (e) { summary.historico = `error: ${e.message}`; }
   }
 
   // Redes sociales: sucesos nuevos en curso y avisos nuevos de huelga.

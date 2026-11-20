@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Histórico de retrasos de Cercanías y Renfe: la peor línea de la semana · Andén</title>
+<meta name="description" content="Qué líneas de Cercanías y Rodalies van con más retraso esta semana y este mes, evolución día a día y datos descargables en CSV y JSON para periodistas.">
+<link rel="canonical" href="__SITE_URL__/historico">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Histórico de retrasos de Renfe · Andén">
+<meta property="og:description" content="La peor línea de la semana, evolución día a día y datos descargables.">
+<meta property="og:url" content="__SITE_URL__/historico">
+<!--#head-->
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"Dataset","name":"Retrasos de Cercanías y trenes de Renfe por línea y día","description":"Porcentaje de trenes con retraso y retraso medio por línea y día, calculado cada 15 minutos a partir de los datos abiertos de Renfe.","creator":{"@type":"Organization","name":"Andén","url":"__SITE_URL__/"},"license":"https://creativecommons.org/licenses/by/4.0/","isAccessibleForFree":true,"distribution":[{"@type":"DataDownload","encodingFormat":"text/csv","contentUrl":"__SITE_URL__/api/historico?formato=csv&dias=365"},{"@type":"DataDownload","encodingFormat":"application/json","contentUrl":"__SITE_URL__/api/historico?dias=365"}]}
+</script>
+</head>
+<body data-page="historico">
+<!--#header-->
+<main id="contenido">
+  <section class="page-head"><div class="container">
+    <p class="crumbs"><a href="/">Inicio</a> › <a href="/retrasos">Retrasos</a> › Histórico</p>
+    <h1>Histórico de retrasos</h1>
+    <p>Qué líneas han ido peor, día a día. Andén guarda cada 15 minutos el estado de todas las líneas con los datos de Renfe.</p>
+  </div></section>
+
+  <section class="section"><div class="container">
+    <div class="filter-bar" role="group" aria-label="Filtros">
+      <div class="segmented" id="periodo">
+        <button type="button" data-dias="7" aria-pressed="true">7 días</button>
+        <button type="button" data-dias="30" aria-pressed="false">30 días</button>
+        <button type="button" data-dias="90" aria-pressed="false">90 días</button>
+      </div>
+      <label for="red" class="sr-only">Red</label>
+      <select id="red" class="select"><option value="">Todas las redes de Cercanías</option></select>
+    </div>
+    <div id="estado" class="small muted"></div>
+
+    <div class="card pad chart-card">
+      <h2 id="rk-t">Líneas con más trenes con retraso</h2>
+      <p class="small muted" id="rk-sub">% de trenes con 3 minutos o más de retraso en el periodo.</p>
+      <div id="ranking" class="chart" role="img" aria-labelledby="rk-t"></div>
+    </div>
+
+    <div class="card pad chart-card">
+      <h2 id="ev-t">Evolución día a día</h2>
+      <p class="small muted" id="ev-sub">Retraso medio de los trenes de Cercanías, en minutos.</p>
+      <div id="evolucion" class="chart" role="img" aria-labelledby="ev-t"></div>
+    </div>
+
+    <details class="card pad">
+      <summary><strong>Ver los datos en tabla</strong></summary>
+      <div id="tabla" style="margin-top:10px"></div>
+    </details>
+
+    <div class="card pad prose" id="datos">
+      <h2>Descargar los datos · para periodistas</h2>
+      <p>Datos por línea y día, gratuitos y reutilizables con licencia <a href="https://creativecommons.org/licenses/by/4.0/deed.es" rel="noopener" target="_blank">CC BY 4.0</a>: cita «Andén (andentren.es), a partir de los datos abiertos de Renfe».</p>
+      <p class="focus-actions"><a class="btn ghost" id="dl-csv" href="/api/historico?formato=csv&amp;dias=90">Descargar CSV</a><a class="btn ghost" id="dl-json" href="/api/historico?dias=90">Ver JSON</a></p>
+      <h3>API</h3>
+      <p><code>GET https://andentren.es/api/historico</code> con <code>dias</code> (1–365), <code>red</code> (p. ej. <code>madrid</code> o <code>larga-distancia</code>), <code>linea</code> (p. ej. <code>C3</code>) y <code>formato=csv</code>. Se actualiza cada hora.</p>
+      <h3>Cómo se calcula</h3>
+      <ul>
+        <li>Cada 15 minutos, de 05:00 a 00:30, se guarda cuántos trenes circulan en cada línea, cuántos tienen dato de retraso y cuántos van con 3 minutos o más (5 en alta velocidad y larga distancia).</li>
+        <li>El <strong>% con retraso</strong> del día suma todas esas fotos. El <strong>retraso medio</strong> es la media de los trenes con dato; los adelantos cuentan como 0.</li>
+        <li>Los retrasos imposibles que a veces manda Renfe (más de 2 horas, o más de 10 minutos de adelanto) no se cuentan. Si Renfe deja de enviar datos de una red, esas horas faltan.</li>
+      </ul>
+    </div>
+  </div></section>
+</main>
+<!--#footer-->
+<script src="/assets/js/historico.js"></script>
+</body>
+</html>

@@ -136,3 +136,20 @@ La primera revisión después de configurarlo solo guarda los avisos que ya hay;
 - Modo claro y oscuro (por defecto, el del dispositivo).
 - Contraste mínimo AA, botones de al menos 44 px y estados indicados siempre con texto, no solo con color.
 - Vista de lista además del mapa y buscador compatible con lectores de pantalla.
+
+
+## Histórico y alertas (Supabase + Telegram)
+
+Se activan solos al añadir estas variables en Vercel (sin ellas, la web funciona igual y esas partes quedan apagadas):
+
+| Variable | Para qué |
+|---|---|
+| `SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY` | Base de datos del histórico de retrasos y de las alertas. Las crea Vercel al conectar Supabase. Antes, ejecuta `supabase/schema.sql` en el SQL Editor de Supabase. |
+| `TELEGRAM_BOT_TOKEN` | Token del bot (de @BotFather). |
+| `TELEGRAM_WEBHOOK_SECRET` | Una contraseña larga cualquiera; Telegram la manda con cada mensaje. |
+| `TELEGRAM_BOT_USERNAME` | Nombre del bot sin @, para el botón «Avísame por Telegram» de cada línea. |
+
+- El cron guarda una foto por línea cada 15 minutos (`lib/historico.js`) y envía las alertas (`lib/alertas.js`).
+- `/historico` muestra rankings y evolución; `/api/historico` da los datos en JSON o CSV (CC BY 4.0).
+- El webhook del bot (`/api/telegram`) se registra solo en la primera pasada del cron con las variables puestas.
+- `/horario/<nº>` y `/alta-velocidad/<corredor>` usan el horario oficial de alta velocidad y larga distancia, que se descarga en cada publicación (`scripts/horarios.js`).
