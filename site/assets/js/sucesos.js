@@ -78,6 +78,19 @@
     if (!isInc(s)) set("causas", causasTexto(s));
   }
 
+  // Webs oficiales para un accidente: siempre Renfe, Adif y el Ministerio (del que depende la CIAF),
+  // y las compañías que se nombran en el suceso
+  function oficiales(s) {
+    const t = `${s.titulo} ${s.resumen} ${s.operador || ""}`;
+    return [
+      ["Renfe", "https://www.renfe.com", "información a viajeros y familiares"],
+      /iryo/i.test(t) && ["Iryo", "https://iryo.eu", "información de la compañía"],
+      /ouigo/i.test(t) && ["Ouigo", "https://www.ouigo.com/es", "información de la compañía"],
+      ["Adif", "https://www.adif.es", "estado de la vía y de las estaciones"],
+      ["Ministerio de Transportes", "https://www.transportes.gob.es", "comunicados oficiales y CIAF, que investiga el accidente"],
+    ].filter(Boolean);
+  }
+
   function completo(s, actualizado) {
     const sec = (titulo, ...children) => h("section", { class: "card pad", style: "display:grid;gap:10px" }, h("h2", {}, titulo), ...children);
     const historial = (s.historial || []).filter((e) => !e.oculto);
@@ -101,7 +114,9 @@
         h("summary", {}, h("strong", {}, "Evolución de las cifras")),
         h("p", { class: "small muted", style: "margin:8px 0" }, "Balances publicados, del más antiguo al más reciente. Las cifras de heridos bajan a medida que reciben el alta; cada cifra indica quién la dio."),
         h("ol", { class: "timeline" }, historial.map((e) => h("li", {}, h("span", {}, h("strong", {}, `${e.cuando}: `), e.texto, e.fuente ? h("span", { class: "muted" }, ` (${e.fuente})`) : ""))))) : "",
-      s.enlaces?.length ? sec("Fuentes", h("ul", { style: "list-style:none;padding:0;margin:0;display:grid;gap:8px" },
+      !isInc(s) ? sec("Webs oficiales", h("ul", { style: "list-style:none;padding:0;margin:0;display:grid;gap:8px" },
+        oficiales(s).map(([n, u, d]) => h("li", {}, h("a", { href: u, target: "_blank", rel: "noopener" }, n), h("span", { class: "muted" }, ` · ${d}`))))) : "",
+      s.enlaces?.length ? sec(isInc(s) ? "Fuentes" : "Noticias en prensa", h("ul", { style: "list-style:none;padding:0;margin:0;display:grid;gap:8px" },
         s.enlaces.map(link).map((e) => h("li", {}, h("a", { href: e.url, target: "_blank", rel: "noopener" }, e.nombre), e.titulo ? h("span", { class: "muted" }, `: ${e.titulo}`) : "")))) : "");
   }
 
@@ -131,11 +146,21 @@
       return;
     }
     if (modo === "incidencias") {
-      const activas = incs.filter((s) => s.activo);
-      const recientes = incs.filter((s) => !s.activo && Date.now() - new Date(s.inicio) < 7 * 86400_000);
-      box.replaceChildren(
+      // Filtros: tipo de servicio y solo en curso (guardados en la dirección para poder compartirlos)
+      const prm = new URLSearchParams(location.search);
+      const tipo = prm.get("tipo") || "", soloActivas = prm.get("encurso") === "1";
+      const cat = (s) => (/alta|larga|media|ave|alvia|avlo/i.test(`${s.servicio} ${s.linea || ""}`) ? "alta-velocidad" : /cercan|rodalies/i.test(`${s.servicio} ${s.linea || ""}`) ? "cercanias" : "otros");
+      const pasa = (s) => !tipo || cat(s) === tipo;
+      const go = (k, v) => { if (v) prm.set(k, v); else prm.delete(k); history.replaceState(null, "", `${location.pathname}${prm.size ? "?" + prm : ""}`); render(data); };
+      const chip = (label, v) => h("button", { class: "chip", type: "button", "aria-pressed": String(tipo === v), onclick: () => go("tipo", v) }, label);
+      const filtros = h("div", { class: "filter-bar", role: "group", "aria-label": "Filtrar incidencias" },
+        h("div", { class: "chips" }, h("span", { class: "chip-label" }, "Mostrar:"), chip("Todas", ""), chip("Alta velocidad y larga distancia", "alta-velocidad"), chip("Cercanías", "cercanias"), chip("Mercancías y otras", "otros")),
+        h("label", { class: "check" }, h("input", { type: "checkbox", checked: soloActivas, onchange: (e) => go("encurso", e.target.checked ? "1" : "") }), " Solo en curso"));
+      const activas = incs.filter((s) => s.activo && pasa(s));
+      const recientes = soloActivas ? [] : incs.filter((s) => !s.activo && pasa(s) && Date.now() - new Date(s.inicio) < 7 * 86400_000);
+      box.replaceChildren(filtros,
         activas.length ? h("div", { class: "alerts" }, activas.map(incidencia))
-          : h("div", { class: "empty" }, "Ahora mismo no hay ninguna incidencia importante en la red ferroviaria."),
+          : h("div", { class: "empty" }, tipo ? "Ahora mismo no hay incidencias de este tipo en curso." : "Ahora mismo no hay ninguna incidencia importante en la red ferroviaria."),
         recientes.length ? h("h2", { style: "margin-top:24px" }, "Últimos 7 días") : "",
         recientes.length ? h("div", { class: "alerts" }, recientes.map(incidencia)) : "");
       return;

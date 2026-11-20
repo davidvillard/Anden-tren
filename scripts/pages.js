@@ -252,7 +252,7 @@ ${cfg.ga ? `<p>Andén no usa cookies de publicidad. Solo usa cookies de <strong>
 <li><strong>Algo que no funciona o cuesta leer:</strong> dinos qué dispositivo y navegador usas.</li>
 <li><strong>Privacidad:</strong> para ejercer tus derechos sobre tus datos.</li>
 </ul>
-<p>Andén no atiende reclamaciones de viajeros ni gestiona billetes. Para eso, contacta con tu operador (Renfe, Iryo u Ouigo). En una emergencia, llama al <strong>112</strong>.</p>
+<p>Andén no atiende reclamaciones de viajeros ni gestiona billetes. Para eso, contacta con tu operador (Renfe, Iryo u Ouigo): tienes sus números en <a href="/telefonos">Teléfonos útiles</a> y cómo reclamar en <a href="/indemnizaciones">Indemnizaciones</a>. En una emergencia, llama al <strong><a href="tel:112">112</a></strong>.</p>
 `,
   }),
 

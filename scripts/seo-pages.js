@@ -133,7 +133,8 @@ function sucesoPage(s, actualizado) {
       ${actualizado ? `<p class="small muted">Actualizado: ${fecha(actualizado)}, ${hora(actualizado)}. Las cifras son provisionales.</p>` : ""}
       ${s.circulacion ? `<h2>Trenes afectados</h2><p>${esc(s.circulacion)}</p>` : ""}
       ${!inc ? `<h2>Causas</h2><p>${esc(causasTexto(s))}</p>` : ""}
-      ${fuentes.length ? `<h2>Fuentes</h2><ul>${fuentes.map((e) => `<li><a href="${esc(e.url)}" rel="noopener" target="_blank">${esc(e.nombre)}</a></li>`).join("")}</ul>` : ""}
+      ${!inc ? `<h2>Webs oficiales</h2><ul><li><a href="https://www.renfe.com" rel="noopener" target="_blank">Renfe</a></li>${/iryo/i.test(s.titulo + s.resumen) ? '<li><a href="https://iryo.eu" rel="noopener" target="_blank">Iryo</a></li>' : ""}${/ouigo/i.test(s.titulo + s.resumen) ? '<li><a href="https://www.ouigo.com/es" rel="noopener" target="_blank">Ouigo</a></li>' : ""}<li><a href="https://www.adif.es" rel="noopener" target="_blank">Adif</a></li><li><a href="https://www.transportes.gob.es" rel="noopener" target="_blank">Ministerio de Transportes (CIAF)</a></li></ul>` : ""}
+      ${fuentes.length ? `<h2>${inc ? "Fuentes" : "Noticias en prensa"}</h2><ul>${fuentes.map((e) => `<li><a href="${esc(e.url)}" rel="noopener" target="_blank">${esc(e.nombre)}</a></li>`).join("")}</ul>` : ""}
     </div></article>
   </div></section>
   ${faqHtml(qs)}

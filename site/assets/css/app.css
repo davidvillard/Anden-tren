@@ -353,3 +353,20 @@ html[data-contrast="high"] .leaflet-tile-pane{filter:grayscale(1)}
 html[data-contrast="high"] .segmented button[aria-pressed="true"],html[data-contrast="high"] .chip[aria-pressed="true"]{background:#000;color:#fff;box-shadow:none;outline:2px solid #000}
 html[data-contrast="high"] .segmented{background:#fff;border:2px solid #000}
 [id]{scroll-margin-top:84px}
+
+/* Mi línea */
+.my-line{display:flex;align-items:center;gap:14px;padding:14px 18px;max-width:680px;color:var(--ink);text-decoration:none!important;border-color:var(--accent)}
+.my-line .grow{flex:1;min-width:0;display:grid;line-height:1.35}
+.my-line small{color:var(--accent);font-weight:650;font-size:.78rem;text-transform:uppercase;letter-spacing:.06em}
+.my-line .grow span{color:var(--muted);font-size:.875rem}
+.fav-btn{min-height:38px;font-size:.9rem;justify-self:start}
+
+/* Teléfonos útiles */
+.big-phones .phone b{font-size:1.6rem}
+.phone.emergency{border-color:var(--crit);background:var(--crit-bg)}
+.phone.emergency b{color:var(--crit)}
+
+/* Filtros de incidencias */
+.filter-bar{display:flex;flex-wrap:wrap;gap:10px 20px;align-items:center;margin-bottom:6px}
+.check{display:inline-flex;align-items:center;gap:8px;font-weight:550;cursor:pointer;min-height:38px}
+.check input{width:20px;height:20px;accent-color:var(--accent)}

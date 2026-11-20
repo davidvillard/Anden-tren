@@ -87,6 +87,39 @@
     else if (p) p.remove();
   }
 
+  // "Mi línea": tarjeta en la portada con el estado de la línea guardada
+  function miLinea(el) {
+    if (!el) return;
+    const key = A.myLine();
+    if (!key) { el.replaceChildren(h("p", { class: "small muted" }, "Consejo: en la página de tu línea pulsa «Guardar como mi línea» y verás aquí cómo va nada más entrar.")); return; }
+    const o = A.lines(null).find((x) => x.key === key);
+    const st = o ? A.lineStatus(o) : { cls: "none", text: A.isNight() ? "Sin trenes circulando ahora" : "Sin datos en directo de Renfe ahora" };
+    const n = A.alertsOfLine(key).length;
+    el.replaceChildren(h("a", { class: "card my-line", href: A.lineUrl(key) },
+      A.lineBadge(A.lineCode(key)),
+      h("span", { class: "grow" }, h("small", {}, "Tu línea"), h("strong", {}, `${A.lineName(key, true)}: ${st.text.charAt(0).toLowerCase()}${st.text.slice(1)}`),
+        h("span", {}, [o ? `${o.trains.length} ${o.trains.length === 1 ? "tren" : "trenes"}` : "", n ? `${n} ${n === 1 ? "aviso" : "avisos"} de Renfe` : "sin avisos de Renfe"].filter(Boolean).join(" · "))),
+      h("span", { class: `tag ${st.cls}` }, n ? "Ver avisos" : "Ver línea")));
+  }
+  function favButton(statusEl, key) {
+    if (!statusEl) return;
+    let b = document.getElementById("fav-btn");
+    if (!b) { b = h("button", { class: "btn ghost fav-btn", id: "fav-btn", type: "button" }); statusEl.after(b); b.onclick = () => { A.setMyLine(A.myLine() === key ? null : key); paint(); }; }
+    const paint = () => { const mine = A.myLine() === key; b.textContent = mine ? "★ Es tu línea · quitar" : "☆ Guardar como mi línea"; b.setAttribute("aria-pressed", String(mine)); };
+    paint();
+  }
+
+  // Trenes de alta velocidad y larga distancia que Renfe da como cancelados hoy
+  function cancelados() {
+    const list = A.ldCancelled();
+    if (!list.length) return "";
+    const dia = (f) => new Date(f + "T12:00").toLocaleDateString("es-ES", { day: "numeric", month: "long" });
+    return h("div", { id: "cancelados", class: "card pad", style: "display:grid;gap:10px;margin-top:8px" },
+      h("h3", {}, `Trenes cancelados (${list.length})`),
+      h("p", { class: "small muted" }, "Número de tren según Renfe. Renfe no publica el trayecto de los trenes cancelados: si tu número está aquí, consulta tu billete en la web o la app de Renfe. Puede que te correspondan cambio o devolución: ", h("a", { href: "/indemnizaciones" }, "tus derechos"), "."),
+      h("div", { class: "chips" }, list.map((c) => h("span", { class: "chip", title: `Cancelado · ${dia(c.fecha)}` }, `${c.num}${c.fecha !== list[0].fecha ? ` · ${dia(c.fecha)}` : ""}`))));
+  }
+
   const redesChips = (el) => el && el.replaceChildren(...A.S.redes.map((r) => h("a", { class: "chip", href: `/cercanias/${r.slug}` }, r.corto)));
   const bbox = (r) => r && [[r.bbox[0], r.bbox[1]], [r.bbox[2], r.bbox[3]]];
 
@@ -94,6 +127,7 @@
   const pages = {
     home() {
       A.onUpdate(() => {
+        miLinea($("mi-linea"));
         kpis($("kpis"), A.summary());
         linesTable($("top-lines"), A.lines(), { compact: true });
         alertsList($("alerts"), A.alerts(), 3, "/avisos");
@@ -148,6 +182,7 @@
           h("p", {}, s.ld
             ? `Renfe informa de ${s.ldCancelled.toLocaleString("es-ES")} ${s.ldCancelled === 1 ? "tren cancelado" : "trenes cancelados"} en este momento.`
             : "Renfe no informa ahora mismo de cancelaciones."),
+          cancelados(),
           ...(tarde.length ? [h("div", { class: "rows" }, tarde.sort((a, b) => b.delayMin - a.delayMin).slice(0, 10).map(A.trainRow))] : []),
           h("a", { class: "more", href: "/mapa-trenes" }, "Ver todos en el mapa"));
       });
@@ -188,6 +223,7 @@
         }
         const o = A.lines(null).find((x) => x.key === key);
         const s = A.lineStatus(o);
+        favButton($("status"), key);
         $("status").replaceChildren(h("span", { class: `tag ${s.cls}`, style: "font-size:1rem;padding:5px 12px" }, o ? s.text : (A.isNight() ? "No hay trenes de esta línea circulando ahora" : "Sin datos en directo de Renfe ahora")));
         $("kpis").replaceChildren(
           A.kpi(o ? o.trains.length : 0, o?.trains.length === 1 ? "tren circulando" : "trenes circulando"),

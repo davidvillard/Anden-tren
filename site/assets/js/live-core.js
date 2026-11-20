@@ -185,6 +185,26 @@
   const fmtMin = (v) => (v === null ? "—" : `${v.toFixed(1).replace(".", ",")} min`);
   const fmtPct = (v) => (v === null ? "—" : `${Math.round(v * 100)} %`);
 
+  /* ---------- Mi línea (solo en este navegador) ---------- */
+  const MY_KEY = "anden-mi-linea";
+  const myLine = () => { try { return localStorage.getItem(MY_KEY) || null; } catch (e) { return null; } };
+  function setMyLine(key) { try { key ? localStorage.setItem(MY_KEY, key) : localStorage.removeItem(MY_KEY); } catch (e) {} }
+
+  /* ---------- Trenes de alta velocidad y larga distancia cancelados ---------- */
+  // Renfe da el viaje como <nº de tren de 5 cifras><variante><fecha>, p. ej. 0414212026-11-19
+  function ldCancelled() {
+    const hoy = new Date().toLocaleDateString("sv-SE", { timeZone: "Europe/Madrid" });
+    const out = new Map();
+    for (const t of S.live?.largaDistancia?.trips || []) {
+      if (!t.cancelled) continue;
+      const m = /^(\d{5})\d?(\d{4}-\d{2}-\d{2})$/.exec(t.tripId || "");
+      if (!m || m[2] < hoy) continue;
+      const num = String(Number(m[1]));
+      if (!out.has(num)) out.set(num, { num, fecha: m[2] });
+    }
+    return [...out.values()].sort((a, b) => a.fecha.localeCompare(b.fecha) || Number(a.num) - Number(b.num));
+  }
+
   /* ---------- Componentes ---------- */
   const lineBadge = (code) => h("span", { class: "line-badge" }, code || "—");
   const trainRow = (t) => {
@@ -397,7 +417,7 @@
     const input = form.querySelector("input"), list = form.querySelector(".suggest");
     let results = [], active = -1;
     // Sinónimos: lo que escribe la gente → lo que aparece en los nombres de estación
-    const SYN = [[/^(airport|aeropuerto|aeroport|el prat|prat)$/, "aeropuerto aeroport"]];
+    const SYN = [[/^(airport|aeropuerto|aeroport|el prat|prat|barajas|t4)$/, "aeropuerto aeroport"]];
     const LD_WORDS = /^(ave|avlo|alvia|avant|euromed|alta velocidad|larga distancia|media distancia|ouigo|iryo|intercity)\b/;
     function search(qRaw) {
       const q = norm(qRaw).trim(); if (!q) return [];
@@ -438,7 +458,9 @@
       for (const t of trains()) if ([t.num, t.label, t.tripId, t.id].some((v) => v && norm(v).includes(q))) out.push({ href: trainUrl(t), badge: t.code || "—", title: `Tren ${t.num}${t.line ? " · " + lineName(t.line) : ""}`, sub: delayInfo(t.delayMin).text, group: "Trenes" });
       if (!S.scope) for (const t of ldTrains()) if ([t.num, `${t.tipo} ${t.num}`, t.origen, t.destino].some((v) => v && (norm(v).includes(q) || starts(v)))) out.push({ href: trainUrl(t), badge: t.code, title: trainTitle(t), sub: `${t.origen ? `${t.origen} → ${t.destino} · ` : ""}${delayInfo(t.delayMin).text}`, group: "Alta velocidad, larga y media distancia" });
       if (LD_WORDS.test(q)) out.push({ href: "/retrasos#larga-distancia", badge: "AV", title: "Alta velocidad y larga distancia", sub: "Retrasos y trenes cancelados de Renfe ahora", group: "Alta velocidad, larga y media distancia" });
-      if (/^\d{4,6}$/.test(q) && !out.some((r) => r.group === "Trenes" || r.group.startsWith("Alta"))) out.push({ href: "/retrasos#larga-distancia", badge: "?", title: `El tren ${q} no está circulando ahora`, sub: "Solo se ven los trenes en marcha. Mira los cancelados de alta velocidad y larga distancia", group: "Trenes" });
+      const canc = /^\d{3,6}$/.test(q) ? ldCancelled().find((c) => c.num === String(Number(q))) : null;
+      if (canc) out.push({ href: "/retrasos#cancelados", badge: "✕", title: `El tren ${canc.num} está cancelado`, sub: `Renfe lo da como cancelado (${new Date(canc.fecha + "T12:00").toLocaleDateString("es-ES", { day: "numeric", month: "long" })}). Consulta tu billete con la compañía`, group: "Alta velocidad, larga y media distancia" });
+      else if (/^\d{4,6}$/.test(q) && !out.some((r) => r.group === "Trenes" || r.group.startsWith("Alta"))) out.push({ href: "/retrasos#larga-distancia", badge: "?", title: `El tren ${q} no está circulando ahora`, sub: "Solo se ven los trenes en marcha. Mira los cancelados de alta velocidad y larga distancia", group: "Trenes" });
       // 5. Avisos y accidentes (palabras enteras)
       if (!ldWord) for (const a of alerts()) if (starts(`${a.header} ${a.desc}`) || a.routes.some((x) => norm(x).includes(q))) out.push({ href: `/avisos#aviso-${a.id}`, badge: "!", title: cleanAlert(a.header) || cleanAlert(a.desc), sub: alertLines(a).map((k) => lineName(k, true)).slice(0, 3).join(", ") || "Aviso de Renfe", group: "Avisos" });
       for (const d of S.acc) if (starts(`${d.place} ${d.prov}`)) out.push({ href: `/accidentes#${d.id}`, badge: "⚑", title: `${d.place} (${d.prov})`, sub: `${d.type} · ${window.Anden.fmtDate(d.date)}`, group: "Accidentes" });
@@ -516,7 +538,7 @@
 
   window.AndenLive = {
     S, start, onUpdate: (f) => S.subs.push(f), attachSearch,
-    trains, ldTrains, nightNote, isNight, alerts, alertsOfLine, alertLines, alertRedes, stations, cleanAlert, lines, lineStatus, summary, redBySlug,
+    trains, ldTrains, ldCancelled, myLine, setMyLine, nightNote, isNight, alerts, alertsOfLine, alertLines, alertRedes, stations, cleanAlert, lines, lineStatus, summary, redBySlug,
     delayInfo, lineName, lineCode, lineUrl, trainUrl, lineKey, trainTitle, GRUPOS, GRUPO_COLOR, REFRESH_MS,
     fmtMin, fmtPct, lineBadge, trainRow, alertCard, kpi, trainLayer, Vias,
   };
