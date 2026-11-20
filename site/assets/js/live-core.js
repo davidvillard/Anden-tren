@@ -458,15 +458,27 @@
       for (const t of trains()) if ([t.num, t.label, t.tripId, t.id].some((v) => v && norm(v).includes(q))) out.push({ href: trainUrl(t), badge: t.code || "—", title: `Tren ${t.num}${t.line ? " · " + lineName(t.line) : ""}`, sub: delayInfo(t.delayMin).text, group: "Trenes" });
       if (!S.scope) for (const t of ldTrains()) if ([t.num, `${t.tipo} ${t.num}`, t.origen, t.destino].some((v) => v && (norm(v).includes(q) || starts(v)))) out.push({ href: trainUrl(t), badge: t.code, title: trainTitle(t), sub: `${t.origen ? `${t.origen} → ${t.destino} · ` : ""}${delayInfo(t.delayMin).text}`, group: "Alta velocidad, larga y media distancia" });
       if (LD_WORDS.test(q)) out.push({ href: "/retrasos#larga-distancia", badge: "AV", title: "Alta velocidad y larga distancia", sub: "Retrasos y trenes cancelados de Renfe ahora", group: "Alta velocidad, larga y media distancia" });
+      // Horario oficial por número de tren (se descarga la primera vez que se busca un número)
+      if (/^\d{2,6}$/.test(q)) {
+        if (!S.horarios && !S.horariosCargando) {
+          S.horariosCargando = fetch("/data/horarios-ld.json").then((r) => r.json()).then((j) => { S.horarios = j; input.dispatchEvent(new Event("input")); }).catch(() => {});
+        }
+        const t = S.horarios?.trenes?.[String(Number(q))];
+        if (t) {
+          const v = [...t.v].sort((a, b) => b.d.split("1").length - a.d.split("1").length)[0];
+          const pn = (x) => S.horarios.paradas[x[0]].split(/[-/]/)[0];
+          out.push({ href: `/horario/${Number(q)}`, badge: t.tipo.split(" ")[0].slice(0, 5), title: `${t.tipo} ${Number(q)} · ${pn(v.p[0])} → ${pn(v.p[v.p.length - 1])}`, sub: `Sale a las ${v.p[0][2]} · horario y estado de hoy`, group: "Horarios" });
+        }
+      }
       const canc = /^\d{3,6}$/.test(q) ? ldCancelled().find((c) => c.num === String(Number(q))) : null;
-      if (canc) out.push({ href: "/retrasos#cancelados", badge: "✕", title: `El tren ${canc.num} está cancelado`, sub: `Renfe lo da como cancelado (${new Date(canc.fecha + "T12:00").toLocaleDateString("es-ES", { day: "numeric", month: "long" })}). Consulta tu billete con la compañía`, group: "Alta velocidad, larga y media distancia" });
-      else if (/^\d{4,6}$/.test(q) && !out.some((r) => r.group === "Trenes" || r.group.startsWith("Alta"))) out.push({ href: "/retrasos#larga-distancia", badge: "?", title: `El tren ${q} no está circulando ahora`, sub: "Solo se ven los trenes en marcha. Mira los cancelados de alta velocidad y larga distancia", group: "Trenes" });
+      if (canc) out.unshift({ href: "/retrasos#cancelados", badge: "✕", title: `El tren ${canc.num} está cancelado`, sub: `Renfe lo da como cancelado (${new Date(canc.fecha + "T12:00").toLocaleDateString("es-ES", { day: "numeric", month: "long" })}). Consulta tu billete con la compañía`, group: "Alta velocidad, larga y media distancia" });
+      else if (/^\d{4,6}$/.test(q) && S.horarios && !out.some((r) => r.group === "Trenes" || r.group === "Horarios" || r.group.startsWith("Alta"))) out.push({ href: "/retrasos#larga-distancia", badge: "?", title: `El tren ${q} no está circulando ahora`, sub: "Solo se ven los trenes en marcha. Mira los cancelados de alta velocidad y larga distancia", group: "Trenes" });
       // 5. Avisos y accidentes (palabras enteras)
       if (!ldWord) for (const a of alerts()) if (starts(`${a.header} ${a.desc}`) || a.routes.some((x) => norm(x).includes(q))) out.push({ href: `/avisos#aviso-${a.id}`, badge: "!", title: cleanAlert(a.header) || cleanAlert(a.desc), sub: alertLines(a).map((k) => lineName(k, true)).slice(0, 3).join(", ") || "Aviso de Renfe", group: "Avisos" });
       for (const d of S.acc) if (starts(`${d.place} ${d.prov}`)) out.push({ href: `/accidentes#${d.id}`, badge: "⚑", title: `${d.place} (${d.prov})`, sub: `${d.type} · ${window.Anden.fmtDate(d.date)}`, group: "Accidentes" });
       // Orden de los grupos: lo más probable primero (la ciudad antes que sus estaciones)
       const ORDER = syn ? ["Estaciones", "Líneas", "Redes de Cercanías", "Trenes", "Alta velocidad, larga y media distancia", "Avisos", "Accidentes"] : ldWord ? ["Alta velocidad, larga y media distancia", "Líneas", "Redes de Cercanías", "Estaciones", "Trenes", "Avisos", "Accidentes"]
-        : ["Líneas", "Redes de Cercanías", "Estaciones", "Trenes", "Alta velocidad, larga y media distancia", "Avisos", "Accidentes"];
+        : ["Líneas", "Redes de Cercanías", "Estaciones", "Trenes", "Alta velocidad, larga y media distancia", "Horarios", "Avisos", "Accidentes"];
       const per = {};
       return out.filter((r) => (per[r.group] = (per[r.group] || 0) + 1) <= 6)
         .map((r, i) => [r, i]).sort((a, b) => ORDER.indexOf(a[0].group) - ORDER.indexOf(b[0].group) || a[1] - b[1]).map(([r]) => r);

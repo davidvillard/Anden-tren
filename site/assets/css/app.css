@@ -370,3 +370,9 @@ html[data-contrast="high"] .segmented{background:#fff;border:2px solid #000}
 .filter-bar{display:flex;flex-wrap:wrap;gap:10px 20px;align-items:center;margin-bottom:6px}
 .check{display:inline-flex;align-items:center;gap:8px;font-weight:550;cursor:pointer;min-height:38px}
 .check input{width:20px;height:20px;accent-color:var(--accent)}
+
+/* Horarios */
+.chip.off{opacity:.55;text-decoration:line-through}
+.train-index{list-style:none;padding:0;margin:12px 0 0;display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:4px 16px}
+.train-index li{padding:3px 0}
+.train-index a{font-weight:650;display:inline-block;min-width:3.5em}

@@ -13,6 +13,7 @@
   "dependencies": {
     "@google/genai": "^2.31.0",
     "@resvg/resvg-js": "^2.6.2",
-    "@vercel/functions": "^3.11.3"
+    "@vercel/functions": "^3.11.3",
+    "fflate": "^0.8.3"
   }
 }

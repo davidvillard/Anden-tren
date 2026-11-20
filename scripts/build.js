@@ -18,6 +18,7 @@ import { generate as seoPages } from "./seo-pages.js";
 import { ogImage } from "./og.js";
 import { loadState } from "../lib/sucesos-state.js";
 import { buildLive } from "../lib/renfe.js";
+import { descargarYGenerar } from "./horarios.js";
 
 const ROOT = fileURLToPath(new URL("..", import.meta.url));
 const SRC = join(ROOT, "site");
@@ -110,7 +111,18 @@ const { lineas } = JSON.parse(await readFile(join(SRC, "data", "lineas.json"), "
 // Si Renfe no responde, esas páginas se publican sin la lista y la cargan en directo.
 const live = await buildLive();
 const avisos = live.sources.alerts?.ok ? live : null;
-for (const p of seoPages({ sucesos, redes, lineas, live: avisos })) {
+// Horarios oficiales de alta velocidad, larga y media distancia: se descargan en cada publicación;
+// si Renfe no responde, se usa la última copia guardada en el repositorio
+let horarios;
+try {
+  horarios = await descargarYGenerar();
+  await writeFile(join(OUT, "data", "horarios-ld.json"), JSON.stringify(horarios));
+  console.log(`Horarios de Renfe: ${Object.keys(horarios.trenes).length} trenes`);
+} catch (e) {
+  horarios = JSON.parse(await readFile(join(SRC, "data", "horarios-ld.json"), "utf8"));
+  console.log(`Horarios de Renfe: copia guardada (${e.message})`);
+}
+for (const p of seoPages({ sucesos, redes, lineas, live: avisos, horarios })) {
   await writePage(p.path, p.html, p.og);
   sitemap.push({ path: p.path, priority: p.priority, freq: p.freq });
 }

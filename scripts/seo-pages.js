@@ -341,7 +341,87 @@ function temaPage(tema, live) {
       scripts: ["/assets/js/live-core.js", "/assets/js/live-pages.js"] }) };
 }
 
-export function generate({ sucesos, redes, lineas, live }) {
+/* ---------- Horarios de alta velocidad, larga y media distancia ---------- */
+
+const DIAS_SEMANA = ["domingo", "lunes", "martes", "miércoles", "jueves", "viernes", "sábado"];
+const corto = (n) => String(n).replace(/-Clara Campoamor|-Almudena Grandes|-Julio Anguita|-Joaquín Sorolla|-Daniel Castelao|-Fernando Zóbel| Indalecio Prieto/g, "");
+// Variante principal: la que circula más días
+const principal = (t) => [...t.v].sort((a, b) => b.d.split("1").length - a.d.split("1").length)[0];
+export const trenSlug = (num) => `/horario/${num}`;
+// Ciudad de una estación ("Madrid-Puerta de Atocha" → "Madrid")
+export const ciudad = (n) => corto(n).split(/[-/]/)[0].replace(/ (Delicias|Santa Justa|Sants|Atocha|Chamartín|María Zambrano|Abando|Campo Grande|Estació del Nord)$/, "").trim();
+
+function horarioPage(num, t, H) {
+  const path = trenSlug(num);
+  const v = principal(t);
+  const st = (x) => H.paradas[x[0]];
+  const origen = st(v.p[0]), destino = st(v.p[v.p.length - 1]);
+  const ruta = `${ciudad(origen)} – ${ciudad(destino)}`;
+  const nombre = `${t.tipo} ${num}`;
+  const title = `${nombre} ${ruta}: horario, paradas y retraso hoy`;
+  const description = `Tren ${nombre} de Renfe de ${corto(origen)} (${v.p[0][2]}) a ${corto(destino)} (${v.p[v.p.length - 1][1]}): todas sus paradas, qué días circula y si hoy va con retraso o está cancelado.`;
+  const dias7 = [...Array(7)].map((_, i) => {
+    const d = new Date(`${H.desde}T12:00:00Z`); d.setUTCDate(d.getUTCDate() + i);
+    const circula = t.v.some((x) => x.d[i] === "1");
+    return `<span class="chip${circula ? "" : " off"}" title="${circula ? "Circula" : "No circula"}">${DIAS_SEMANA[d.getUTCDay()].slice(0, 3)} ${d.getUTCDate()}${circula ? "" : " ✕"}</span>`;
+  }).join("");
+  const tabla = (x) => `<div class="table-wrap"><table><thead><tr><th>Estación</th><th>Llegada</th><th>Salida</th></tr></thead><tbody>${x.p.map((r, i) => `<tr><td>${esc(corto(st(r)))}</td><td class="num">${i ? r[1] : "—"}</td><td class="num">${i < x.p.length - 1 ? r[2] : "—"}</td></tr>`).join("")}</tbody></table></div>`;
+  const otras = t.v.filter((x) => x !== v);
+  const trip = {
+    "@context": "https://schema.org", "@type": "TrainTrip", name: `${nombre} ${ruta}`, trainNumber: num, trainName: t.tipo,
+    provider: { "@type": "Organization", name: "Renfe" },
+    departureStation: { "@type": "TrainStation", name: corto(origen) }, arrivalStation: { "@type": "TrainStation", name: corto(destino) },
+    departureTime: v.p[0][2], arrivalTime: v.p[v.p.length - 1][1],
+  };
+  const qs = [
+    { p: `¿A qué hora sale el ${nombre}?`, r: `Sale de ${corto(origen)} a las ${v.p[0][2]} y llega a ${corto(destino)} a las ${v.p[v.p.length - 1][1]}, según el horario oficial de Renfe.` },
+    { p: `¿Dónde para el ${nombre}?`, r: `Para en ${v.p.map((x) => corto(st(x))).join(", ")}.` },
+    { p: `¿Va con retraso hoy el ${nombre}?`, r: "Esta página lo muestra en directo con los datos abiertos de Renfe: retraso, próxima parada o cancelación." },
+  ];
+  const body = `
+  <section class="page-head band"><div class="container">
+    <p class="crumbs"><a href="/">Inicio</a> › <a href="/horarios">Horarios</a> › ${esc(nombre)}</p>
+    <h1>${esc(nombre)}: ${esc(ruta)}</h1>
+    <p>Sale de ${esc(corto(origen))} a las <strong>${v.p[0][2]}</strong> y llega a ${esc(corto(destino))} a las <strong>${v.p[v.p.length - 1][1]}</strong>.</p>
+  </div></section>
+  <section class="section"><div class="container">
+    <div class="card pad" id="hoy" data-num="${esc(num)}" style="display:grid;gap:8px"><h2>Hoy</h2><p class="muted">Consultando a Renfe…</p></div>
+    <h2 style="margin-top:12px">Próximos 7 días</h2>
+    <div class="chips">${dias7}</div>
+    <h2 style="margin-top:12px">Paradas y horario</h2>
+    ${tabla(v)}
+    ${otras.length ? `<details class="card pad"><summary><strong>Otros horarios de este tren (${otras.length})</strong></summary><p class="small muted" style="margin:8px 0">Algunos días el ${esc(nombre)} hace otro recorrido u otro horario.</p>${otras.map(tabla).join("")}</details>` : ""}
+    <p class="small muted">Horario oficial de Renfe (datos abiertos), actualizado el ${fecha(H.generado)}. Si tu tren se retrasa o se cancela, mira <a href="/indemnizaciones">tus derechos</a>.</p>
+  </div></section>
+  ${faqHtml(qs)}`;
+  return {
+    path, priority: "0.4", freq: "daily",
+    html: shell({ path, title: `${title} · Andén`, description, body, jsonld: [trip, faqLd(qs), crumbs([["Inicio", "/"], ["Horarios", "/horarios"], [nombre, path]])],
+      scripts: ["/assets/js/live-core.js", "/assets/js/horario.js"] }),
+  };
+}
+
+function horariosIndex(H) {
+  const path = "/horarios";
+  const porTipo = {};
+  for (const [num, t] of Object.entries(H.trenes)) (porTipo[t.tipo] ||= []).push([num, t]);
+  const orden = ["AVE", "AVLO", "AVE Euromed", "AVANT", "AVANT EXP", "Intercity", "Regional"];
+  const tipos = Object.keys(porTipo).sort((a, b) => (orden.indexOf(a) + 99) % 99 - (orden.indexOf(b) + 99) % 99);
+  const body = `
+  <section class="page-head band"><div class="container">
+    <p class="crumbs"><a href="/">Inicio</a> › Horarios</p>
+    <h1>Horarios de trenes de Renfe</h1>
+    <p>Todos los trenes de alta velocidad, larga y media distancia de Renfe con su horario oficial y su estado de hoy. Busca tu número de tren arriba o elige en la lista.</p>
+  </div></section>
+  <section class="section"><div class="container">
+    ${tipos.map((tp) => `<details class="card pad"><summary><strong>${esc(tp)}</strong> <span class="muted">(${porTipo[tp].length} trenes)</span></summary><ul class="train-index">${porTipo[tp].sort((a, b) => Number(a[0]) - Number(b[0])).map(([num, t]) => { const v = principal(t); return `<li><a href="${trenSlug(num)}">${esc(num)}</a> <span class="muted">${esc(ciudad(H.paradas[v.p[0][0]]))} ${v.p[0][2]} → ${esc(ciudad(H.paradas[v.p[v.p.length - 1][0]]))}</span></li>`; }).join("")}</ul></details>`).join("")}
+  </div></section>`;
+  return { path, priority: "0.6", freq: "daily",
+    html: shell({ path, title: "Horarios de trenes Renfe: AVE, Avlo, Avant, Alvia e Intercity · Andén", description: "Horario oficial de todos los trenes de alta velocidad, larga y media distancia de Renfe, con sus paradas y su estado de hoy.", body,
+      jsonld: [crumbs([["Inicio", "/"], ["Horarios", path]])] }) };
+}
+
+export function generate({ sucesos, redes, lineas, live, horarios }) {
   const pages = [hoyPage(sucesos), incidenciasPage(sucesos)];
   for (const s of sucesos.sucesos || []) pages.push(sucesoPage(s, sucesos.actualizado));
   for (const r of redes.redes) {
@@ -350,5 +430,9 @@ export function generate({ sucesos, redes, lineas, live }) {
     for (const l of deRed) pages.push(lineaPage(l, r, deRed.filter((x) => x !== l)));
   }
   for (const t of TEMAS) pages.push(temaPage(t, live));
+  if (horarios?.trenes) {
+    pages.push(horariosIndex(horarios));
+    for (const [num, t] of Object.entries(horarios.trenes)) pages.push(horarioPage(num, t, horarios));
+  }
   return pages;
 }
