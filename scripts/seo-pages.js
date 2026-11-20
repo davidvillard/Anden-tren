@@ -421,6 +421,77 @@ function horariosIndex(H) {
       jsonld: [crumbs([["Inicio", "/"], ["Horarios", path]])] }) };
 }
 
+/* ---------- Corredores de alta velocidad ---------- */
+// Un tren pertenece a un corredor si para en una estación de cada extremo
+export const CORREDORES = [
+  { slug: "madrid-barcelona", a: "Madrid", b: "Barcelona", ra: "madrid", rb: "barcelona", via: "Zaragoza y Lleida" },
+  { slug: "madrid-sevilla", a: "Madrid", b: "Sevilla", ra: "madrid", rb: "sevilla", via: "Ciudad Real y Córdoba" },
+  { slug: "madrid-malaga", a: "Madrid", b: "Málaga", ra: "madrid", rb: "m[aá]laga", via: "Córdoba y Antequera" },
+  { slug: "madrid-valencia", a: "Madrid", b: "Valencia", ra: "madrid", rb: "val[eè]ncia", via: "Cuenca" },
+  { slug: "madrid-alicante", a: "Madrid", b: "Alicante", ra: "madrid", rb: "alicante|alacant", via: "Albacete" },
+  { slug: "madrid-murcia", a: "Madrid", b: "Murcia", ra: "madrid", rb: "murcia", via: "Albacete" },
+  { slug: "madrid-galicia", a: "Madrid", b: "Galicia", ra: "madrid", rb: "ourense|santiago|coru|vigo|pontevedra|lugo|ferrol", via: "Zamora y Ourense" },
+  { slug: "madrid-asturias", a: "Madrid", b: "Asturias y León", ra: "madrid", rb: "oviedo|gij[oó]n|le[oó]n|avil[eé]s", via: "Valladolid" },
+  { slug: "madrid-valladolid", a: "Madrid", b: "Valladolid", ra: "madrid", rb: "valladolid", via: "Segovia" },
+  { slug: "madrid-pais-vasco", a: "Madrid", b: "País Vasco", ra: "madrid", rb: "bilbao|vitoria|donostia|irun", via: "Valladolid y Burgos" },
+  { slug: "madrid-granada", a: "Madrid", b: "Granada", ra: "madrid", rb: "granada", via: "Antequera" },
+  { slug: "madrid-cadiz", a: "Madrid", b: "Cádiz", ra: "madrid", rb: "c[aá]diz|jerez", via: "Sevilla" },
+  { slug: "barcelona-valencia", a: "Barcelona", b: "Valencia", ra: "barcelona", rb: "val[eè]ncia", via: "Tarragona y Castellón" },
+];
+export function trenesCorredor(c, H) {
+  const A = new RegExp(c.ra, "i"), B = new RegExp(c.rb, "i");
+  return Object.entries(H.trenes).filter(([, t]) => t.v.some((v) => { const n = v.p.map((x) => H.paradas[x[0]]); return n.some((x) => A.test(x)) && n.some((x) => B.test(x)); })).map(([num]) => num);
+}
+
+function corredorPage(c, H) {
+  const path = `/alta-velocidad/${c.slug}`;
+  const nums = trenesCorredor(c, H);
+  const ruta = `${c.a}–${c.b}`;
+  const title = `Trenes ${ruta} hoy: AVE, Avlo, Iryo y Ouigo, retrasos y cancelaciones`;
+  const description = `Estado de los trenes de alta velocidad ${ruta} (por ${c.via}): horarios de hoy, retrasos en directo, trenes cancelados e incidencias en la línea.`;
+  const filas = nums.map((num) => { const t = H.trenes[num]; const v = principal(t); return [num, t, v]; })
+    .sort((x, y) => x[2].p[0][2].localeCompare(y[2].p[0][2]));
+  const qs = [
+    { p: `¿Cuántos trenes de Renfe hay entre ${c.a} y ${c.b}?`, r: `Según el horario oficial de Renfe, ${nums.length} trenes distintos unen ${c.a} y ${c.b} (en uno u otro sentido) en los próximos días. Iryo y Ouigo no publican datos abiertos, así que sus trenes no aparecen en la lista.` },
+    { p: `¿Hay retrasos hoy entre ${c.a} y ${c.b}?`, r: "Esta página lo muestra en directo con los datos de Renfe: trenes en marcha con su retraso, cancelados de hoy e incidencias en la línea." },
+  ];
+  const body = `
+  <section class="page-head band"><div class="container">
+    <p class="crumbs"><a href="/">Inicio</a> › <a href="/alta-velocidad">Alta velocidad</a> › ${esc(ruta)}</p>
+    <h1>Trenes ${esc(ruta)} hoy</h1>
+    <p>Alta velocidad y larga distancia de Renfe entre ${esc(c.a)} y ${esc(c.b)}, por ${esc(c.via)}: retrasos en directo, cancelaciones e incidencias.</p>
+  </div></section>
+  <section class="section"><div class="container">
+    <div class="kpis" id="kpis"></div>
+    <div id="incidencias-corredor"></div>
+    <div class="section-head"><h2>Trenes de hoy</h2><p class="small">Horario oficial de Renfe con su estado en directo.</p></div>
+    <div id="hoy-corredor"><div class="table-wrap"><table><thead><tr><th>Tren</th><th>Sale</th><th>Llega</th></tr></thead><tbody>${filas.map(([num, t, v]) => `<tr><td><a href="${trenSlug(num)}">${esc(t.tipo)} ${esc(num)}</a></td><td>${esc(ciudad(H.paradas[v.p[0][0]]))} ${v.p[0][2]}</td><td>${esc(ciudad(H.paradas[v.p[v.p.length - 1][0]]))} ${v.p[v.p.length - 1][1]}</td></tr>`).join("")}</tbody></table></div></div>
+    <p class="small muted">Iryo y Ouigo no publican datos abiertos de sus trenes: sus incidencias sí aparecen arriba si salen en las noticias. Si tu tren se retrasa o se cancela, mira <a href="/indemnizaciones">tus derechos</a>.</p>
+  </div></section>
+  ${faqHtml(qs)}`;
+  return { path, priority: "0.7", freq: "hourly",
+    html: shell({ path, title: `${title} · Andén`, description, body, jsonld: [faqLd(qs), crumbs([["Inicio", "/"], ["Alta velocidad", "/alta-velocidad"], [ruta, path]])],
+      inline: `window.ANDEN_CORREDOR=${JSON.stringify({ slug: c.slug, a: c.a, b: c.b, ra: c.ra, rb: c.rb, nums })};`,
+      scripts: ["/assets/js/live-core.js", "/assets/js/corredor.js"] }) };
+}
+
+function altaVelocidadIndex(H) {
+  const path = "/alta-velocidad";
+  const body = `
+  <section class="page-head band"><div class="container">
+    <p class="crumbs"><a href="/">Inicio</a> › Alta velocidad</p>
+    <h1>Alta velocidad hoy: estado de cada línea</h1>
+    <p>Elige tu trayecto para ver los trenes de hoy, los retrasos en directo, las cancelaciones y las incidencias.</p>
+  </div></section>
+  <section class="section"><div class="container"><div class="rows">
+    ${CORREDORES.map((c) => `<a class="row" href="/alta-velocidad/${c.slug}"><span class="line-badge">AV</span><span class="grow"><strong>${esc(c.a)} – ${esc(c.b)}</strong><span>Por ${esc(c.via)} · ${trenesCorredor(c, H).length} trenes de Renfe</span></span></a>`).join("")}
+  </div>
+  <p style="margin-top:16px"><a class="more" href="/horarios">Todos los horarios por número de tren</a></p></div></section>`;
+  return { path, priority: "0.8", freq: "hourly",
+    html: shell({ path, title: "Alta velocidad hoy: retrasos y cancelaciones de AVE por línea · Andén", description: "Estado de las líneas de alta velocidad de España: Madrid–Barcelona, Madrid–Sevilla, Madrid–Valencia y más, con retrasos en directo y cancelaciones.", body,
+      jsonld: [crumbs([["Inicio", "/"], ["Alta velocidad", path]])] }) };
+}
+
 export function generate({ sucesos, redes, lineas, live, horarios }) {
   const pages = [hoyPage(sucesos), incidenciasPage(sucesos)];
   for (const s of sucesos.sucesos || []) pages.push(sucesoPage(s, sucesos.actualizado));
@@ -431,7 +502,8 @@ export function generate({ sucesos, redes, lineas, live, horarios }) {
   }
   for (const t of TEMAS) pages.push(temaPage(t, live));
   if (horarios?.trenes) {
-    pages.push(horariosIndex(horarios));
+    pages.push(horariosIndex(horarios), altaVelocidadIndex(horarios));
+    for (const c of CORREDORES) pages.push(corredorPage(c, horarios));
     for (const [num, t] of Object.entries(horarios.trenes)) pages.push(horarioPage(num, t, horarios));
   }
   return pages;

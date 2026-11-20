@@ -457,7 +457,7 @@
       // 4. Trenes por número
       for (const t of trains()) if ([t.num, t.label, t.tripId, t.id].some((v) => v && norm(v).includes(q))) out.push({ href: trainUrl(t), badge: t.code || "—", title: `Tren ${t.num}${t.line ? " · " + lineName(t.line) : ""}`, sub: delayInfo(t.delayMin).text, group: "Trenes" });
       if (!S.scope) for (const t of ldTrains()) if ([t.num, `${t.tipo} ${t.num}`, t.origen, t.destino].some((v) => v && (norm(v).includes(q) || starts(v)))) out.push({ href: trainUrl(t), badge: t.code, title: trainTitle(t), sub: `${t.origen ? `${t.origen} → ${t.destino} · ` : ""}${delayInfo(t.delayMin).text}`, group: "Alta velocidad, larga y media distancia" });
-      if (LD_WORDS.test(q)) out.push({ href: "/retrasos#larga-distancia", badge: "AV", title: "Alta velocidad y larga distancia", sub: "Retrasos y trenes cancelados de Renfe ahora", group: "Alta velocidad, larga y media distancia" });
+      if (LD_WORDS.test(q)) out.push({ href: "/alta-velocidad", badge: "AV", title: "Alta velocidad hoy", sub: "Estado de cada línea: retrasos, cancelados e incidencias", group: "Alta velocidad, larga y media distancia" });
       // Horario oficial por número de tren (se descarga la primera vez que se busca un número)
       if (/^\d{2,6}$/.test(q)) {
         if (!S.horarios && !S.horariosCargando) {
