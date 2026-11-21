@@ -40,7 +40,8 @@ async function setIfChanged(key, value, before) {
   return true;
 }
 
-export const config = { maxDuration: 120 };
+// Margen de sobra: Gemini tiene como mucho 75 s y el resto de llamadas, su propio tope
+export const config = { maxDuration: 300 };
 
 const KEY_LAST_RUN = "sucesos:ultima-ejecucion";
 
@@ -158,7 +159,7 @@ async function run(now) {
     const lastDeploy = (await getJSON(KEY_LAST_DEPLOY)) || 0;
     if (now - lastDeploy > 15 * 60_000) {
       try {
-        await fetch(process.env.DEPLOY_HOOK_URL, { method: "POST" });
+        await fetch(process.env.DEPLOY_HOOK_URL, { method: "POST", signal: AbortSignal.timeout(10_000) });
         await setJSON(KEY_LAST_DEPLOY, now.getTime());
         await setJSON(KEY_PENDING_DEPLOY, false);
         summary.redeploy = true;
