@@ -32,7 +32,7 @@ const SITE_URL = (env.SITE_URL || "https://andentren.es").replace(/\/$/, "");
 const GTM = /^GTM-[A-Z0-9]+$/.test(env.GTM_ID || "") ? env.GTM_ID : "GTM-NRM83968";const GSC = (env.GSC_VERIFICATION || "gFf5Yx-WKMqeVB9tL1ZoBHpDn84roE32XKY4qD2je2A").replace(/[^A-Za-z0-9_-]/g, "");
 const cfg = {
   ga: Boolean(GTM),
-  contact: env.CONTACT_EMAIL || "davidvillard6@gmail.com",
+  contact: env.CONTACT_EMAIL || "contacto@andentren.es",
   ownerName: env.OWNER_NAME || "",
   ownerNif: env.OWNER_NIF || "",
 };
